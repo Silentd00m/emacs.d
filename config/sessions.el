@@ -1,8 +1,9 @@
-                                        ;(setq desktop-dirname             "~/.emacs.d/sessions/"
-                                        ;       desktop-base-file-name      "emacs.desktop"
-                                        ;       desktop-base-lock-name      "lock"
-                                        ;       desktop-path                (list desktop-dirname)
-                                        ;       desktop-save                t
-                                        ;       desktop-files-not-to-save   "^$" ;reload tramp paths
-                                        ;       desktop-load-locked-desktop nil)
-                                        ;(desktop-save-mode 1)
+;;;; Sessions
+(desktop-save-mode 1)
+
+;; Save place in buffer
+(use-package saveplace
+  :ensure t
+  :config (progn (setq-default save-place t)
+                 (setq save-place-file "~/.emacs.d/saved-places")
+                 (setq save-place-forget-unreadable-files nil)))

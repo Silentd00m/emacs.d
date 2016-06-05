@@ -1,27 +1,25 @@
-;(require 'anaconda-mode)
-					;(autoload 'jedi:setup "jedi" nil t)
+(require 'mmm-auto)
+(setq mmm-global-mode 'maybe)
 
-					;(setq jedi:complete-on-dot t)
-					;(add-hook 'python-mode-hook 'jedi:setup)
-					;(setq jedi:setup-keys t)
-					;(add-hook 'python-mode-hook 'jedi:ac-setup)
-                                        ;(setq jedi:server-command '("~/.emacs.d/plugins/emacs-jedi/jediepcserver.py"))
-					;(setq jedi:server-command '("/usr/bin/jediepcserver"))
 (add-hook 'python-mode-hook '(lambda ()
                                (ycmd-mode)
                                (eldoc-mode)
                                (hideshowvis-minor-mode)
-                               (fci-mode t)
-                               )
-          )
+                               (fci-mode t)))
 
-(add-to-list 'company-backends 'company-ycmd)
-(add-hook 'python-mode-hook 'ycmd-mode)
-
-(defun my/python-first-run-hook ()
+(defun my/python-first-run-hook()
   (remove-hook 'python-mode-hook 'my/python-first-run-hook)
   (run-python))
 
 (add-hook 'python-mode-hook 'my/python-first-run-hook)
+(add-hook 'python-mode-hook '(lambda()
+                               (message "[Dash] Loaded docset 'Python 3'")
+                               (helm-dash-activate-docset "Python 3")))
 
-					;(add-to-list 'company-backends 'company-anaconda)
+                                        ;(add-to-list 'company-backends 'company-anaconda)
+
+;; Mako
+
+(add-to-list 'auto-mode-alist '("\\.mako\\'" . html-mode))
+(add-to-list 'auto-mode-alist '("\\.mako\\'" . python-mode))
+(mmm-add-mode-ext-class 'html-mode "\\.mako\\'" 'mako)

@@ -1,8 +1,3 @@
-                                        ;(require 'irony)
-                                        ;(require 'irony-cdb)
-                                        ;(require 'flycheck)
-(require 'ycmd)
-
 (c-add-style "gears"
              '("linux"
                (c-basic-offset . 4)                                             ; 4 spaces
@@ -39,33 +34,22 @@
                 (member-init-cont . 0)
                 (template-args-cont . +)
                 (inher-cont . c-lineup-multi-inher)
-                )
-               )
-             )
+                (comment-intro . 0))))
 (setq c-default-style "gears")
 
-(defun gears/cpp-mode-hook ()
+(defun gears-cpp-mode-hook ()
+  (setq font-lock-maximum-decoration 6)
   (font-lock-fontify-buffer)
-  (define-key irony-mode-map [remap completion-at-point]
-    'irony-completion-at-point-async)
-  (define-key irony-mode-map [remap complete-symbol]
-    'irony-completion-at-point-async)
   (local-set-key (kbd "RET") 'newline-and-indent)
   (yas-minor-mode 1)
-  (local-set-key (kbd "C-SPC") 'company-complete)
   (setq flycheck-clang-args "-std=c++11")
   (setq flycheck-check-syntax-automatically '(mode-enabled save))
-  (company-irony-setup-begin-commands)
-  (add-to-list 'flycheck-checkers 'irony)
-  (fci-mode 1)
+  ;; (fci-mode 1)
   (yas-minor-mode-on)
   (c-set-style "gears")
-  (gears/cpp-fix-indent)
-  (irony-cdb-autosetup-compile-options)
+  (gears-cpp-fix-indent)
   (setq flycheck-clang-language-standard "c++11")
-  (hideshowvis-minor-mode)
-  (irony-eldoc 1)
-  )
+  (hideshowvis-minor-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Language element indentation fix
@@ -79,10 +63,7 @@
       (goto-char pos)
       (up-list -1)
       (backward-sexp 1)
-      (looking-back "template<.*>[\t\n ]*[(class)|(struct)]+")
-      )
-    )
-  )
+      (looking-back "template<.*>[\t\n ]*[(class)|(struct)]+"))))
 
 ;; Fixing enum-classes
 (defun gears-check-inside-enum-class (pos)
@@ -94,9 +75,7 @@
       (backward-sexp 1)
       (looking-back "enum[ \t]+class[ \t]+[^}]+")
                                         ;(looking-back "enum[ \t]+class[ \t]+")
-      )
-    )
-  )
+      )))
 
 ;; Fix statement-cont
 (defun gears-cpp-align-statement-cont (langelem)
@@ -106,23 +85,17 @@
    ((gears-check-inside-template (c-langelem-pos langelem)) '+)
 
    ;; Default value
-   (t '+)
-   )
-  )
+   (t '+)))
 
 
 ;; Fix topmost-intro-cont
 (defun gears-cpp-align-topmost-intro-cont (langelem)
   "Fix topmost-intro-cont"
-  (cond
-   ((gears-check-inside-enum-class (c-langelem-pos langelem))
-    ;; We're inside a enum-class. Don't indent.
-    0)
-   )
-  )
+  (cond ((gears-check-inside-enum-class (c-langelem-pos langelem))
+         ;; We're inside a enum-class. Don't indent.
+         0)))
 
 (defun gears-cpp-align-template-args-cont (langelem)
-
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -131,27 +104,29 @@
 (defun gears-cpp-fix-indent ()
   (interactive)
   (add-to-list 'c-offsets-alist
-               '(topmost-intro-cont . gears-cpp-align-topmost-intro-cont)
-               )
+               '(topmost-intro-cont . gears-cpp-align-topmost-intro-cont))
   (add-to-list 'c-offsets-alist
-               '(statement-cont . gears-cpp-align-statement-cont)
-               )
-  )
+               '(statement-cont . gears-cpp-align-statement-cont)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; YCMD
-(set-variable 'ycmd-server-command '("python2" "/home/andre/.emacs.d/ycmd/ycmd"))
+;; Packages
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package flycheck
+  :config (progn (setq flycheck-clang-args (quote ("-std=c++11")))
+                 (setq flycheck-display-errors-function (function flycheck-pos-tip-error-messages))))
+
+(use-package modern-cpp-font-lock
+  :init (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Hooks
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;(eval-after-load 'company '(add-to-list 'company-backends 'company-irony))
-;(eval-after-load 'flycheck
-;  '(add-to-list 'flycheck-checkers 'flycheck-checker-irony))
 (add-to-list 'company-backends 'company-c-headers)
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'c++-mode-hook 'gears/cpp-mode-hook)
+(add-hook 'c++-mode-hook 'gears-cpp-mode-hook)
 (add-hook 'c-mode-hook 'ycmd-mode)
 (add-hook 'c++-mode-hook 'ycmd-mode)
-					;(add-hook 'irony-mode-hook 'gears-irony-mode-hook)
+(add-hook 'c++-mode-hook '(lambda()
+                            (message "[Dash] Loaded docset 'C++' and 'C'.")
+                            (setq-local helm-dash-docsets '("C++" "C"))))
