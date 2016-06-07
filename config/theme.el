@@ -6,10 +6,13 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Main theme and font
-(require 'moe-theme)
+(use-package moe-theme
+  :ensure t
+  :config (load-theme 'moe-dark t)
+  )
 
 ;(use-package moe-dark)
-(load-theme 'moe-dark t)
+;(load-theme 'moe-dark t)
 
 (set-default-font "Source Code Pro-9")
 (set-frame-font "Source Code Pro-9")
@@ -20,11 +23,18 @@
 (setq show-paren-style 'expression)
 (global-hl-line-mode t) ; Highlight current line
 
+(add-hook 'after-change-major-mode-hook '(lambda ()
+                                           (setq-default indent-tabs-mode nil)
+                                           (setq tab-width 4)
+                                           (setq fill-column 81)))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI Elemnts
 (use-package nlinum
-  :config (global-nlinum-mode t))
+  :ensure t
+  :init (global-nlinum-mode t))
 (use-package rainbow-delimiters
+  :ensure t
   :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (column-number-mode t) ; Show column numers
@@ -34,12 +44,10 @@
 ;; Maximize window on start
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 
-;; Smart Mode Line
-(use-package smart-mode-line
-  :init (progn
-          (sml/setup)
-          (sml/apply-theme 'dark))
-  :config (setq sml/no-confirm-load-theme t))
+;; Powerline
+(use-package powerline
+  :ensure moe-theme
+  :config (powerline-moe-theme))
 
 ;; Whitespace
 (use-package whitespace

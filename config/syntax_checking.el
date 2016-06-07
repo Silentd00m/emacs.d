@@ -8,5 +8,5 @@
   :config (progn (flycheck-ycmd-setup)
                  (flycheck-pos-tip-mode)
                  (eval-after-load 'flycheck
-                   '(custom-set-variables
-                     '(flycheck-display-errors-function #'flycheck-pos-tip-error-messages)))))
+                   '(when (not (display-graphic-p))
+                      (setq flycheck-indication-mode nil)))))

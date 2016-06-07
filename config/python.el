@@ -1,5 +1,7 @@
-(require 'mmm-auto)
-(setq mmm-global-mode 'maybe)
+(use-package mmm-mode
+  :ensure t
+  :config (progn (require 'mmm-auto)
+                 (setq mmm-global-mode 'maybe)))
 
 (add-hook 'python-mode-hook '(lambda ()
                                (ycmd-mode)

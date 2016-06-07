@@ -1,27 +1,22 @@
-(require 'fuzzy)
-(require 'yasnippet)
-(require 'smartparens-config)
-(require 'company)
-
-(add-hook 'after-init-hook 'global-company-mode)
+(use-package fuzzy
+  :ensure t)
+(use-package yasnippet
+  :ensure t)
 
 (set-default 'semantic-case-fold t)
 
-;; Command completion
-;(smex-initialize)
-
-;; Parenthese auto-completion
-(smartparens-global-mode)
-
-;; Helm
-(load "~/.emacs.d/config/helm.el")
+(use-package smartparens
+  :ensure t
+  :config (progn (require 'smartparens-config)
+                 (smartparens-global-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Company
 (use-package company
   :ensure t
-  :config (progn (global-company-mode 1)
-                                        ;(company-quickhelp-mode 0) ; Disable quickhelp mode
+  :config (progn (add-hook 'after-init-hook 'global-company-mode)
+  
+                 (global-company-mode 1)
 
                  (setq company-auto-complete (quote ignore))
                  (setq company-auto-complete-chars nil)
@@ -64,9 +59,11 @@
   :ensure ycmd
   :config (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup))
 
+;(use-package)
+
 (use-package company-quickhelp
   :ensure company
-  :config (progn (setq company-quickhelp-delay nil)
+  :config (progn (setq company-quickhelp-delay 0.1)
                  (add-hook 'prog-mode-hook '(lambda ()
                                               (unless (equal 'major-mode "emacs-lisp-mode")
                                                 (company-quickhelp-mode 1))))))

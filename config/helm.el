@@ -16,9 +16,11 @@
                  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
                  (define-key helm-map (kbd "ESC") 'helm-keyboard-quit)
 
-                 (add-hook 'after-init-hook '(lambda()
-                                               (find-file helm-find-files nil remap) ; Replace find-file with helm-find-files
-                                               (execute-extended-command helm-M-x nil remap))) ; Replace execute-command with helm-M-x
+                 (require 'helm-fzf)
+
+;                 (add-hook 'after-init-hook '(lambda()
+;                                               (find-file helm-find-files nil remap) ; Replace find-file with helm-find-files
+;                                               (execute-extended-command helm-M-x nil remap))) ; Replace execute-command with helm-M-x
                  (defun gears/helm-find-files-navigate-back (orig-fun &rest args)
                    "Go up one directory when pressing backspace in a directory when no additional"
                    "Characters have been entered."
@@ -27,21 +29,24 @@
                      (apply orig-fun args)))
                  (advice-add 'helm-ff-delete-char-backward :around #'gears/helm-find-files-navigate-back)))
 
+(use-package fzf
+  :ensure t)
+
 ;; Helm-Dash
 (use-package helm-dash
-  :ensure helm
+  :ensure t
   :config (progn (setq helm-dash-browser-func 'eww)
                  (setq helm-dash-docsets-path "~/.emacs.d/docsets")
-                 (setq helm-dash-enable-debugging nil)))
+                 (setq helm-dash-enable-debugging nil)
 
-(defvar my/helm-dash-official-docset-list '("C++"
+                 (defvar my/helm-dash-official-docset-list '("C++"
                                             "C"
                                             "Emacs Lisp"
                                             "CMake"
                                             "Bash"
                                             "Python 3"))
 
-(dolist (docset my/helm-dash-official-docset-list)
-  ;; Install missng docsets
-  (unless (file-exists-p (concat "~/.emacs.d/docsets/" docset ".docset"))
-    (helm-dash-install-docset docset)))
+                 (dolist (docset my/helm-dash-official-docset-list)
+                   ;; Install missng docsets
+                   (unless (file-exists-p (concat "~/.emacs.d/docsets/" docset ".docset"))
+                     (helm-dash-install-docset docset)))))

@@ -1,7 +1,3 @@
-(require 'multiple-cursors)
-(require 'redo+)
-(require 'comment-dwim-2)
-
 ;; Unbind annoying plugin keys
 ;(define-key flycheck-command-map (kbd "C-c") nil)
 
@@ -12,55 +8,128 @@
 (transient-mark-mode 1)
 (setq x-select-enable-clipboard t)
 
-(global-unset-key (kbd "<insert>"))
-(global-unset-key (kbd "C-s"))
-(global-unset-key (kbd "C-c"))
-(global-set-key (kbd "C-s") 'save-buffer)
-(global-unset-key (kbd "C-o"))
-(global-set-key (kbd "C-o") 'helm-find-files)
-(global-set-key (kbd "C-a") 'mark-whole-buffer)
-(global-unset-key (kbd "C-e"))
-(global-set-key (kbd "M-a") 'helm-M-x)
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+(use-package comment-dwim-2
+  :ensure t)
+(use-package redo+
+  :ensure t)
+(use-package multiple-cursors
+  :ensure t)
 
-(global-set-key [M-left] 'tabbar-backward-tab)
-(global-set-key [M-right] 'tabbar-forward-tab)
-                                        ;(local-set-key (kbd "DEL") 'backward-delete-whitespace-to-column)
-(global-set-key (kbd "<C-tab>") 'tab-to-tab-stop)
-(global-set-key (kbd "C-S-d") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-S-a") 'mc/mark-all-like-this)
-					;(global-set-key (kbd "C-e") 'dired)
-(global-set-key (kbd "M-S-<left>") 'windmove-left)
-(global-set-key (kbd "M-S-<right>") 'windmove-right)
-(global-set-key (kbd "M-S-<up>") 'windmove-up)
-(global-set-key (kbd "M-S-<down>") 'windmove-down)
+;; (global-unset-key (kbd "<insert>"))
+;; (global-unset-key (kbd "C-s"))
+;; (global-unset-key (kbd "C-c"))
+;; (global-set-key (kbd "C-s") 'save-buffer)
+;; (global-unset-key (kbd "C-o"))
+;; (global-set-key (kbd "C-o") 'helm-find-files)
+;; (global-set-key (kbd "C-a") 'mark-whole-buffer)
+;; (global-unset-key (kbd "C-e"))
+;; (global-set-key (kbd "M-a") 'helm-M-x)
+;; (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
-(add-hook 'after-change-major-mode-hook '(lambda()
-                                           (local-set-key (kbd "<C-tab>") 'tab-to-tab-stop)
-                                           (local-set-key (kbd "C-S-d") 'mc/mark-next-like-this)
-                                           (global-unset-key (kbd "C-d"))
-                                           (global-set-key (kbd "C-S-d") 'mc/mark-next-like-this)
-                                           (global-set-key (kbd "C-S-a") 'mc/mark-all-like-this)))
+;; (global-set-key [M-left] 'tabbar-backward-tab)
+;; (global-set-key [M-right] 'tabbar-forward-tab)
+;;                                         ;(local-set-key (kbd "DEL") 'backward-delete-whitespace-to-column)
+;; (global-set-key (kbd "<C-tab>") 'tab-to-tab-stop)
+;; (global-set-key (kbd "C-S-d") 'mc/mark-next-like-this)
+;; (global-set-key (kbd "C-S-a") 'mc/mark-all-like-this)
+;; 					;(global-set-key (kbd "C-e") 'dired)
+;; (global-set-key (kbd "M-S-<left>") 'windmove-left)
+;; (global-set-key (kbd "M-S-<right>") 'windmove-right)
+;; (global-set-key (kbd "M-S-<up>") 'windmove-up)
+;; (global-set-key (kbd "M-S-<down>") 'windmove-down)
 
-(global-set-key (kbd "C-p") 'helm-mini)
-(global-set-key (kbd "C-h") 'vr/replace)
-(global-set-key (kbd "C-f") 'helm-occur)
-;;(global-set-key (kbd "<f8>") 'helm-flycheck)
-(global-set-key (kbd "<f7>") 'helm-semantic-or-imenu)
-(global-set-key (kbd "C-t") 'hs-toggle-hiding)
-(global-set-key (kbd "C-z") 'undo)
-(global-set-key (kbd "C-y") 'redo)
-(global-set-key (kbd "M-w") 'avy-goto-word-or-subword-1)
-;; (global-set-key (kbd "M-l") 'avy-goto-line)
-(global-set-key (kbd "M-:") 'goto-line)
-(global-set-key (kbd "M-,") 'comment-dwim-2)
-(global-set-key (kbd "M-s") 'helm-swoop)
-(global-unset-key (kbd "M-c"))
-(global-set-key (kbd "M-a") 'helm-M-x)
+;; (add-hook 'after-change-major-mode-hook '(lambda()
+;;                                            (local-set-key (kbd "<C-tab>") 'tab-to-tab-stop)
+;;                                            (local-set-key (kbd "C-S-d") 'mc/mark-next-like-this)
+;;                                            (global-unset-key (kbd "C-d"))
+;;                                            (global-set-key (kbd "C-S-d") 'mc/mark-next-like-this)
+;;                                            (global-set-key (kbd "C-S-a") 'mc/mark-all-like-this)))
 
-(global-set-key (kbd "<f1>") 'helm-dash)
-(global-set-key (kbd "<f2>") 'helm-dash-at-point)
-(global-set-key (kbd "<f3>") 'help-command)
+;; (global-set-key (kbd "C-p") 'helm-mini)
+;; (global-set-key (kbd "C-h") 'vr/replace)
+;; (global-set-key (kbd "C-f") 'helm-occur)
+;; ;;(global-set-key (kbd "<f8>") 'helm-flycheck)
+;; (global-set-key (kbd "<f7>") 'helm-semantic-or-imenu)
+;; (global-set-key (kbd "C-t") 'hs-toggle-hiding)
+;; (global-set-key (kbd "C-z") 'undo)
+;; (global-set-key (kbd "C-y") 'redo)
+;; (global-set-key (kbd "M-w") 'avy-goto-word-or-subword-1)
+;; ;; (global-set-key (kbd "M-l") 'avy-goto-line)
+;; (global-set-key (kbd "M-:") 'goto-line)
+;; (global-set-key (kbd "M-,") 'comment-dwim-2)
+;; (global-set-key (kbd "M-s") 'helm-swoop)
+;; (global-unset-key (kbd "M-c"))
+;; (global-set-key (kbd "M-a") 'helm-M-x)
+
+;; (global-set-key (kbd "<f1>") 'helm-dash)
+;; (global-set-key (kbd "<f2>") 'helm-dash-at-point)
+;; (global-set-key (kbd "<f3>") 'help-command)
+
+(defvar gears-global-keymap '(;; General
+                              ("<escape>" . keyboard-escape-quit)
+
+                              ;; Sane text editing
+                              ("C-s" . save-buffer)
+                              ("C-a" . mark-whole-buffer)
+                              ("C-c" . cua-copy-region)
+                              ;; ("C-x" . cua-cut-region)
+                              ;; ("C-v" . cua-paste-region)
+                              ("C-y" . cua-redo)
+                              ("C-z" . cua-undo)
+                              ("C-f" . helm-occur)
+                              ("C-h" . vr/replace)
+
+                              ;; Editing
+                              ("<C-tab>" . tab-stop-tab)
+                              ("C-S-d" . mc/mark-next-like-this)
+                              ("C-S-a" . mc/mark-all-like-this)
+                              ("M-," . comment-dwim-2)
+
+                              ;; Document navigation
+                              ("M-w" . avy-goto-word-or-subword-1)
+                              ("M-l" . goto-line)
+                              ("C-t" . hs-toggle-hiding)
+
+                              ;; Window navigation
+                              ("M-S-<left>" . windmove-left)
+                              ("M-S-<right>" . windmove-right)
+                              ("M-S-<up>" . windmove-up)
+                              ("M-S-<down>" . windmove-down)
+
+                              ;; Documentation
+                              ("<f3>" . help-command)
+
+                              ;; Helm key bindings
+                              ("C-p" . helm-mini)
+                              ("M-a" . helm-M-x)
+                              ("M-x" . helm-M-x)
+                              ("C-o" . helm-find-files)
+                              ("M-o" . helm-fzf)
+                              ("<f1>" . helm-dash)
+                              ("<f2>" . helm-dash-at-point)
+                              ("<f5>" . helm-make)
+                              ("<f7>" . helm-semantic-or-imenu)
+                              ("<f8>" . helm-flycheck)
+                              ("M-s" . helm-swoop)))
+(defvar gears-local-keymap '(("<C-tab>" . tab-stop-to-tab)
+                             ("C-S-d" . mc/mark-next-like-this)
+                             ("C-S-a" . mc/mark-all-like-this)))
+
+(global-unset-key (kbd "C-x x"))
+
+(dolist (i gears-global-keymap)
+  (global-set-key (kbd (car i)) (cdr i)))
+
+;; (add-hook 'after-change-major-mode-hook '(lambda()
+;;                                            (local-set-key (kbd "<C-tab>") 'tab-to-tab-stop)
+;;                                            (local-set-key (kbd "C-S-d") 'mc/mark-next-like-this)
+;;                                            (global-unset-key (kbd "C-d"))
+;;                                            (global-set-key (kbd "C-S-d") 'mc/mark-next-like-this)
+;;                                            (global-set-key (kbd "C-S-a") 'mc/mark-all-like-this)))
+
+
+;; (use-package evil-mode
+;;   :config )
 
 ;; Company mode
 (with-eval-after-load 'company

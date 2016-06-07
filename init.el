@@ -1,14 +1,20 @@
 (package-initialize)
 
-(setq debug-on-error nil)
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("marmalade" . "https://marmalade-repo.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")))
+
+;(setq debug-on-error nil)
 (setq custom-file "~/.emacs.d/config/custom.el")
 
 (unless (package-installed-p 'use-package)
+  (package-refresh-contents)
   (package-install 'use-package))
 
 (load "~/.emacs.d/config/plugins")
 (load custom-file)
 (load "~/.emacs.d/config/theme")
+(load "~/.emacs.d/config/helm")
 (load "~/.emacs.d/config/auto_completion")
 (load "~/.emacs.d/config/syntax_checking")
 (load "~/.emacs.d/config/cpp")
@@ -20,31 +26,8 @@
 (load "~/.emacs.d/config/programming")
 (load "~/.emacs.d/config/latex")
 
-(add-to-list "~/.emacs.d/elpa")
-
 ;; Hooks
-(add-hook 'emacs-lisp-mode-hook '(lambda ()
-                                   (add-hook 'after-save-hook 'emacs-lisp-byte-compile t t)
-                                   )                                            ;; Automatically byte-compile emacs-lisp files upon save
-          )
-(add-hook 'prog-mode-hook 'rainbow-delimiters-mode)                             ;; Rainbow colored parentheses
-(add-hook 'after-change-major-mode-hook '(lambda ()
-                                           (setq-default indent-tabs-mode nil)
-                                           (setq tab-width 4)
-                                           (setq fill-column 81)
-                                           )
-          )
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
-(add-hook 'magit-mode '(lambda()
-                         (setq ergoemacs-ctl-c-delay 1)
-                         )
-          )
-(add-hook 'git-commit-mode '(setq ergoemacs-ctl-c-delay 1))
-(add-hook 'magit-commit-mode '(setq ergoemacs-ctl-c-delay 1))
-(add-hook 'org-mode '(lambda ()
-                       (setq ergoemacs-ctl-c-delay 1)
-                       )
-          )
 (autoload 'cmake-font-lock-activate "cmake-font-lock" nil t)
 (add-hook 'cmake-mode-hook 'cmake-font-lock-activate)
 
