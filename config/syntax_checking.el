@@ -10,3 +10,6 @@
                  (eval-after-load 'flycheck
                    '(when (not (display-graphic-p))
                       (setq flycheck-indication-mode nil)))))
+
+(use-package flycheck-pos-tip
+  :ensure t)

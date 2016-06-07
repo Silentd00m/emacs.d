@@ -32,6 +32,9 @@
 (use-package fzf
   :ensure t)
 
+(use-package helm-flycheck
+  :ensure t)
+
 ;; Helm-Dash
 (use-package helm-dash
   :ensure t
