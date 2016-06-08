@@ -11,9 +11,10 @@
   (package-refresh-contents)
   (package-install 'use-package))
 
+(load "~/.emacs.d/config/config")
 (load "~/.emacs.d/config/plugins")
-(load custom-file)
-(load "~/.emacs.d/config/theme")
+                                        ;(load "~/.emacs.d/config/theme")
+(load "~/.emacs.d/config/interface")
 (load "~/.emacs.d/config/helm")
 (load "~/.emacs.d/config/auto_completion")
 (load "~/.emacs.d/config/syntax_checking")
@@ -46,11 +47,3 @@
               backward-char forward-char))
     (ding)))
 (setq ring-bell-function 'my-bell-function)
-
-;(require 'auto-package-update)
-;(auto-package-update-maybe)
-
-;(add-hook 'auto-package-update-before-hook
-;          (lambda () (message "Updating packages.")))
-
-                                        ;(compile-emacs-dir)
