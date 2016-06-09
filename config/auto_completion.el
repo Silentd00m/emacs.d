@@ -48,16 +48,18 @@
                      (set-variable 'ycmd-server-command '("/usr/bin/python" "/Users/andre/.emacs.d/ycmd-mac/ycmd"))
                    (set-variable 'ycmd-server-command '("python3" "/home/andre/.emacs.d/ycmd-linux/ycmd")))
 
-                 (setq ycmd-extra-conf-handler 'load)))
+                 (setq ycmd-extra-conf-handler 'load)
+
+                 (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup)))
 
 (use-package company-ycmd
-  :ensure company
+  :ensure t
   :config (progn (company-ycmd-setup)
                  (add-to-list 'company-backends 'company-ycmd)))
 
-(use-package ycmd-eldoc
-  :ensure ycmd
-  :config (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup))
+;(use-package ycmd-eldoc
+;  :ensure t
+;  :config (add-hook 'ycmd-mode-hook 'ycmd-eldoc-setup))
 
 ;(use-package)
 

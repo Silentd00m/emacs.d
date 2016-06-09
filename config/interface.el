@@ -3,14 +3,14 @@
   :group 'gears
   :link '(url-link :tag "Github" "https://github.com/Silentd00m/emacs.d"))
 
-(defcustom gears-font "Source Code Pro-9"
+(defcustom gears-font "Source Code Pro-10"
   "The font to use."
   :type 'face
   :group 'gears-interface)
 
-(defcustom gears-theme "moe-theme"
+(defcustom gears-theme 'moe-dark
   "The used theme."
-  :type 'string
+  :type 'symbolp
   :group 'gears-interface)
 
 (defcustom gears-enable-tabbar nil
@@ -61,7 +61,7 @@ Options:
   :type 'boolean
   :group 'gears-interface)
 
-(defcustom gears-powerline-theme 'powerline-moe-theme
+(defcustom gears-powerline-theme nil
   "Controls wheter powerline (the bottom bar) should be used."
   :type 'function
   :group 'gears-interface)
@@ -99,11 +99,6 @@ Set to nil to disable."
   :type 'boolean
   :group 'gears-interface)
 
-(defcustom gears-dark-theme t
-  "Use dark theme variant (defaul theme only)."
-  :type 'boolean
-  :group 'gears-interface)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Gears' powerline themes
 
@@ -113,15 +108,12 @@ Set to nil to disable."
 ;; Set configuration
 
 (set-frame-font gears-font)
+(set-face-attribute 'default nil :font gears-font)
+(set-default-font gears-font)
 
 (column-number-mode t)
 
-(when (string= gears-theme "moe-theme")
-  (use-package moe-theme
-    :ensure t
-    :config (if gears-dark-theme
-                (load-theme 'moe-dark t)
-              (load-theme 'moe-light t))))
+(load-theme gears-theme t)
 
 (when gears-hightlight-current-line
   (global-hl-line-mode t))

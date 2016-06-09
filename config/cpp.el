@@ -123,7 +123,8 @@
 ;; Hooks
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(add-to-list 'company-backends 'company-c-headers)
+(when (boundp 'company-backends)
+  (add-to-list 'company-backends 'company-c-headers))
 (add-hook 'c++-mode-hook 'gears-cpp-mode-hook)
 (add-hook 'c-mode-hook 'ycmd-mode)
 (add-hook 'c++-mode-hook 'ycmd-mode)

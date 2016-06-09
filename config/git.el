@@ -7,7 +7,7 @@
 
 (use-package git-gutter-fringe+
   :ensure t)
-                 
+
 (use-package magit
   :ensure t
   :config (progn (setq magit-last-seen-setup-instructions "1.4.0")

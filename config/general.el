@@ -13,6 +13,11 @@
                                         ;(global-aggressive-indent-mode 1)
 (electric-indent-mode)
 
+(add-hook 'after-change-major-mode-hook '(lambda ()
+                                           (setq-default indent-tabs-mode nil)
+                                           (setq tab-width 4)
+                                           (setq fill-column 81)))
+
 ;; General
 (add-hook 'doc-view-mode-hook 'auto-revert-mode)
 

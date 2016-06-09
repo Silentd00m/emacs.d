@@ -6,14 +6,15 @@
 
 ;(setq debug-on-error nil)
 (setq custom-file "~/.emacs.d/config/custom.el")
+(load custom-file)
+(load "~/.emacs.d/config/packages")
 
 (unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+  (load "~/.emacs.d/functions/install")
+
+  (gears-install-default-packages))
 
 (load "~/.emacs.d/config/config")
-(load "~/.emacs.d/config/plugins")
-                                        ;(load "~/.emacs.d/config/theme")
 (load "~/.emacs.d/config/interface")
 (load "~/.emacs.d/config/helm")
 (load "~/.emacs.d/config/auto_completion")

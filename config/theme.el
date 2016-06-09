@@ -1,15 +1,12 @@
-(require 'use-package)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Config variables
-(defvar gears-tabbar-enabled nil "Enable tabbar.")
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Main theme and font
-(use-package moe-theme
-  :ensure t
-  :config (load-theme 'moe-dark t)
-  )
+(when (string= gears-theme "moe-theme")
+  (use-package moe-theme
+    :ensure t
+    :config (load-theme 'moe-dark t)))
+
+(when (not (string= gears-theme "moe-theme"))
+  (require gears-theme))
 
 ;(use-package moe-dark)
 ;(load-theme 'moe-dark t)
@@ -22,11 +19,6 @@
 (show-paren-mode 1)                                                             ; Show matching delimiters.
 (setq show-paren-style 'expression)
 (global-hl-line-mode t) ; Highlight current line
-
-(add-hook 'after-change-major-mode-hook '(lambda ()
-                                           (setq-default indent-tabs-mode nil)
-                                           (setq tab-width 4)
-                                           (setq fill-column 81)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI Elemnts
@@ -46,8 +38,9 @@
 
 ;; Powerline
 (use-package powerline
-  :ensure moe-theme
-  :config (powerline-moe-theme))
+  :ensure t
+  :config (progn (setq powerline-default-separator 'slant)
+                 (powerline-moe-theme)))
 
 ;; Whitespace
 (use-package whitespace
