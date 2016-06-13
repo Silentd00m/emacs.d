@@ -1,29 +1,36 @@
+;;; -*- lexical-binding: t; -*-
+
 (require 'cl)
 
-(require 'wid-edit)
-
-(load "~/.emacs.d/functions/gui")
+(load "~/.emacs.d/functions/packages")
+(load "~/.emacs.d/functions/layers")
 
 (defun gears-install-configure()
   (interactive)
 
-                                        ;(customize-group "gears")
+  (when gears-use-evil
+    (evil-mode nil))
+
+  (setq gic-layer-list '(base))
 
   (generate-new-buffer-name "*gears-install*")
   (switch-to-buffer "*gears-install*")
-  (erase-buffer)
+  (let ((inhibit-read-only t))
+    (erase-buffer))
+  (remove-overlays)
 
-  (widget-insert "Keyboard Mode:\n")
+  (widget-insert (gears-ui-create-header-bar "Keyboard Mode" (current-buffer)) "\n")
   (widget-create 'radio-button-choice
                  :value "gears-keys"
                  :notify (lambda (widget &rest ignore)
-                           (when (string= (widget-value widget) "vim-keys")
-                             (customize-save-variable 'gears-use-evil t)))
+                           (if (string= (widget-value widget) "vim-keys")
+                               (customize-save-variable 'gears-use-evil t)
+                             (customize-save-variable 'gears-use-evil nil)))
                  '(item :tag "Gears (modern)"
                         :value "gears-keys")
                  '(item :tag "Vi(m)-Like"
                         :value "vim-keys"))
-  (widget-insert "\nTheme:\n")
+  (widget-insert "\n" (gears-ui-create-header-bar "Theme" (current-buffer)) "\n")
   (widget-create 'radio-button-choice
                  :value gears-theme
                  :notify (lambda (widget &rest ignore)
@@ -39,52 +46,57 @@
                  '(item :tag "Material (Light)"
                         :value material-light))
 
+  (widget-insert "\n" (gears-ui-create-header-bar "Additional Features" (current-buffer)) "\n")
+
+  (dolist (layer (gears-layers-list-available))
+    (load (concat "~/.emacs.d/layers/" layer "/init"))
+
+    (widget-create 'checkbox
+                   :value nil
+                   :notify (lambda (widget &rest ignore)
+                             (if (widget-value widget)
+                                 (progn (add-to-list 'gic-layer-list layer))
+                               (delete layer gic-layer-list))))
+    (widget-insert " " layer "\n  " (gears-layer-get-description layer) "\n"))
+
+  (widget-insert "\n\n")
+  (widget-create 'push-button
+                 :notify (lambda (&rest ignore)
+                           (generate-new-buffer-name "*gears-install*")
+                           (switch-to-buffer "*gears-install*")
+                           (let ((inhibit-read-only t))
+                             (erase-buffer))
+                           (remove-overlays)
+
+                           (princ gic-layer-list (current-buffer))
+
+                           (dolist (layer gic-layer-list)
+                             ;; Add layer to list beforehand so subsequent layers know it is installed.
+                             ;; Important for additional functionality.
+                             (add-to-list gears-layers-installed-list layer)
+                             (customize-save-variable 'gears-layers-installed-list gears-layers-installed-list))
+                           ;; Install all selected layers
+                           (dolist (layer gic-layer-list)
+                             (gears-layer-install layer)))
+                 "Next")
+
   (use-local-map widget-keymap)
   (widget-setup))
 
 (defun gears-install-default-packages()
   (interactive)
 
-  (generate-new-buffer-name "*gears-install*")
-  (switch-to-buffer "*gears-install*")
+  (customize-save-variable 'gears-layers-installed-list '())
+  (gears-install-packages gears-base-packages)
 
-  (read-only-mode 0)
-  (princ "Refreshing package repository cache before installation." (current-buffer))
-  (read-only-mode t)
-
-  ;(package-refresh-contents)
-
-  (let ((gidp-installed-package-count 0))
-    (dolist (pkg gears-base-packages)
-      (unless (package-installed-p pkg)
-        (package-install pkg))
-
-      (setq gidp-installed-package-count (+ gidp-installed-package-count 1))
-
-      (switch-to-buffer "*gears-install*")
-
-      (read-only-mode 0)
-      (erase-buffer)
-      (princ "Please wait, installing Gears' base packages... [" (current-buffer))
-      (princ gidp-installed-package-count (current-buffer))
-      (princ "/" (current-buffer))
-      (princ (length gears-base-packages) (current-buffer))
-      (princ "]\n" (current-buffer))
-      (gears-princ-progress-bar (current-buffer) (floor (* (/ (float gidp-installed-package-count) (length gears-base-packages)) 100)))
-      (read-only-mode t)))
-
-  (switch-to-buffer "*gears-install*")
-
-  (read-only-mode 0)
-  (princ "\n\n" (current-buffer))
-  (princ "Installation complete. Next step: " (current-buffer))
-
+  (princ "Next step: " (current-buffer))
   (remove-overlays)
   (widget-create 'push-button
                  :notify (lambda (&rest ignore)
                            (gears-install-configure))
-         "Configure")
+                 "Configure")
 
   (use-local-map widget-keymap)
   (widget-setup)
-  (read-only-mode t))
+
+  (moe-theme))

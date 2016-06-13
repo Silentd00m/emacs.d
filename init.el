@@ -7,12 +7,20 @@
 ;(setq debug-on-error nil)
 (setq custom-file "~/.emacs.d/config/custom.el")
 (load custom-file)
-(load "~/.emacs.d/config/packages")
+(load "~/.emacs.d/config/layers")
 
 (unless (package-installed-p 'use-package)
   (load "~/.emacs.d/functions/install")
 
   (gears-install-default-packages))
+
+(require 'f)
+(setq gears-emacs-basepath (f-dirname (f-this-file)))
+
+(load "~/.emacs.d/functions/layers")
+(gears-layer-init)
+
+;; TODO : Remove all following loads to layers.
 
 (load "~/.emacs.d/config/config")
 (load "~/.emacs.d/config/interface")
@@ -23,7 +31,7 @@
 (load "~/.emacs.d/config/git")
 (load "~/.emacs.d/config/sessions")
 (load "~/.emacs.d/config/general")
-(load "~/.emacs.d/config/keyboard")
+;;(load "~/.emacs.d/config/keyboard")
 (load "~/.emacs.d/config/python")
 (load "~/.emacs.d/config/programming")
 (load "~/.emacs.d/config/latex")
