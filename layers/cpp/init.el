@@ -134,7 +134,7 @@
                                 (setq-local helm-dash-docsets '("C++" "C"))))))
 
 (defun gears-layers/cpp-install()
-  "Additional install commands for the C++ layer."
-  )
+  "Additional install commands for the C++ layer.")
 
-(setq gears-layers/cpp-depends '((packages . '(modern-cpp-font-lock))))
+(setq gears-layers/cpp-depends '((packages . '(modern-cpp-font-lock))
+                                 (layers . nil)))

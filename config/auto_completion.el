@@ -3,8 +3,6 @@
 (use-package yasnippet
   :ensure t)
 
-(set-default 'semantic-case-fold t)
-
 (use-package smartparens
   :ensure t
   :config (progn (require 'smartparens-config)

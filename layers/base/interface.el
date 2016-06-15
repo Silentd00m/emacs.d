@@ -159,3 +159,6 @@ Set to nil to disable."
       :config (progn (tabbar-mode t)
                      (setq tabbar-ruler-global-tabbar t) ; Use tabbar
                      (setq tabbar-ruler-movement-timer-dealy 1000000))))
+
+(when gears-maximize-after-start
+  (add-to-list 'default-frame-alist '(fullscreen . maximized)))

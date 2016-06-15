@@ -13,4 +13,4 @@
 ;; Dash
 (add-hook 'emacs-lisp-mode-hook '(lambda()
                                    (message "[Dash] Loaded docset 'Emacs Lisp'.")
-                                   (setq-local helm-dash-docsets '("Emacs_Lisp" "Emacs Lisp"))))
+                                   (setq-local helm-dash-docsets '("Emacs Lisp" "Emacs Lisp"))))

@@ -1,6 +1,6 @@
 (require 'f)
 
-(load "~/.emacs.d/config/layers")
+(load (concat gears-emacs-basepath "/config/layers"))
 
 (defun gears-layer-init()
   (interactive)
@@ -17,31 +17,31 @@
   (f-write-text (concat "(setq gears-layer-installed-list '("
                         (mapconcat #'sequencep gears-layer-installed-list " ")
                         "))")
-                'utf-8 "~/.emacs.d/config/layers.el"))
+                'utf-8 (concat gears-emacs-basepath "/config/layers.el")))
 
 (defun gears-layer-list-available()
   "Returns a list of all available configuration layers."
 
-  (directory-files "~/.emacs.d/layers/" nil "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)"))
+  (directory-files (concat gears-emacs-basepath "/layers/" nil "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)")))
 
 (defun gears-layer-get-description(layer)
   "Returns the description of the given layer."
 
-  (funcall (intern (concat "gears-layers/" layer "-description"))))
+  (funcall (intern (concat "gears-layers/" (prin1-to-string layer) "-description"))))
 
 (defun gears-layer--recursive-list-depends(layer)
   "Recursively lists all depended packages for the layer."
 
   (let ((gli-package-list '()))
     (dolist (layer-r (cdr (assoc 'layers (eval (intern (concat "gears-layers/"
-                                                               layer
+                                                               (prin1-to-string layer)
                                                                "-depends"))))))
       (setq gli-package-list
             (append gli-package-list (gears-layer--recursive-list-depends layer-r))))
 
     (remove-duplicates (append gli-package-list
             (cdr (assoc 'packages (eval (intern (concat "gears-layers/"
-                                                        layer
+                                                        (prin1-to-string layer)
                                                         "-depends")))))))))
 
 (defun gears-layer-mark-installed(layer)
@@ -51,14 +51,14 @@
   (gears-layer-mark-installed layer)
 
   (dolist (layer-r (cdr (assoc 'layers (eval (intern (concat "gears-layers/"
-                                                               layer
+                                                               (prin1-to-string layer)
                                                                "-depends"))))))
     (gears-layer--recursive-mark-installed layer-r)))
 
 (defun gears-layer-get-depends(layer)
   "Returns the dependencies for a given layer."
 
-  (eval (intern (concat "gears-layers/" layer "-depends"))))
+  (eval (intern (concat "gears-layers/" (prin1-to-string layer) "-depends"))))
 
 (defun gears-layer-autoremove-packages()
   "Removes all packages not used by any layer."
@@ -80,7 +80,7 @@
   (add-to-list 'gears-layer-installed-list layer)
   (gears-layer-list-save)
 
-  (load (concat "~/.emacs.d/layers/" layer "/init"))
+  (load (concat gears-emacs-basepath "/layers/" (prin1-to-string layer) "/init"))
 
   ;; Install all layer dependencies
   (gears-install-packages (cdr (assoc 'packages
@@ -92,12 +92,12 @@
                                                   "-depends"))))
     (gears-layer-install layer)))
 
-(defun gears-layer-remove(layer)
-  (funcall (intern (concat "gears-layers/" layer "-remove")))
-
-  (delete layer gears-layer-installed-list)
-
-  (gears-layer-list-save))
+;; (defun gears-layer-remove(layer)
+;;   (funcall (intern "gears-layers/" layer "-remove")))
+;; 
+;;   (delete layer gears-layer-installed-list)
+;; 
+;;   (gears-layer-list-save))
 
 (defun gears-layer-installed(layer)
   (member layer 'gears-layer-installed-list))

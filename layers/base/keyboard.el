@@ -10,9 +10,12 @@
 (transient-mark-mode 1)
 (setq x-select-enable-clipboard t)
 
+(require 'smartparens-config)
+(smartparens-global-mode t)
+
 (use-package comment-dwim-2
   :ensure t)
-(use-package redo+
+(use-package undo-tree
   :ensure t)
 (use-package multiple-cursors
   :ensure t)
@@ -26,8 +29,8 @@
                                  ("C-c" . cua-copy-region)
                                  ;; ("C-x" . cua-cut-region)
                                  ;; ("C-v" . cua-paste-region)
-                                 ("C-y" . cua-redo)
-                                 ("C-z" . cua-undo)
+                                 ("C-y" . undo-tree-redo)
+                                 ("C-z" . undo-tree-undo)
                                  ("C-f" . helm-occur)
                                  ("C-h" . vr/replace)
 
@@ -38,8 +41,6 @@
                                  ("M-," . comment-dwim-2)
 
                                  ;; Document navigation
-                                 ("M-w" . avy-goto-word-or-subword-1)
-                                 ("M-l" . goto-line)
                                  ("C-t" . hs-toggle-hiding)
 
                                  ;; Window navigation
@@ -53,7 +54,7 @@
                                  ("<f3>" . help-command)
 
                                  ;; Helm key bindings
-                                 ("C-p" . helm-mini)
+                                 ("C-p" . gears-helm-mini)
                                  ("M-a" . helm-M-x)
                                  ("M-x" . helm-M-x)
                                  ("C-o" . helm-find-files)
@@ -63,7 +64,11 @@
                                  ("<f5>" . helm-make)
                                  ("<f7>" . helm-semantic-or-imenu)
                                  ("<f8>" . helm-flycheck)
-                                 ("M-s" . helm-swoop))
+                                 ("C-u" . undo-tree-visualize)
+
+                                 ;; Hydras
+                                 ("M-p" . gears-layers/base-hydra-m-p/body)
+                                 ("M-g" . gears-layers/base-hydra-m-g/body))
 
   ""
   :type '(alist :value (group key-sequence symbol))
@@ -99,3 +104,5 @@
 ;; Company mode
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "<return>") #'company-complete-selection))
+
+(load (concat gears-emacs-basepath "/layers/base/hydra"))
