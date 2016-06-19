@@ -2,7 +2,7 @@
 
 (load (concat gears-emacs-basepath "/config/layers"))
 
-(defun gears-layer-init()
+(defun gears-layer-init ()
   (interactive)
 
   "Initializes all installed layers."
@@ -11,7 +11,7 @@
     (load (concat gears-emacs-basepath "/layers/" (prin1-to-string layer) "/init.el"))
     (funcall (intern (concat "gears-layers/" (prin1-to-string layer) "-init")))))
 
-(defun gears-layer-list-save()
+(defun gears-layer-list-save ()
   "Saves the current value of gears-layers-installed-list"
 
   (f-write-text (concat "(setq gears-layer-installed-list '("
@@ -19,7 +19,7 @@
                         "))")
                 'utf-8 (concat gears-emacs-basepath "/config/layers.el")))
 
-(defun gears-layer-list-available()
+(defun gears-layer-list-available ()
   "Returns a list of all available configuration layers."
 
   (directory-files (concat gears-emacs-basepath "/layers/" nil "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)")))
@@ -44,10 +44,10 @@
                                                         (prin1-to-string layer)
                                                         "-depends")))))))))
 
-(defun gears-layer-mark-installed(layer)
+(defun gears-layer-mark-installed (layer)
   (add-to-list 'gears-layer-installed-list layer))
 
-(defun gears-layer--recursive-mark-installed(layer)
+(defun gears-layer--recursive-mark-installed (layer)
   (gears-layer-mark-installed layer)
 
   (dolist (layer-r (cdr (assoc 'layers (eval (intern (concat "gears-layers/"
@@ -55,12 +55,12 @@
                                                                "-depends"))))))
     (gears-layer--recursive-mark-installed layer-r)))
 
-(defun gears-layer-get-depends(layer)
+(defun gears-layer-get-depends (layer)
   "Returns the dependencies for a given layer."
 
   (eval (intern (concat "gears-layers/" (prin1-to-string layer) "-depends"))))
 
-(defun gears-layer-autoremove-packages()
+(defun gears-layer-autoremove-packages ()
   "Removes all packages not used by any layer."
 
   (let ((glarp-depended-pkg-list nil))
@@ -69,11 +69,13 @@
     (dolist (layer gears-layer-installed-list)
       (add-to-list glarp-depended-pkg-list (cdr (assoc 'packages (gears-layer-get-depends layer)))))
 
+    ;; Iterate over the list of activated packages, delete everything not needed
+    ;; in a layer.
     (dolist (package package-activated-list)
       (unless (member package glarp-depended-pkg-list)
         (gears-package-remove package)))))
 
-(defun gears-layer-install(layer)
+(defun gears-layer-install (layer)
   "Install a layer and all dependencies."
 
   ;; Add layer to list of layers
@@ -92,12 +94,17 @@
                                                   "-depends"))))
     (gears-layer-install layer)))
 
-;; (defun gears-layer-remove(layer)
-;;   (funcall (intern "gears-layers/" layer "-remove")))
-;; 
-;;   (delete layer gears-layer-installed-list)
-;; 
-;;   (gears-layer-list-save))
+(defun gears-layer-remove (layer)
+  (funcall (intern "gears-layers/" (prin1-to-string layer) "-remove"))
 
-(defun gears-layer-installed(layer)
-  (member layer 'gears-layer-installed-list))
+  (delete layer gears-layer-installed-list)
+
+  (gears-layer-list-save)
+
+  ;; TODO : Uninstall unused packages.
+  )
+
+(defun gears-layer-installed (layer)
+  "Returns true if layer is installed."
+
+  (> (length (member layer gears-layer-installed-list)) 0))
