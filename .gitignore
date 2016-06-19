@@ -1,0 +1,16 @@
+.cask
+.tutor
+*.elc
+docset*
+elpa/*
+ycmd-*/
+auto-save-list/*
+history
+recentf
+tramp
+.stfolder
+.cask/*
+.DS_Store
+\.*.el
+\.*.elc
+/projectile-bookmarks.eld
