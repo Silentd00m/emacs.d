@@ -31,6 +31,8 @@
 ;; (gears-defhydra gears-hydra-def
 ;;                gears-hydra-h)
 
+(defvar gears-hydra-list '())
+
 (defun gears-hydra-categories--max-length (hydra)
   "Returns the maximum number of heads inside any category of the given hydra."
 
@@ -108,13 +110,15 @@
     (setq categories (nreverse categories))
     (setq category-widths (nreverse category-widths))
 
-    ;; (princ (prin1-to-string category-widths) (current-buffer))
-
     (dotimes (row (+ max-category-length 2))
+      ;; Iterate over all categories. Categories will be displayed horizontally.
       (dotimes (col (length categories))
         (if (> (length (nth row (nth col categories))) 0)
+            ;; If the category has enough heads for the current row, output the
+            ;; head.
             (setq output-string (s-append (concat (nth row (nth col categories)) " ")
                                           output-string))
+          ;; Else fill with whitespace.
           (setq output-string (s-append (s-repeat (+ (nth col category-widths) 1) " ")
                                         output-string)))
 
@@ -124,7 +128,14 @@
 
     output-string))
 
+(defun gears-hydra-add-category (hydra category)
+  "Adds a catgory to a hydra."
+
+  (setq `,(gears-hydra-categories hydra) (append `,(gears-hydra-categories hydra)
+                                               category)))
+
 (defun gears-hydra--list-keys (hydra)
+  "Lists all key bindings in a hydra."
 
   (let ((return-list '()))
     (dolist (category (gears-hydra-categories hydra))
@@ -133,10 +144,30 @@
 
     return-list))
 
-(defmacro gears-defhydra (name hydra)
+(defmacro gears-hydra--generate (name hydra)
   (let ((docstring (eval (gears-hydra--format (eval hydra))))
         (heads (gears-hydra--list-keys (eval hydra))))
     `(defhydra ,name (:hint nil)
        ,docstring
        ,@heads
        ("<ESC>" nil "Close Help"))))
+
+(defmacro gears-defhydra (name categories)
+  (setq gears-layers/base-hydra-list
+        `(append '(,name . (make-gears-hydra :name (prin1-to-string name)
+                                             :categories categories)))
+        gears-layers/base-hydra-list)
+
+  `(gears-hydra--generate ,name (make-gears-hydra :name ,(prin1-to-string name)
+                                                  :categories ,categories)))
+
+;; (defmacro gears-defhydra (name categories)
+;;   (let ((hydra (gears-hydra--generate ,name
+;;                                       `(make-gears-hydra :name (prin1-to-string name)
+;;                                                          :categories '())))
+;;         (name-sym ',(eval name))
+;;         (name-string (prin1-to-string ,name))
+;;         (cat `,(eval categories))))
+
+;;   (append gears-hydra-list `(gears-hydra--generate name-sym
+;;                                                    hydra)))
