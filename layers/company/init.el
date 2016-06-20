@@ -32,4 +32,5 @@
 (defun gears-layers/company-remove()
   (eval t))
 
-(setq gears-layers/company-depends '((packages . (company))))
+(gears-layer-defdepends company
+                        :packages '(company))

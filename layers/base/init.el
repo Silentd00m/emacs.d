@@ -76,7 +76,8 @@ Options:
   (setq save-place-forget-unreadable-files nil)
   (global-undo-tree-mode 1)
   (projectile-global-mode)
-  (global-company-mode))
+  (global-company-mode)
+  (company-quickhelp-mode 1))
 
 (defun gears-layers/base-remove()
   "Additional uninstall commands for the base-layer"
@@ -88,21 +89,21 @@ Options:
 
   (eval t))
 
-(setq gears-layers/base-depends '((packages . (bug-hunter
-                                               fzf
-                                               undo-tree
-                                               smartparens
-                                               comment-dwim-2
-                                               use-package
-                                               rainbow-delimiters
-                                               nlinum
-                                               multiple-cursors
-                                               moe-theme
-                                               powerline
-                                               material-theme
-                                               tabbar-ruler
-                                               saveplace
-                                               git
-                                               visual-regexp
-                                               origami))
-                                  (layers . (company))))
+(gears-layer-defdepends base
+                        :packages '(bug-hunter
+                                    undo-tree
+                                    smartparens
+                                    comment-dwim-2
+                                    use-package
+                                    rainbow-delimiters
+                                    nlinum
+                                    multiple-cursors
+                                    moe-theme
+                                    powerline
+                                    material-theme
+                                    tabbar-ruler
+                                    saveplace
+                                    git
+                                    visual-regexp
+                                    origami)
+                        :layers '(company))

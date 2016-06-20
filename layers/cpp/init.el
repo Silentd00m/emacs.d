@@ -136,5 +136,5 @@
 (defun gears-layers/cpp-install()
   "Additional install commands for the C++ layer.")
 
-(setq gears-layers/cpp-depends '((packages . '(modern-cpp-font-lock))
-                                 (layers . nil)))
+(gears-layer-defdepends cpp
+                        :packages '(modern-cpp-font-lock))
