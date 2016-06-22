@@ -35,7 +35,6 @@
                 (template-args-cont . +)
                 (inher-cont . c-lineup-multi-inher)
                 (comment-intro . 0))))
-(setq c-default-style "gears")
 
 (defun gears-cpp-mode-hook ()
   (setq font-lock-maximum-decoration 6)
@@ -122,12 +121,11 @@
 
   (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode)
 
+  (setq c-default-style "gears")
+
   (when (boundp 'company-backends)
     (add-to-list 'company-backends 'company-c-headers))
   (add-hook 'c++-mode-hook 'gears-cpp-mode-hook)
-  (when (gears-layer-installed "ycmd")
-    (add-hook 'c-mode-hook 'ycmd-mode)
-    (add-hook 'c++-mode-hook 'ycmd-mode))
   (when (gears-layer-installed "dash")
     (add-hook 'c++-mode-hook '(lambda()
                                 (message "[Dash] Loaded docset 'C++' and 'C'.")

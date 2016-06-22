@@ -5,7 +5,7 @@
 (load "~/.emacs.d/functions/packages")
 (load "~/.emacs.d/functions/layers")
 
-(defun gears-install-configure()
+(defun gears-install-configure ()
   (interactive)
 
   (when gears-use-evil
@@ -83,11 +83,11 @@
   (use-local-map widget-keymap)
   (widget-setup))
 
-(defun gears-install-default-packages()
+(defun gears-install-firstrun-setup ()
   (interactive)
 
-  (customize-save-variable 'gears-layers-installed-list '())
-  (gears-install-packages gears-base-packages)
+  (load (concat gears-emacs-basepath "/functions/layers"))
+  (gears-layer-init)
 
   (princ "Next step: " (current-buffer))
   (remove-overlays)
@@ -97,6 +97,4 @@
                  "Configure")
 
   (use-local-map widget-keymap)
-  (widget-setup)
-
-  (moe-theme))
+  (widget-setup))

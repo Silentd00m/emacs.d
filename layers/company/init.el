@@ -5,17 +5,13 @@
 
   (setq company-auto-complete 'ignore)
   (setq company-auto-complete-chars nil)
-  (defvar company-backends
-    (quote
-     (company-c-headers company-bbdb company-nxml company-css company-cmake company-capf
-                        (company-dabbrev-code company-gtags company-keywords)
-                        company-oddmuse company-files company-dabbrev)))
+  (setq company-backends '(company-c-headers company-bbdb company-nxml company-css company-cmake company-capf
+                                             (company-dabbrev-code company-gtags company-keywords)
+                                             company-oddmuse company-files company-dabbrev))
   (setq company-continue-commands
-        (quote
-         (not save-buffer save-some-buffers save-buffers-kill-terminal save-buffers-kill-emacs fixup-whitespace)))
+        '(not save-buffer save-some-buffers save-buffers-kill-terminal save-buffers-kill-emacs fixup-whitespace))
   (setq company-frontends
-        (quote
-         (company-pseudo-tooltip-unless-just-one-frontend company-echo-metadata-frontend company-preview-if-just-one-frontend)))
+        '(company-pseudo-tooltip-unless-just-one-frontend company-echo-metadata-frontend company-preview-if-just-one-frontend))
   (setq company-idle-delay 0)
   (setq company-minimum-prefix-length 0)
   (setq company-selection-wrap-around t)

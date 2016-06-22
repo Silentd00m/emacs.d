@@ -44,6 +44,7 @@ Options:
 
   (setq create-lockfiles nil)  ;; No lock files
   (setq make-backup-files nil) ;; No backup files
+  (setq frame-resize-pixelwise t) ;; Resize by pixels instead of rows
 
   (setq scroll-step 1)
 
@@ -77,17 +78,18 @@ Options:
   (global-undo-tree-mode 1)
   (projectile-global-mode)
   (global-company-mode)
-  (company-quickhelp-mode 1))
+  (company-quickhelp-mode 1)
+  (global-origami-mode t))
 
 (defun gears-layers/base-remove()
   "Additional uninstall commands for the base-layer"
 
-  (eval t))
+  t)
 
 (defun gears-layers/base-install()
   "Additional install commands for the base-layer"
 
-  (eval t))
+  t)
 
 (gears-layer-defdepends base
                         :packages '(bug-hunter

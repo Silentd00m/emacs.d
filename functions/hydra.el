@@ -2,34 +2,11 @@
 
 (require 'cl)
 (require 's)
+(require 'hydra)
 
 (cl-defstruct gears-hydra name categories)
 (cl-defstruct gears-hydra-category title heads)
 (cl-defstruct gears-hydra-head key text command)
-
-;; Usage example:
-;; (setq gears-hydra-h (make-gears-hydra :name "gears-hydra"
-;;                               :categories `(
-;;                                             ,(make-gears-hydra-category :title "GOTO"
-;;                                                                  :heads `(,(make-gears-hydra-head :key "c"
-;;                                                                                            :text "Character"
-;;                                                                                            :command 'goto-character)
-;;                                                                           ,(make-gears-hydra-head :key "l"
-;;                                                                                            :text "Line"
-;;                                                                                            :command 'goto-line)))
-;;                                             ,(make-gears-hydra-category :title "Git"
-;;                                                                  :heads `(,(make-gears-hydra-head :key "b"
-;;                                                                                            :text "Blame")
-;;                                                                           ,(make-gears-hydra-head :key "s"
-;;                                                                                            :text "Status")
-;;                                                                           ,(make-gears-hydra-head :key "L"
-;;                                                                                            :text "Log")))
-;;                                             ,(make-gears-hydra-category :title "Graphics"
-;;                                                                  :heads `(,(make-gears-hydra-head :key "r"
-;;                                                                                            :text "Rotate"))))))
-;;
-;; (gears-defhydra gears-hydra-def
-;;                gears-hydra-h)
 
 (defvar gears-hydra-list '())
 
@@ -64,6 +41,8 @@
   (nth n (gears-hydra-category-heads category)))
 
 (defun gears-hydra-category--format (category)
+  "Generate and format the info text of a category."
+
   (let ((output-string "")
         (max-headlength (gears-hydra-category--max-headlength category)))
 
@@ -128,11 +107,18 @@
 
     output-string))
 
-(defun gears-hydra-add-category (hydra category)
+(defun gears-hydra--add-category (hydra category)
   "Adds a catgory to a hydra."
 
   (setq `,(gears-hydra-categories hydra) (append `,(gears-hydra-categories hydra)
-                                               category)))
+                                                 category)))
+
+(defun gears-hydra-category--add-head (category head)
+  "Adds a head to a category."
+
+  (setq (gears-hydra-category-heads category)
+        (append (gears-hydra-category-heads category)
+                head)))
 
 (defun gears-hydra--list-keys (hydra)
   "Lists all key bindings in a hydra."
@@ -144,6 +130,7 @@
 
     return-list))
 
+
 (defmacro gears-hydra--generate (name hydra)
   (let ((docstring (eval (gears-hydra--format (eval hydra))))
         (heads (gears-hydra--list-keys (eval hydra))))
@@ -153,21 +140,17 @@
        ("<ESC>" nil "Close Help"))))
 
 (defmacro gears-defhydra (name categories)
-  (setq gears-layers/base-hydra-list
-        `(append '(,name . (make-gears-hydra :name (prin1-to-string name)
-                                             :categories categories)))
-        gears-layers/base-hydra-list)
+  (let ((hydra (make-gears-hydra :name (prin1-to-string name)
+                                 :categories (eval categories))))
 
-  `(gears-hydra--generate ,name (make-gears-hydra :name ,(prin1-to-string name)
-                                                  :categories ,categories)))
+    (if (not (assoc name gears-hydra-list))
+        (setq gears-hydra-list (push `(,name . ,hydra) gears-hydra-list))
+      (let ((item (assoc name gears-hydra-list)))
+        (setf (cdr item) hydra)))
 
-;; (defmacro gears-defhydra (name categories)
-;;   (let ((hydra (gears-hydra--generate ,name
-;;                                       `(make-gears-hydra :name (prin1-to-string name)
-;;                                                          :categories '())))
-;;         (name-sym ',(eval name))
-;;         (name-string (prin1-to-string ,name))
-;;         (cat `,(eval categories))))
+    `(gears-hydra--generate ,name ,hydra)))
 
-;;   (append gears-hydra-list `(gears-hydra--generate name-sym
-;;                                                    hydra)))
+(defmacro gears-hydra-update (name)
+  "Updates the hydra with the given name so new heads and categories are shown."
+
+  `(gears-hydra--generate ,name (cdr (assoc ,name ,gears-hydra-list))))
