@@ -6,7 +6,7 @@
 
 (cl-defstruct gears-hydra name categories)
 (cl-defstruct gears-hydra-category title heads)
-(cl-defstruct gears-hydra-head key text command)
+(cl-defstruct gears-hydra-head key text command exit)
 
 (defvar gears-hydra-list '())
 
@@ -46,7 +46,7 @@
   (let ((output-string "")
         (max-headlength (gears-hydra-category--max-headlength category)))
 
-    (let ((title (s-concat "^" (gears-hydra-category-title category) "^")))
+    (let ((title (s-concat " " (gears-hydra-category-title category) " ")))
       (when (< (length title) max-headlength)
         (setq title (s-append (concat (s-repeat (- max-headlength (length title)) " ")
                                      "\n")
@@ -126,7 +126,7 @@
   (let ((return-list '()))
     (dolist (category (gears-hydra-categories hydra))
       (dolist (head (gears-hydra-category-heads category))
-        (push `(,(eval (gears-hydra-head-key head)) ,(gears-hydra-head-command head)) return-list)))
+        (push `(,(gears-hydra-head-key head) ,(gears-hydra-head-command head) :exit ,(gears-hydra-head-exit head)) return-list)))
 
     return-list))
 
