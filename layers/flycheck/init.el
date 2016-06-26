@@ -9,7 +9,7 @@
 (defun gears-layers/flycheck-description()
   "Returns the description of the flycheck Layer."
 
-  (eval ""))
+  "On the fly syntax checking.")
 
 (defun gears-layers/flycheck-install()
   )
@@ -17,5 +17,5 @@
 (defun gears-layers/flycheck-remove()
   )
 
-(setq gears-layers/flycheck-depends '((packages . (flycheck flycheck-pos-tip))
-                                      (layers . nil)))
+(gears-layer-defdepends flycheck
+                        :packages '(flycheck flycheck-pos-tip))

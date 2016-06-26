@@ -1,1 +1,1 @@
-(setq gears-layer-installed-list '(base flycheck dash))
+(setq gears-layer-installed-list '(python base auto_completion ycmd dash flycheck))

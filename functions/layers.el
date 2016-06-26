@@ -8,14 +8,19 @@
 
 (cl-defstruct gears-layer-dependencies packages layers)
 
+(defun gears-layer-convert-name (layer)
+  (if (stringp layer)
+      layer
+    (prin1-to-string layer)))
+
 (defun gears-layer-init ()
   (interactive)
 
   "Initializes all installed layers."
 
   (dolist (layer gears-layer-installed-list)
-    (load (concat gears-emacs-basepath "/layers/" (prin1-to-string layer) "/init.el"))
-    (funcall (intern (concat "gears-layers/" (prin1-to-string layer) "-init")))))
+    (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer) "/init.el"))
+    (funcall (intern (concat "gears-layers/" (gears-layer-convert-name layer) "-init")))))
 
 (defun gears-layer-list-save ()
   "Saves the current value of gears-layers-installed-list"
@@ -28,18 +33,27 @@
 (defun gears-layer-list-available ()
   "Returns a list of all available configuration layers."
 
-  (directory-files (concat gears-emacs-basepath "/layers/" nil "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)")))
+  (delete "base"
+          (directory-files (expand-file-name (concat
+                                              gears-emacs-basepath
+                                              "/layers/"))
+                           nil "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)")))
 
 (defun gears-layer-get-description (layer)
   "Returns the description of the given layer."
 
-  (funcall (intern (concat "gears-layers/" (prin1-to-string layer) "-description"))))
+  (load (concat gears-emacs-basepath
+                "/layers/"
+                (gears-layer-convert-name layer)
+                "/init"))
+
+  (funcall (intern (concat "gears-layers/" (gears-layer-convert-name layer) "-description"))))
 
 (defun gears-layer--recursive-list-dependencies (layer)
-  (load (concat gears-emacs-basepath "/layers/" (prin1-to-string layer) "/init"))
+  (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer) "/init"))
 
   (let* ((deps (eval (intern (concat "gears-layers/"
-                                     (prin1-to-string layer)
+                                     (gears-layer-convert-name layer)
                                      "-depends"))))
          (package-list (gears-layer-dependencies-packages deps))
          (layer-list (gears-layer-dependencies-layers deps)))
@@ -56,15 +70,15 @@
 (defun gears-layer--recursive-mark-installed (layer)
   (gears-layer-mark-installed layer)
 
-  (dolist (layer-dep (gears-layer-dependencies-layers (eval (intern (concat "gears-layer/"
-                                                                          (prin1-to-string layer)
+  (dolist (layer-dep (gears-layer-dependencies-layers (eval (intern (concat "gears-layers/"
+                                                                          (gears-layer-convert-name layer)
                                                                           "-depends")))))
     (gears-layer--recursive-mark-installed layer-dep)))
 
 (defun gears-layer-get-depends (layer)
   "Returns the dependencies for a given layer."
 
-  (eval (intern (concat "gears-layers/" (prin1-to-string layer) "-depends"))))
+  (eval (intern (concat "gears-layers/" (gears-layer-convert-name layer) "-depends"))))
 
 (defun gears-layer-autoremove-packages ()
   "Removes all packages not used by any layer."
@@ -88,7 +102,7 @@
   (add-to-list 'gears-layer-installed-list layer)
   (gears-layer-list-save)
 
-  (load (concat gears-emacs-basepath "/layers/" (prin1-to-string layer) "/init"))
+  (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer) "/init"))
 
   ;; Install all layer dependencies
   (gears-package-install-packages (gears-layer--recursive-list-dependencies layer))
@@ -97,7 +111,7 @@
 (defun gears-layer-remove (layer)
   "Removes a layer and all its files and unused packages."
 
-  (funcall (intern "gears-layers/" (prin1-to-string layer) "-remove"))
+  (funcall (intern "gears-layers/" (gears-layer-convert-name layer) "-remove"))
 
   (delete layer gears-layer-installed-list)
 
@@ -115,5 +129,5 @@
 (defmacro gears-layer-defdepends (layer &rest depends)
   "Simple way to generate a dependency list for a layer."
 
-  `(setq ,(intern (concat "gears-layers/" (prin1-to-string layer) "-depends"))
+  `(setq ,(intern (concat "gears-layers/" (gears-layer-convert-name layer) "-depends"))
          (make-gears-layer-dependencies ,@depends)))

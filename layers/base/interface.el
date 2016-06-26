@@ -99,6 +99,11 @@ Set to nil to disable."
   :type 'boolean
   :group 'gears-interface)
 
+(defcustom gears-disable-auto-key-help nil
+  "Disable the keymap popup on normal (Non-Mod) key combinations."
+  :type 'boolean
+  :group 'gears-interface)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Gears' powerline themes
 
@@ -162,3 +167,6 @@ Set to nil to disable."
 
 (when gears-maximize-after-start
   (add-to-list 'default-frame-alist '(fullscreen . maximized)))
+
+(unless gears-disable-auto-key-help
+  (which-key-mode t))

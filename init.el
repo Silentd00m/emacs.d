@@ -4,7 +4,7 @@
                          ("marmalade" . "https://marmalade-repo.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
 
-
+(setq inhibit-startup-message t)
 
 (setq custom-file "~/.emacs.d/config/custom.el")
 (load custom-file)
@@ -12,6 +12,7 @@
 (load "~/.emacs.d/config/config")
 
 (unless (package-installed-p 'use-package)
+  (package-refresh-contents)
   (package-install 'use-package))
 
 (use-package f

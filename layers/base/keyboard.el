@@ -28,7 +28,7 @@
                                  ("C-a" . mark-whole-buffer)
                                  ("C-c" . cua-copy-region)
                                  ;; ("C-x" . cua-cut-region)
-                                 ;; ("C-v" . cua-paste-region)
+                                 ;; ("C-v" . cua-paste)
                                  ("C-y" . undo-tree-redo)
                                  ("C-z" . undo-tree-undo)
                                  ("C-f" . helm-occur)
@@ -67,8 +67,14 @@
                                  ("C-u" . undo-tree-visualize)
 
                                  ;; Hydras
+                                 ("M-e" . gears-layers/base-hydra-m-e/body)
+                                 ("M-f" . gears-layers/base-hydra-m-f/body)
+                                 ("M-g" . gears-layers/base-hydra-m-g/body)
                                  ("M-p" . gears-layers/base-hydra-m-p/body)
-                                 ("M-g" . gears-layers/base-hydra-m-g/body))
+                                 ("M-r" . gears-layers/base-hydra-m-r/body)
+                                 ("M-s" . gears-layers/base-hydra-m-s/body)
+                                 ("M-t" . gears-layers/base-hydra-m-t/body)
+                                 )
 
   ""
   :type '(alist :value (group key-sequence symbol))
@@ -81,6 +87,21 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set configuration
+
+(use-package helm
+  :ensure t
+  :config (progn ()
+                 (define-key helm-map (kbd "<escape>") 'helm-keyboard-quit)))
+
+(defadvice keyboard-escape-quit (around my-keyboard-escape-quit activate)
+  "Don't unsplit window when pressing escape."
+
+  (let (orig-one-window-p)
+    (fset 'orig-one-window-p (symbol-function 'one-window-p))
+    (fset 'one-window-p (lambda (&optional nomini all-frames) t))
+    (unwind-protect
+        ad-do-it
+      (fset 'one-window-p (symbol-function 'orig-one-window-p)))))
 
 (dolist (i gears-global-keymap)
   (global-set-key (kbd (car i)) (cdr i)))

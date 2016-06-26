@@ -102,10 +102,17 @@ Options:
                                     multiple-cursors
                                     moe-theme
                                     powerline
+                                    powerline-evil
                                     material-theme
                                     tabbar-ruler
                                     saveplace
                                     git
                                     visual-regexp
-                                    origami)
+                                    origami
+                                    hydra
+                                    projectile
+                                    helm
+                                    helm-make
+                                    helm-projectile
+                                    which-key)
                         :layers '(company))
