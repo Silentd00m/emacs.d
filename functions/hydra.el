@@ -3,15 +3,15 @@
 ;;; Commentary:
 ;; Usage:
 ;; - Declare a dynamic hydra:
-;;   (gears-defhydra example-hydra
-;;                   `(,(make-gears-hydra-category :title "Example"
-;;                                                 :heads `(,(make-gears-hydra-head :key "q"
-;;                                                                                  :text "Save and Exit"
-;;                                                                                  :command 'save-buffers-kill-terminal)))))
+;; (defdynhydra example-hydra
+;;   `(,(make-dynhydra-category :title "Example"
+;;                              :heads `(,(make-dynhydra-head :key "q"
+;;                                                            :text "Save and Exit"
+;;                                                            :command 'save-buffers-kill-terminal)))))
 ;; - Add a category:
-;;   (gears-hydra--add-category 'example-hydra (make-gears-hydra-category :title "Navigation"))
+;;   (dynhydra--add-category 'example-hydra (make-dynhydra-category :title "Navigation"))
 ;; - Update the hydra
-;;   (gears-hydra--update gears-layers/base-hydra-m-p)
+;;   (dynhydra--update gears-layers/base-hydra-m-p)
 
 ;;; Code:
 ;;* Requires
@@ -31,8 +31,25 @@
 (defun dynhydra-category--add-head (category head)
   "Adds a head to a category."
 
-  (setq (dynhydra-category-heads category)
+  (setf (dynhydra-category-heads category)
         (append (dynhydra-category-heads category) head)))
+
+(defun dynhydra-category--remove-head (category head)
+  "Removes the given head from the given category."
+
+  (setf (dynhydra-category-heads category)
+        (remove (dynhydra-category--get-head category head)
+                (dynhydra-category-heads category))))
+
+(defun dynhydra-category--get-head (category key)
+  "Returns the head bound to the given key."
+
+  (let ((match nil))
+    (dolist (head (dynhydra-category-heads category))
+      (when (string= (dynhydra-head-key head) key)
+        (setq match head)))
+
+    match))
 
 (defun dynhydra-category--format (category)
   "Generate and format the info text of a category."
@@ -43,7 +60,7 @@
     (let ((title (s-concat " " (dynhydra-category-title category) " ")))
       (when (< (length title) max-headlength)
         (setq title (s-append (concat (s-repeat (- max-headlength (length title)) " ")
-                                     "\n")
+                                      "\n")
                               title))
 
         (setq output-string title)))
@@ -53,16 +70,16 @@
                                   output-string))
 
     (dolist (head (dynhydra-category-heads category))
-        (setq output-string (s-append (concat " _"
-                                              (dynhydra-head-key head)
-                                              "_ "
-                                              (dynhydra-head-text head)
-                                              (s-repeat (- max-headlength
-                                                           (+ (length (dynhydra-head-key head))
-                                                              (length (dynhydra-head-text head))
-                                                              2))
-                                                        " ")
-                                              "\n") output-string)))
+      (setq output-string (s-append (concat " _"
+                                            (dynhydra-head-key head)
+                                            "_ "
+                                            (dynhydra-head-text head)
+                                            (s-repeat (- max-headlength
+                                                         (+ (length (dynhydra-head-key head))
+                                                            (length (dynhydra-head-text head))
+                                                            2))
+                                                      " ")
+                                            "\n") output-string)))
 
     ;; Return our output as list of lines
     (s-lines output-string)))
@@ -138,10 +155,29 @@
   "Adds a catgory to a hydra."
 
   (setf (dynhydra-categories (cdr (assoc hydra dynhydra-list)))
-             (append (dynhydra-categories (cdr (assoc hydra dynhydra-list)))
-                     `(,(make-dynhydra-category :title "Test"
-                                                   :heads `(,(make-dynhydra-head :key "L"
-                                                                                    :text "List")))))))
+        (append (dynhydra-categories (cdr (assoc hydra dynhydra-list)))
+                `(,(make-dynhydra-category :title "Test"
+                                           :heads `(,(make-dynhydra-head :key "L"
+                                                                         :text "List")))))))
+
+(defun dynhydra--remove-category (hydra category)
+  "Removes a category from a hydra."
+
+  (let ((category-list (dynhydra-categories (cdr (assoc hydra dynhydra-list)))))
+    (dolist (cat category-list)
+      (when (string= (dynhydra-category-title cat) category)
+        (setf (dynhydra-categories (cdr (assoc hydra dynhydra-list)))
+              (remove cat category-list))))))
+
+(defun dynhydra--get-category (hydra category)
+  "Returns the category with the given name from the hydra."
+
+  (let ((match nil))
+    (dolist (cat (dynhydra-categories (cdr (assoc hydra dynhydra-list))))
+      (when (string= (dynhydra-category-title cat) category)
+        (setq match cat)))
+
+    match))
 
 (defun dynhydra--list-keys (hydra)
   "Lists all key bindings in a hydra."
@@ -173,7 +209,7 @@
 Modifies it if already exists"
 
   (let ((hydra (make-dynhydra :name (prin1-to-string name)
-                                 :categories (eval categories))))
+                              :categories (eval categories))))
 
     (if (not (assoc name dynhydra-list))
         (setq dynhydra-list (push `(,name . ,hydra) dynhydra-list))
