@@ -21,18 +21,33 @@
 
 (cl-defstruct dynhydra name categories)
 (cl-defstruct dynhydra-category title heads)
-(cl-defstruct dynhydra-head key text command exit)
+(cl-defstruct dynhydra-head key text command exit condition)
 
 (defvar dynhydra-list '())
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Gears Hydra Category
 
+(defun dynhydra-category-heads--list-active (category)
+  "Returns a list of all active heads inside a category."
+
+  (let ((return-list '()))
+    (dolist (head (dynhydra-category-heads category))
+      (cond ((not (dynhydra-head-condition head))
+             ;; Condition is not set.
+             (push head return-list))
+
+            ((funcall (dynhydra-head-condition head))
+             ;; Condition returns true
+             (push head return-list))))
+
+    return-list))
+
 (defun dynhydra-category--add-head (category head)
   "Adds a head to a category."
 
   (setf (dynhydra-category-heads category)
-        (append (dynhydra-category-heads category) head)))
+        (append head (dynhydra-category-heads category))))
 
 (defun dynhydra-category--remove-head (category head)
   "Removes the given head from the given category."
@@ -57,6 +72,7 @@
   (let ((output-string "")
         (max-headlength (dynhydra-category--max-headlength category)))
 
+    ;; Write headline and bar
     (let ((title (s-concat " " (dynhydra-category-title category) " ")))
       (when (< (length title) max-headlength)
         (setq title (s-append (concat (s-repeat (- max-headlength (length title)) " ")
@@ -69,7 +85,8 @@
                                           "\n")
                                   output-string))
 
-    (dolist (head (dynhydra-category-heads category))
+    ;; Generate the heads
+    (dolist (head (dynhydra-category-heads--list-active category))
       (setq output-string (s-append (concat " _"
                                             (dynhydra-head-key head)
                                             "_ "
@@ -93,7 +110,7 @@
   "Returns the headlength (horizontal character count) of a category."
 
   (let ((max-length (+ (length (dynhydra-category-title category)) 2)))
-    (dolist (head (dynhydra-category-heads category))
+    (dolist (head (dynhydra-category-heads--list-active category))
       (let ((head-length (+ (length (dynhydra-head-key head))
                             (length "  ")
                             (length (dynhydra-head-text head))
@@ -112,8 +129,8 @@
 
   (let ((max-length 0))
     (dolist (category (dynhydra-categories hydra))
-      (when (< max-length (length (dynhydra-category-heads category)))
-        (setq max-length (length (dynhydra-category-heads category)))))
+      (when (< max-length (length (dynhydra-category-heads--list-active category)))
+        (setq max-length (length (dynhydra-category-heads--list-active category)))))
 
     max-length))
 
@@ -151,7 +168,7 @@
 
     output-string))
 
-(defun dynhydra--add-category (hydra category)
+(defmacro dynhydra--add-category (hydra category)
   "Adds a catgory to a hydra."
 
   (setf (dynhydra-categories (cdr (assoc hydra dynhydra-list)))
@@ -185,7 +202,23 @@
   (let ((return-list '()))
     (dolist (category (dynhydra-categories hydra))
       (dolist (head (dynhydra-category-heads category))
-        (push `(,(dynhydra-head-key head) ,(dynhydra-head-command head) :exit ,(dynhydra-head-exit head)) return-list)))
+        (push `(,(dynhydra-head-key head)
+                ,(dynhydra-head-command head)
+                :exit ,(dynhydra-head-exit head))
+              return-list)))
+
+    return-list))
+
+(defun dynhydra--list-active-keys (hydra)
+  "Lists all active key bindings in a hydra."
+
+  (let ((return-list '()))
+    (dolist (category (dynhydra-categories hydra))
+      (dolist (head (dynhydra-category-heads--list-active category))
+        (push `(,(dynhydra-head-key head)
+                ,(dynhydra-head-command head)
+                :exit ,(dynhydra-head-exit head))
+              return-list)))
 
     return-list))
 
@@ -217,3 +250,10 @@ Modifies it if already exists"
         (setf (cdr item) hydra)))
 
     `(dynhydra--generate ,name ,hydra)))
+
+(defmacro dynhydra--open (hydra)
+  "Updates and then opens a hydra."
+
+  (eval `(dynhydra--update ,hydra))
+  (funcall (intern (concat (prin1-to-string hydra)
+                           "/body"))))
