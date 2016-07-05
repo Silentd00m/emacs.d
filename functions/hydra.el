@@ -226,7 +226,7 @@
   "Generates a hydra from the given name and dynhydra-struct"
 
   (let ((docstring (eval (dynhydra--format (eval hydra))))
-        (heads (dynhydra--list-keys (eval hydra))))
+        (heads (dynhydra--list-active-keys (eval hydra))))
     `(defhydra ,name (:hint nil)
        ,docstring
        ,@heads
