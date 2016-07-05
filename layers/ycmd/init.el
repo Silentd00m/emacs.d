@@ -3,9 +3,9 @@
 (defun gears-layers/ycmd-init ()
   (defgroup gears-layers/ycmd nil
     "YCMD Layer Configuration"
-    :group 'gears)
+    :group 'gears-layers)
 
-  (defcustom gears-layers/ycmd-path (concat gears-emacs-basepath "/ycmd/ycmd")
+  (defcustom gears-layers/ycmd-path (concat gears-emacs-basepath "/dep/ycmd/ycmd")
     "Path to the YCMD server."
 
     :type 'directory
@@ -31,9 +31,9 @@
   ;; Company setup
 
   (when (gears-layer-installed 'auto_completion)
-      (use-package company-ycmd
+    (use-package company-ycmd
         :ensure t)
-      (company-ycmd-setup)
+    (company-ycmd-setup)
 
       (add-to-list 'company-backends 'company-ycmd))
 
@@ -67,9 +67,10 @@
   ;; TODO : Add compilation of ycmd-server.
   (require 'git)
 
-  (git-clone "https://github.com/Valloric/YouCompleteMe" (concat gears-emacs-basepath "/ycmd"))
+  (git-clone "https://github.com/Valloric/YouCompleteMe"
+             (concat gears-emacs-basepath "/dep/ycmd"))
 
-  (eval t))
+  t)
 
 (defun gears-layers/ycmd-remove ()
   "Additional functions for removing ycmd."

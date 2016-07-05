@@ -104,6 +104,12 @@ Set to nil to disable."
   :type 'boolean
   :group 'gears-interface)
 
+(defcustom gears-show-minor-modes nil
+  "Show all minor modes in modeline."
+  :type 'boolean
+  :group 'gears-interface)
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Gears' powerline themes
 
@@ -170,3 +176,13 @@ Set to nil to disable."
 
 (unless gears-disable-auto-key-help
   (which-key-mode t))
+
+(unless gears-show-minor-modes
+  (require 'diminish)
+
+  (diminish 'company-mode)
+  (diminish 'helm-mode)
+  (diminish 'which-key-mode)
+  (diminish 'whitespace-mode)
+  (diminish 'undo-tree-mode)
+  (diminish 'smartparens-mode))

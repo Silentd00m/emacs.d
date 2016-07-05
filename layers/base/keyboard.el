@@ -67,14 +67,33 @@
                                  ("C-u" . undo-tree-visualize)
 
                                  ;; Hydras
-                                 ("M-e" . gears-layers/base-hydra-m-e/body)
-                                 ("M-f" . gears-layers/base-hydra-m-f/body)
-                                 ("M-g" . gears-layers/base-hydra-m-g/body)
-                                 ("M-p" . gears-layers/base-hydra-m-p/body)
-                                 ("M-r" . gears-layers/base-hydra-m-r/body)
-                                 ("M-s" . gears-layers/base-hydra-m-s/body)
-                                 ("M-t" . gears-layers/base-hydra-m-t/body)
-                                 )
+                                 ("M-e" . (lambda ()
+                                            (interactive)
+
+                                            (eval (dynhydra--open gears-layers/base-hydra-m-e))))
+                                 ("M-f" . (lambda ()
+                                            (interactive)
+
+                                            (eval (dynhydra--open gears-layers/base-hydra-m-f))))
+                                 ("M-g" . (lambda ()
+                                            (interactive)
+                                            (eval (dynhydra--open gears-layers/base-hydra-m-g))))
+                                 ("M-p" . (lambda ()
+                                            (interactive)
+
+                                            (eval (dynhydra--open gears-layers/base-hydra-m-p))))
+                                 ("M-r" . (lambda ()
+                                            (interactive)
+
+                                            (eval (dynhydra--open gears-layers/base-hydra-m-r))))
+                                 ("M-s" . (lambda ()
+                                            (interactive)
+
+                                            (eval (dynhydra--open gears-layers/base-hydra-m-s))))
+                                 ("M-t" . (lambda ()
+                                            (interactive)
+
+                                            (eval (dynhydra--open gears-layers/base-hydra-m-t)))))
 
   ""
   :type '(alist :value (group key-sequence symbol))

@@ -8,7 +8,7 @@
 
     :group 'gears-layers)
 
-  (defcustom gears-layers/dash-docset-list '("Emacs Lisp")
+  (defcustom gears-layers/dash-docset-list '("Emacs_Lisp")
     "List of all docsets to install and keep updated."
 
     :type 'listp
@@ -20,11 +20,12 @@
     :type 'stringp
     :group 'gears-layers/dash)
 
-  (defcustom gears-layers/dash-docset-mode-autoloads '(("cpp-mode-hook" . '("C++"))
-                                                       ("emacs-lisp-mode-hook" . '("Emacs Lisp")))
+  (defcustom gears-layers/dash-docset-mode-autoloads '((cpp-mode-hook . '("C++"))
+                                                       (emacs-lisp-mode-hook . '("Emacs_Lisp"))
+                                                       (python-mode-hook . '("Python 3")))
     "Defines which Docsets should be loaded in what mode."
 
-    :type '(alist :value (group key-sequence stringp))
+    :type '(alist :value (group symbolp stringp))
     :group 'gears-layers/dash)
 
   (defcustom gears-layers/dash-minimum-characters 3
@@ -38,7 +39,7 @@
   (setq helm-dash-enable-debugging t)
 
   (dolist (docset gears-layers/dash-docset-list)
-    ;; Install missng docsets
+    ;; Install missing docsets
     (unless (file-exists-p (concat gears-emacs-basepath
                                    "/docsets/"
                                    docset
@@ -46,8 +47,8 @@
       (helm-dash-install-docset docset)))
 
   (dolist (item gears-layers/dash-docset-mode-autoloads)
-    (add-hook (intern (car item)) `(lambda()
-                                     (setq-local helm-dash-docsets ,(cdr item))))))
+    (add-hook (car item) `(lambda()
+                            (setq-local helm-dash-docsets ,(cdr item))))))
 
 (defun gears-layers/dash-description()
   "Returns the Dash layer description."

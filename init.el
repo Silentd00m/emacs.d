@@ -35,4 +35,6 @@
   (byte-recompile-directory (expand-file-name "~/.emacs.d") 0)
   (byte-recompile-directory (expand-file-name "~/.emacs.d/plugins") 0)
   (byte-recompile-directory (expand-file-name "~/.emacs.d/config") 0)
-  (byte-recompile-directory (expand-file-name "~/.emacs.d/elpa") 0))
+  (byte-recompile-directory (expand-file-name "~/.emacs.d/elpa") 0)
+  (byte-recompile-directory (expand-file-name "~/.emacs.d/functions") 0)
+  (byte-recompile-directory (expand-file-name "~/.emacs.d/layers") 0))

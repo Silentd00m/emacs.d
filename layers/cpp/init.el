@@ -41,7 +41,7 @@
   (font-lock-fontify-buffer)
   (local-set-key (kbd "RET") 'newline-and-indent)
   (yas-minor-mode 1)
-  (setq flycheck-clang-args "-std=c++11")
+  (setq flycheck-clang-args "-std=c++14")
   (setq flycheck-check-syntax-automatically '(mode-enabled save))
   ;; (fci-mode 1)
   (yas-minor-mode-on)
@@ -123,16 +123,34 @@
 
   (setq c-default-style "gears")
 
+  (when (gears-layer-installed 'refactor)
+    (use-package srefactor
+      :ensure t))
+
   (when (boundp 'company-backends)
-    (add-to-list 'company-backends 'company-c-headers))
+    (add-to-list 'company-backends 'company-irony-c-headers))
   (add-hook 'c++-mode-hook 'gears-cpp-mode-hook)
+
+  (when (not (gears-layer-installed 'ycmd))
+    (add-hook 'company-backends 'company-irony)
+    (add-hook 'c++-mode-hook #'(lambda ()
+                                 (irony-mode t)
+                                 (irony-eldoc t))))
+
   (when (gears-layer-installed "dash")
     (add-hook 'c++-mode-hook '(lambda()
                                 (message "[Dash] Loaded docset 'C++' and 'C'.")
-                                (setq-local helm-dash-docsets '("C++" "C"))))))
+                                (setq-local helm-dash-docsets '("C++" "C")))))
+
+  (when (not (gears-layer-installed 'cpp))
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
 
 (defun gears-layers/cpp-install()
   "Additional install commands for the C++ layer.")
 
 (gears-layer-defdepends cpp
-                        :packages '(modern-cpp-font-lock))
+                        :packages '(modern-cpp-font-lock
+                                    irony
+                                    irony-eldoc
+                                    company-irony
+                                    company-irony-c-headers))

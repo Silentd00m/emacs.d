@@ -1,12 +1,17 @@
+;;; Code:
+;; Requires:*
 (require 'f)
 (require 'cl)
-
-;;; Code:
 
 (load (concat gears-emacs-basepath "/config/layers"))
 (load (concat gears-emacs-basepath "/functions/packages"))
 
 (cl-defstruct gears-layer-dependencies packages layers)
+
+(defgroup gears-layers nil
+  "Configurations for all layers."
+
+  :group 'gears)
 
 (defun gears-layer-convert-name (layer)
   (if (stringp layer)
@@ -14,9 +19,9 @@
     (prin1-to-string layer)))
 
 (defun gears-layer-init ()
-  (interactive)
-
   "Initializes all installed layers."
+
+  (interactive)
 
   (dolist (layer gears-layer-installed-list)
     (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer) "/init.el"))

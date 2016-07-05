@@ -72,6 +72,8 @@ Options:
   (load (concat gears-emacs-basepath "/layers/base/interface"))
   (load (concat gears-emacs-basepath "/layers/base/helm"))
 
+  (setq auto-save-default nil)
+
   (setq-default save-place t)
   (setq save-place-file (concat gears-emacs-basepath "/saved-places"))
   (setq save-place-forget-unreadable-files nil)
@@ -93,6 +95,7 @@ Options:
 
 (gears-layer-defdepends base
                         :packages '(bug-hunter
+                                    diminish
                                     undo-tree
                                     smartparens
                                     comment-dwim-2
@@ -100,10 +103,10 @@ Options:
                                     rainbow-delimiters
                                     nlinum
                                     multiple-cursors
-                                    moe-theme
                                     powerline
                                     powerline-evil
                                     material-theme
+                                    moe-theme
                                     tabbar-ruler
                                     saveplace
                                     git
@@ -115,4 +118,4 @@ Options:
                                     helm-make
                                     helm-projectile
                                     which-key)
-                        :layers '(company))
+                        :layers '(auto_completion))

@@ -79,11 +79,11 @@
                                                            :command 'goto-char
                                                            :exit t)))
     ,(make-dynhydra-category :title "GIT"
-                             :heads `(,(make-dynhydra-head :key "s"
+                             :heads `(,(make-dynhydra-head :key "S"
                                                            :text "Show Status"
                                                            :command 'magit-status
                                                            :exit t)
-                                      ,(make-dynhydra-head :key "b"
+                                      ,(make-dynhydra-head :key "B"
                                                            :text "Blame Mode"
                                                            :command 'magit-blame
                                                            :exit t)
@@ -116,7 +116,10 @@
                                                            :exit t)
                                       ,(make-dynhydra-head :key "y"
                                                            :text "Redo"
-                                                           :command 'undo-tree-redo)))))
+                                                           :command 'undo-tree-redo)
+                                      ,(make-dynhydra-head :key "r"
+                                                           :text "Replace"
+                                                           :command 'vr/replace)))))
 
 (defdynhydra gears-layers/base-hydra-m-s
   `(,(make-dynhydra-category :title "Buffer"
@@ -126,17 +129,21 @@
                                                            :exit t)
                                       ,(make-dynhydra-head :key "a"
                                                            :text "Select Everything"
-                                                           :command 'mark-whole-buffer)))
+                                                           :command 'mark-whole-buffer
+                                                           :exit t)))
     ,(make-dynhydra-category :title "Split"
                              :heads `(,(make-dynhydra-head :key "h"
                                                            :text "Horizontal"
-                                                           :command 'split-window-horizontally)
+                                                           :command 'split-window-horizontally
+                                                           :exit t)
                                       ,(make-dynhydra-head :key "v"
                                                            :text "Vertical"
-                                                           :command 'split-window-vertically)
+                                                           :command 'split-window-vertically
+                                                           :exit t)
                                       ,(make-dynhydra-head :key "c"
                                                            :text "Close Current"
-                                                           :command 'delete-window)
+                                                           :command 'delete-window
+                                                           :exit t)
                                       ,(make-dynhydra-head :key "o"
                                                            :text "Close Other"
                                                            :command 'delete-other-windows

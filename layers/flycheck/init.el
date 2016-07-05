@@ -4,7 +4,10 @@
   (add-hook 'prog-mode-hook #'(lambda()
                                 (setq-local flycheck-display-errors-function (function flycheck-pos-tip-error-message))
                                 (flycheck-pos-tip-mode t)))
-  (global-flycheck-mode t))
+  (global-flycheck-mode t)
+
+  (unless gears-show-minor-modes
+    (diminish 'flycheck-mode)))
 
 (defun gears-layers/flycheck-description()
   "Returns the description of the flycheck Layer."
