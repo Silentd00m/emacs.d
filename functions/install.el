@@ -5,6 +5,28 @@
 (load "~/.emacs.d/functions/packages")
 (load "~/.emacs.d/functions/layers")
 
+(defun gears-install-firstrun-setup ()
+  (generate-new-buffer-name "*gears-install*")
+  (switch-to-buffer "*gears-install*")
+
+  (let ((inhibit-read-only t))
+    (erase-buffer)
+    (load (concat gears-emacs-basepath "/functions/layers"))
+    (gears-layer-install 'base)
+    (gears-layer-init)
+
+    (load-theme 'material t)
+
+    (princ "Next step: " (current-buffer))
+  (remove-overlays)
+  (widget-create 'push-button
+                 :notify (lambda (&rest ignore)
+                           (gears-install-configure))
+                 "Configure")
+
+  (use-local-map widget-keymap)
+  (widget-setup)))
+
 (defun gears-install-configure ()
   (generate-new-buffer-name "*gears-install*")
   (switch-to-buffer "*gears-install*")
@@ -72,8 +94,10 @@
                            (dolist (layer gic-layer-list)
                              ;; Add layer to list beforehand so subsequent layers know it is installed.
                              ;; Important for additional functionality.
-                             (add-to-list gears-layers-installed-list layer)
-                             (customize-save-variable 'gears-layer-installed-list gears-layer-installed-list))
+                             (add-to-list gears-layers-installed-list layer))
+
+                           (gears-layer-list-save)
+
                            ;; Install all selected layers
                            (dolist (layer gic-layer-list)
                              (gears-layer-install layer)))
@@ -81,23 +105,3 @@
 
   (use-local-map widget-keymap)
   (widget-setup))
-
-(defun gears-install-firstrun-setup ()
-  (generate-new-buffer-name "*gears-install*")
-  (switch-to-buffer "*gears-install*")
-
-  (let ((inhibit-read-only t))
-    (erase-buffer)
-    (load (concat gears-emacs-basepath "/functions/layers"))
-    (gears-layer-install 'base)
-    (gears-layer-init)
-
-  (princ "Next step: " (current-buffer))
-  (remove-overlays)
-  (widget-create 'push-button
-                 :notify (lambda (&rest ignore)
-                           (gears-install-configure))
-                 "Configure")
-
-  (use-local-map widget-keymap)
-  (widget-setup)))

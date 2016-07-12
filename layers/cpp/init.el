@@ -127,11 +127,13 @@
     (use-package srefactor
       :ensure t))
 
-  (when (boundp 'company-backends)
-    (add-to-list 'company-backends 'company-irony-c-headers))
   (add-hook 'c++-mode-hook 'gears-cpp-mode-hook)
 
   (when (not (gears-layer-installed 'ycmd))
+    (eval-after-load 'company
+      #'(add-to-list
+         'company-backends '(company-irony-c-headers company-c-headers company-irony)))
+
     (add-hook 'company-backends 'company-irony)
     (add-hook 'c++-mode-hook #'(lambda ()
                                  (irony-mode t)
