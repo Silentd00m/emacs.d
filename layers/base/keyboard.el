@@ -99,11 +99,6 @@
   :type '(alist :value (group key-sequence symbol))
   :group 'gears)
 
-(defcustom gears-use-evil nil
-  "Use evil-mode instead of Gears' cua-mode."
-  :type 'boolean
-  :group 'gears-keyboard)
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set configuration
 
@@ -124,22 +119,6 @@
 
 (dolist (i gears-global-keymap)
   (global-set-key (kbd (car i)) (cdr i)))
-
-;; Evil-mode
-(when gears-use-evil
-  (use-package evil
-    :ensure t
-    :config (progn (evil-mode t)
-
-                   (dolist (i gears-global-keymap)
-                     (dolist (map '(evil-normal-state-map
-                                    evil-insert-state-map
-                                    evil-motion-state-map))
-                       (unless (string= (car i) "<escape>")
-                         (define-key (eval map) (kbd (car i)) (cdr i)))))))
-
-  (use-package powerline-evil
-    :ensure t))
 
 ;; Company mode
 (with-eval-after-load 'company

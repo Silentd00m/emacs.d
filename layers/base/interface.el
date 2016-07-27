@@ -145,7 +145,7 @@ Set to nil to disable."
   (use-package powerline
     :ensure t
     :config (progn (setq powerline-default-separator gears-powerline-shape)
-                 (funcall gears-powerline-theme))))
+                   (funcall gears-powerline-theme))))
 
 (when gears-enable-rainbow-delimiters
   (use-package rainbow-delimiters
@@ -165,11 +165,11 @@ Set to nil to disable."
          (setq tool-bar-mode nil)))
 
 (when gears-enable-tabbar
-    (use-package tabbar-ruler
-      :ensure tabbar-ruler
-      :config (progn (tabbar-mode t)
-                     (setq tabbar-ruler-global-tabbar t) ; Use tabbar
-                     (setq tabbar-ruler-movement-timer-dealy 1000000))))
+  (use-package tabbar-ruler
+    :ensure tabbar-ruler
+    :config (progn (tabbar-mode t)
+                   (setq tabbar-ruler-global-tabbar t) ; Use tabbar
+                   (setq tabbar-ruler-movement-timer-dealy 1000000))))
 
 (when gears-maximize-after-start
   (add-to-list 'default-frame-alist '(fullscreen . maximized)))
@@ -186,3 +186,11 @@ Set to nil to disable."
   (diminish 'whitespace-mode)
   (diminish 'undo-tree-mode)
   (diminish 'smartparens-mode))
+
+;; TODO : Add cursor and mode color configuration.
+
+(when gears-use-evil
+  (setq evil-normal-state-cursor '(box "green")
+        evil-insert-state-cursor '(bar "DeepSkyBlue")
+        evil-visual-state-cursor '(box "orange")
+        evil-replace-state-cursor '(hbar "red")))

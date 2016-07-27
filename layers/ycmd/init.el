@@ -31,11 +31,10 @@
   ;; Company setup
 
   (when (gears-layer-installed 'auto_completion)
-    (use-package company-ycmd
-        :ensure t)
+    (require 'company-ycmd)
     (company-ycmd-setup)
 
-      (add-to-list 'company-backends 'company-ycmd))
+    (add-hook 'c++-mode-hook #'(add-to-list 'company-backends 'company-ycmd)))
 
   ;; Flycheck setup
   (use-package flycheck-ycmd

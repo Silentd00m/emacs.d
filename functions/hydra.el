@@ -144,8 +144,10 @@
         (max-category-length (dynhydra-categories--max-length hydra)))
 
     (dolist (category (dynhydra-categories hydra))
-      (push (dynhydra-category--format category) categories)
-      (push (dynhydra-category--max-headlength category) category-widths))
+      (when (> (dynhydra-category-heads--list-active category) 0)
+        ;; If the current category has at last 1 active head, add it to the output
+        (push (dynhydra-category--format category) categories)
+        (push (dynhydra-category--max-headlength category) category-widths)))
 
     (setq categories (nreverse categories))
     (setq category-widths (nreverse category-widths))
@@ -168,14 +170,11 @@
 
     output-string))
 
-(defmacro dynhydra--add-category (hydra category)
+(defun dynhydra--add-category (hydra category)
   "Adds a catgory to a hydra."
 
   (setf (dynhydra-categories (cdr (assoc hydra dynhydra-list)))
-        (append (dynhydra-categories (cdr (assoc hydra dynhydra-list)))
-                `(,(make-dynhydra-category :title "Test"
-                                           :heads `(,(make-dynhydra-head :key "L"
-                                                                         :text "List")))))))
+        (append (dynhydra-categories (cdr (assoc hydra dynhydra-list))) category)))
 
 (defun dynhydra--remove-category (hydra category)
   "Removes a category from a hydra."

@@ -79,12 +79,10 @@
 ;; Fix statement-cont
 (defun gears-cpp-align-statement-cont (langelem)
   "Fix statement-cont"
-  (cond
-   ((gears-check-inside-enum-class (c-langelem-pos langelem)) '-)
-   ((gears-check-inside-template (c-langelem-pos langelem)) '+)
-
-   ;; Default value
-   (t '+)))
+  (cond ((gears-check-inside-enum-class (c-langelem-pos langelem)) '-)
+        ((gears-check-inside-template (c-langelem-pos langelem)) '+)
+        ;; Default value
+        (t '+)))
 
 
 ;; Fix topmost-intro-cont
@@ -130,19 +128,33 @@
   (add-hook 'c++-mode-hook 'gears-cpp-mode-hook)
 
   (when (not (gears-layer-installed 'ycmd))
-    (eval-after-load 'company
-      #'(add-to-list
-         'company-backends '(company-irony-c-headers company-c-headers company-irony)))
-
     (add-hook 'company-backends 'company-irony)
     (add-hook 'c++-mode-hook #'(lambda ()
                                  (irony-mode t)
-                                 (irony-eldoc t))))
+                                 (irony-eldoc t)
+
+                                 (add-to-list 'company-backends '(company-irony-c-headers company-c-headers company-irony)))))
 
   (when (gears-layer-installed "dash")
     (add-hook 'c++-mode-hook '(lambda()
                                 (message "[Dash] Loaded docset 'C++' and 'C'.")
                                 (setq-local helm-dash-docsets '("C++" "C")))))
+
+  ;; Add formater to hydra.
+
+  (unless (dynhydra--get-category 'gears-layers/base-hydra-m-f "Format")
+    (dynhydra--add-category 'gears-layers/base-hydra-m-f `(,(make-dynhydra-category :title "Format"))))
+
+  ;; (princ (cdr (assoc 'gears-layers/base-hydra-m-f dynhydra-list))(current-buffer))
+
+  (dynhydra-category--add-head (dynhydra--get-category 'gears-layers/base-hydra-m-f "Format")
+                               `(,(make-dynhydra-head :key "F"
+                                                      :text "Format Buffer"
+                                                      :command 'clang-format-buffer
+                                                      :exit t
+                                                      :condition (lambda ()
+                                                                   (or (eq major-mode 'c++-mode)
+                                                                       (eq major-mode 'c-mode))))))
 
   (when (not (gears-layer-installed 'cpp))
     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
