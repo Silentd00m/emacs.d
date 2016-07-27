@@ -144,7 +144,7 @@
         (max-category-length (dynhydra-categories--max-length hydra)))
 
     (dolist (category (dynhydra-categories hydra))
-      (when (> (dynhydra-category-heads--list-active category) 0)
+      (when (dynhydra-category-heads--list-active category)
         ;; If the current category has at last 1 active head, add it to the output
         (push (dynhydra-category--format category) categories)
         (push (dynhydra-category--max-headlength category) category-widths)))
