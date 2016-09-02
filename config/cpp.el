@@ -73,9 +73,7 @@
       (goto-char pos)
       (up-list -1)
       (backward-sexp 1)
-      (looking-back "enum[ \t]+class[ \t]+[^}]+")
-                                        ;(looking-back "enum[ \t]+class[ \t]+")
-      )))
+      (looking-back "enum[ \t]+class[ \t]+[^}]+"))))
 
 ;; Fix statement-cont
 (defun gears-cpp-align-statement-cont (langelem)

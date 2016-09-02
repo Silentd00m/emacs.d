@@ -10,6 +10,19 @@
                                                       :exit t
                                                       :condition (lambda ()
                                                                    (or (eq major-mode 'c++-mode)
+                                                                       (eq major-mode 'c-mode))))))
+  (unless (dynhydra--get-category 'gears-layers/base-hydra-m-r "Refactor")
+    (dynhydra--add-category 'gears-layers/base-hydra-m-r
+                            `(,(make-dynhydra-category :title "Refactor"))))
+
+  (dynhydra-category--add-head (dynhydra--get-category 'gears-layers/base-hydra-m-r
+                                                       "Refactor")
+                               `(,(make-dynhydra-head :key "S"
+                                                      :text "Rename Symbol"
+                                                      :command 'rtags-rename-symbol
+                                                      :exit t
+                                                      :condition (lambda()
+                                                                   (or (eq major-mode 'c++-mode)
                                                                        (eq major-mode 'c-mode)))))))
 
 (defun gears-layers/rtags-init ()

@@ -22,6 +22,8 @@
 
 (defcustom gears-global-keymap '(;; General
                                  ("<escape>" . keyboard-escape-quit)
+                                 ("<menu>" . helm-M-x)
+                                 ("<apps>" . helm-M-x)
 
                                  ;; Sane text editing
                                  ("C-s" . save-buffer)

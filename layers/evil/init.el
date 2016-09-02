@@ -14,7 +14,15 @@
                    evil-motion-state-map
                    evil-visual-state-map))
       (unless (string= (car i) "<escape>")
-        (define-key (eval map) (kbd (car i)) (cdr i))))))
+        (define-key (eval map) (kbd (car i)) (cdr i)))))
+
+  (dolist (map '(evil-normal-state-map
+                 evil-insert-state-map
+                 evil-motion-state-map
+                 evil-visual-state-map))
+    (define-key (eval map) (kbd "C-v") 'cua-paste)
+    (define-key (eval map) (kbd "C-c") 'cua-copy-region)
+    (define-key (eval map) (kbd "C-x") 'cua-cut-region)))
 
 (defun gears-layers/evil-description()
   "Evil-mode support layer.")

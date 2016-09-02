@@ -20,7 +20,8 @@
     :type 'stringp
     :group 'gears-layers/dash)
 
-  (defcustom gears-layers/dash-docset-mode-autoloads '((cpp-mode-hook . '("C++"))
+  (defcustom gears-layers/dash-docset-mode-autoloads '((c-mode-hook . '("C++"))
+                                                       (cpp-mode-hook . '("C++"))
                                                        (emacs-lisp-mode-hook . '("Emacs_Lisp"))
                                                        (python-mode-hook . '("Python 3")))
     "Defines which Docsets should be loaded in what mode."
