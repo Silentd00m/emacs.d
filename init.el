@@ -6,20 +6,21 @@
 
 (setq inhibit-startup-message t)
 
-(setq custom-file "~/.emacs.d/config/custom.el")
-(load custom-file)
-(load "~/.emacs.d/config/layers")
-(load "~/.emacs.d/config/config")
-
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
 
-(use-package f
-             :ensure t)
+(unless (package-installed-p 'f)
+  (use-package f
+    :ensure t))
 
 (require 'f)
 (setq gears-emacs-basepath (f-dirname (f-this-file)))
+
+(setq custom-file (concat gears-emacs-basepath "/config/custom.el"))
+(load custom-file)
+(load (concat gears-emacs-basepath "/config/layers"))
+(load (concat gears-emacs-basepath "/config/config"))
 
 (unless (> (length gears-layer-installed-list) 0)
   (load "~/.emacs.d/functions/install")

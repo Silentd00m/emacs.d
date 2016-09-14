@@ -30,7 +30,7 @@
   (gears-layers/rtags-hydra-add))
 
 (defun gears-layers/rtags-description ()
-  )
+  "Client/Server indexer for C++.")
 
 (defun gears-layers/rtags-install ()
   )

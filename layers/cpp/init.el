@@ -121,13 +121,12 @@
 
   (setq c-default-style "gears")
 
-  (when (gears-layer-installed 'refactor)
-    (use-package srefactor
-      :ensure t))
+  (when (gears-layer-installed 'refactor))
 
   (add-hook 'c++-mode-hook 'gears-cpp-mode-hook)
 
-  (when (not (gears-layer-installed 'ycmd))
+  (when (and (not (gears-layer-installed 'ycmd))
+             (gears-layer-installed 'auto_completion))
     (add-hook 'company-backends 'company-irony)
     (add-hook 'c++-mode-hook #'(lambda ()
                                  (irony-mode t)
@@ -166,5 +165,6 @@
                         :packages '(modern-cpp-font-lock
                                     irony
                                     irony-eldoc
+                                    flycheck-irony
                                     company-irony
                                     company-irony-c-headers))

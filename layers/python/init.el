@@ -24,13 +24,10 @@
   (when (not (gears-layer-installed 'ycmd))
     (gears-layers/python-hydra-add)
 
-    (use-package anaconda-mode
-      :ensure t
-      :config (progn ()
-                     (add-hook 'anaconda-mode-hook 'anaconda-eldoc-mode)
-                     (add-hook 'anaconda-mode-hook #'(lambda ()
-                                                       (eval-after-load "company"
-                                                         '(add-to-list 'company-backends '(company-anaconda)))))))
+    (add-hook 'anaconda-mode-hook 'anaconda-eldoc-mode)
+    (add-hook 'anaconda-mode-hook #'(lambda ()
+                                      (eval-after-load "company"
+                                        '(add-to-list 'company-backends '(company-anaconda)))))
 
     (when gears-layers/python-show-coverage
       (add-hook 'python-mode-hook 'pycoverage-mode))

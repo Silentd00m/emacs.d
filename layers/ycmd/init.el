@@ -37,9 +37,7 @@
     (add-hook 'c++-mode-hook #'(add-to-list 'company-backends 'company-ycmd)))
 
   ;; Flycheck setup
-  (use-package flycheck-ycmd
-    :ensure t
-    :config (flycheck-ycmd-setup))
+  (flycheck-ycmd-setup)
 
   ;; Make sure the flycheck cache sees the parse results
   (add-hook 'ycmd-file-parse-result-hook 'flycheck-ycmd--cache-parse-results)
@@ -79,5 +77,5 @@
     (f-delete (concat gears-emacs-basepath "/" gears-layers/ycmd-basepath))))
 
 (gears-layer-defdepends ycmd
-                        :packages '(ycmd company-ycmd flycheck-ycmd ycmd-eldoc)
-                        :layers '(company))
+                        :packages '(ycmd company-ycmd flycheck-ycmd)
+                        :layers '(auto_completion))

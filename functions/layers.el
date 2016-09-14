@@ -70,14 +70,22 @@
     (remove-duplicates package-list)))
 
 (defun gears-layer-mark-installed (layer)
-  (add-to-list 'gears-layer-installed-list layer))
+  (if (stringp layer)
+      (setq gears-layer-installed-list
+            (append gears-layer-installed-list `(,(intern layer))))
+    (setq gears-layer-installed-list
+          (append gears-layer-installed-list `(,layer))))
+
+
+  (setq gears-layer-installed-list (remove-duplicates gears-layer-installed-list
+                                                      :from-end t)))
 
 (defun gears-layer--recursive-mark-installed (layer)
   (gears-layer-mark-installed layer)
 
   (dolist (layer-dep (gears-layer-dependencies-layers (eval (intern (concat "gears-layers/"
-                                                                          (gears-layer-convert-name layer)
-                                                                          "-depends")))))
+                                                                            (gears-layer-convert-name layer)
+                                                                            "-depends")))))
     (gears-layer--recursive-mark-installed layer-dep)))
 
 (defun gears-layer-get-depends (layer)
@@ -103,9 +111,11 @@
 (defun gears-layer-install (layer)
   "Install a layer and all dependencies."
 
-  ;; Add layer to list of layers
-  (add-to-list 'gears-layer-installed-list layer)
-  (gears-layer-list-save)
+  (interactive "sInstall Layer: ")
+
+  ;; ;; Add layer to list of layers
+  ;; (add-to-list 'gears-layer-installed-list layer)
+  ;; (gears-layer-list-save)
 
   (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer) "/init"))
 

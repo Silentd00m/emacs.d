@@ -6,6 +6,8 @@
 (load "~/.emacs.d/functions/layers")
 
 (defun gears-install-firstrun-setup ()
+  (interactive)
+
   (generate-new-buffer-name "*gears-install*")
   (switch-to-buffer "*gears-install*")
 
@@ -13,21 +15,31 @@
     (erase-buffer)
     (load (concat gears-emacs-basepath "/functions/layers"))
     (gears-layer-install 'base)
-    (gears-layer-init)
+    (load (concat gears-emacs-basepath "/config/layers"))
+    (gears-layer-init))
 
-    (load-theme 'material t)
+  (load-theme 'material t)
+
+  (let ((inhibit-read-only t))
+    (erase-buffer)
+
+    (switch-to-buffer "*gears-install*")
 
     (princ "Next step: " (current-buffer))
-  (remove-overlays)
-  (widget-create 'push-button
-                 :notify (lambda (&rest ignore)
-                           (gears-install-configure))
-                 "Configure")
 
-  (use-local-map widget-keymap)
-  (widget-setup)))
+    (remove-overlays)
+    (widget-create 'push-button
+                   :notify (lambda (&rest ignore)
+                             (gears-install-configure))
+                   "Configure")
+
+    (use-local-map widget-keymap)
+
+    (widget-setup)))
 
 (defun gears-install-configure ()
+  (interactive)
+
   (generate-new-buffer-name "*gears-install*")
   (switch-to-buffer "*gears-install*")
 
@@ -81,20 +93,22 @@
     (widget-insert " " layer "\n  " (gears-layer-get-description layer) "\n"))
 
   (widget-insert "\n\n")
+
   (widget-create 'push-button
                  :notify (lambda (&rest ignore)
+                           (kill-this-buffer)
+
                            (generate-new-buffer-name "*gears-install*")
                            (switch-to-buffer "*gears-install*")
-                           (let ((inhibit-read-only t))
-                             (erase-buffer))
-                           (remove-overlays)
+
+                           (load (concat gears-emacs-basepath "/functions/layers"))
 
                            (princ gic-layer-list (current-buffer))
 
                            (dolist (layer gic-layer-list)
                              ;; Add layer to list beforehand so subsequent layers know it is installed.
                              ;; Important for additional functionality.
-                             (add-to-list gears-layers-installed-list layer))
+                             (gears-layer-mark-installed layer))
 
                            (gears-layer-list-save)
 

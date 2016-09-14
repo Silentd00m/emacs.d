@@ -137,27 +137,22 @@ Set to nil to disable."
   (modify-all-frames-parameters (list (cons 'cursor-type gears-cursor-type))))
 
 (when gears-show-line-numbers
-  (use-package nlinum
-    :ensure t
-    :init (global-nlinum-mode)))
+  ;; (global-nlinum-mode)
+
+  (add-hook 'prog-mode-hook 'nlinum-mode)
+  (add-hook 'text-mode-hook 'nlinum-mode))
 
 (when gears-powerline-theme
-  (use-package powerline
-    :ensure t
-    :config (progn (setq powerline-default-separator gears-powerline-shape)
-                   (funcall gears-powerline-theme))))
+  (setq powerline-default-separator gears-powerline-shape)
+  (funcall gears-powerline-theme))
 
 (when gears-enable-rainbow-delimiters
-  (use-package rainbow-delimiters
-    :ensure t
-    :init (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)))
+  (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
 (when (not (< gears-highlight-after-column 0))
-  (use-package whitespace
-    :ensure t
-    :config (progn (setq whitespace-line-column gears-highlight-after-column)
-                   (setq whitespace-style '(face lines-tail))
-                   (add-hook 'prog-mode-hook 'whitespace-mode))))
+  (setq whitespace-line-column gears-highlight-after-column)
+  (setq whitespace-style '(face lines-tail))
+  (add-hook 'prog-mode-hook 'whitespace-mode))
 
 (if gears-enable-toolbar
     (tool-bar-mode 1)
@@ -165,11 +160,9 @@ Set to nil to disable."
          (setq tool-bar-mode nil)))
 
 (when gears-enable-tabbar
-  (use-package tabbar-ruler
-    :ensure tabbar-ruler
-    :config (progn (tabbar-mode t)
-                   (setq tabbar-ruler-global-tabbar t) ; Use tabbar
-                   (setq tabbar-ruler-movement-timer-dealy 1000000))))
+  (tabbar-mode t)
+  (setq tabbar-ruler-global-tabbar t) ; Use tabbar
+  (setq tabbar-ruler-movement-timer-dealy 1000000))
 
 (when gears-maximize-after-start
   (add-to-list 'default-frame-alist '(fullscreen . maximized)))

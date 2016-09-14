@@ -13,13 +13,6 @@
 (require 'smartparens-config)
 (smartparens-global-mode t)
 
-(use-package comment-dwim-2
-  :ensure t)
-(use-package undo-tree
-  :ensure t)
-(use-package multiple-cursors
-  :ensure t)
-
 (defcustom gears-global-keymap '(;; General
                                  ("<escape>" . keyboard-escape-quit)
                                  ("<menu>" . helm-M-x)
@@ -104,10 +97,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set configuration
 
-(use-package helm
-  :ensure t
-  :config (progn ()
-                 (define-key helm-map (kbd "<escape>") 'helm-keyboard-quit)))
+(define-key helm-map (kbd "<escape>") 'helm-keyboard-quit)
 
 (defadvice keyboard-escape-quit (around my-keyboard-escape-quit activate)
   "Don't unsplit window when pressing escape."

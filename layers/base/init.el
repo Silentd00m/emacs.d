@@ -68,9 +68,9 @@ Options:
   (when gears-indent-comments
     (setq aggressive-indent-comments-too t))
 
+  (load (concat gears-emacs-basepath "/layers/base/helm"))
   (load (concat gears-emacs-basepath "/layers/base/keyboard"))
   (load (concat gears-emacs-basepath "/layers/base/interface"))
-  (load (concat gears-emacs-basepath "/layers/base/helm"))
 
   (setq auto-save-default nil)
 
@@ -117,5 +117,6 @@ Options:
                                     helm
                                     helm-make
                                     helm-projectile
+                                    helm-flycheck
                                     which-key)
                         :layers '(auto_completion))
