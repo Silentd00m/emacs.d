@@ -1,10 +1,10 @@
 (load "~/.emacs.d/functions/gui")
 
 (defun gears-package-install-packages (pkg-list)
-  (read-only-mode t)
-
   (generate-new-buffer-name "*gears-install*")
   (switch-to-buffer "*gears-install*")
+
+  (read-only-mode t)
 
   (let ((inhibit-read-only t))
     (princ "Refreshing package repository cache before installation." (current-buffer)))
