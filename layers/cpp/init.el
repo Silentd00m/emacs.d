@@ -134,7 +134,7 @@
 
                                  (add-to-list 'company-backends '(company-irony-c-headers company-c-headers company-irony)))))
 
-  (when (gears-layer-installed "dash")
+  (when (gears-layer-installed 'dash)
     (add-hook 'c++-mode-hook '(lambda()
                                 (message "[Dash] Loaded docset 'C++' and 'C'.")
                                 (setq-local helm-dash-docsets '("C++" "C")))))
@@ -158,13 +158,26 @@
   (when (not (gears-layer-installed 'cpp))
     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
 
-(defun gears-layers/cpp-install()
+(defun gears-layers/cpp-install ()
   "Additional install commands for the C++ layer.")
 
-(gears-layer-defdepends cpp
-                        :packages '(modern-cpp-font-lock
-                                    irony
-                                    irony-eldoc
-                                    flycheck-irony
-                                    company-irony
-                                    company-irony-c-headers))
+(defun gears-layers/cpp-generate-dependency-list ()
+  (let (gl-pkg-cppdeplist (list 'modern-cpp-font-lock))
+    (unless (gears-layer-installed 'ycmd)
+      (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'irony 'irony-eldoc)))
+
+      (when (gears-layer-installed 'flycheck)
+        (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'flycheck-irony))))
+
+      (when (gears-layer-installed 'auto_completion)
+        (setq gl-pkg-cppdeplist (append (list 'company-irony
+                                              'company-irony-c-headers)
+                                        gl-pkg-cppdeplist)))
+
+      (when (gears-layer-installed 'cmake)
+        (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'cmake-ide
+                                                                'cpputils-cmake)))))
+
+    (princ gl-pkg-cppdeplist (current-buffer))
+
+    (make-gears-layer-dependencies :packages gl-pkg-cppdeplist)))
