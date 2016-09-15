@@ -1,7 +1,6 @@
 ;;; Code:
 ;; Requires:*
 (require 'f)
-(require 'cl)
 
 (load (concat gears-emacs-basepath "/config/layers"))
 (load (concat gears-emacs-basepath "/functions/packages"))
@@ -57,9 +56,17 @@
 (defun gears-layer--recursive-list-dependencies (layer)
   (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer) "/init"))
 
-  (let* ((deps (eval (intern (concat "gears-layers/"
-                                     (gears-layer-convert-name layer)
-                                     "-depends"))))
+  ;; Prefer the <layer>-generate-dependency-list function, then fall back to
+  ;; <layer>-depends
+  (let* ((deps (if (boundp (intern (concat "gears-layers/"
+                                           (gears-layer-convert-name layer)
+                                           "-generate-dependency-list")))
+                   (eval (intern (concat "gears-layers/"
+                                         (gears-layer-convert-name layer)
+                                         "-generate-dependency-list")))
+                 (eval (intern (concat "gears-layers/"
+                                       (gears-layer-convert-name layer)
+                                       "-depends")))))
          (package-list (gears-layer-dependencies-packages deps))
          (layer-list (gears-layer-dependencies-layers deps)))
 
@@ -70,6 +77,8 @@
     (remove-duplicates package-list)))
 
 (defun gears-layer-mark-installed (layer)
+  "Marks a layer as installed."
+
   (if (stringp layer)
       (setq gears-layer-installed-list
             (append gears-layer-installed-list `(,(intern layer))))
@@ -81,6 +90,8 @@
                                                       :from-end t)))
 
 (defun gears-layer--recursive-mark-installed (layer)
+  "Marks a layer, its sublayers and all dependencies as installed."
+
   (gears-layer-mark-installed layer)
 
   (dolist (layer-dep (gears-layer-dependencies-layers (eval (intern (concat "gears-layers/"
@@ -91,7 +102,17 @@
 (defun gears-layer-get-depends (layer)
   "Returns the dependencies for a given layer."
 
-  (eval (intern (concat "gears-layers/" (gears-layer-convert-name layer) "-depends"))))
+  ;; Prefer the <layer>-generate-dependency-list function, then fall back to
+  ;; <layer>-depends
+  (eval (if (boundp (intern (concat "gears-layers/"
+                                           (gears-layer-convert-name layer)
+                                           "-generate-dependency-list")))
+                   (eval (intern (concat "gears-layers/"
+                                         (gears-layer-convert-name layer)
+                                         "-generate-dependency-list")))
+                 (eval (intern (concat "gears-layers/"
+                                       (gears-layer-convert-name layer)
+                                       "-depends"))))))
 
 (defun gears-layer-autoremove-packages ()
   "Removes all packages not used by any layer."
@@ -126,7 +147,9 @@
 (defun gears-layer-remove (layer)
   "Removes a layer and all its files and unused packages."
 
-  (funcall (intern "gears-layers/" (gears-layer-convert-name layer) "-remove"))
+  (funcall (intern (concat "gears-layers/"
+                           (gears-layer-convert-name layer)
+                           "-remove")))
 
   (delete layer gears-layer-installed-list)
 
