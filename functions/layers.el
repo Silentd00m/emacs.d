@@ -58,15 +58,7 @@
 
   ;; Prefer the <layer>-generate-dependency-list function, then fall back to
   ;; <layer>-depends
-  (let* ((deps (if (boundp (intern (concat "gears-layers/"
-                                           (gears-layer-convert-name layer)
-                                           "-generate-dependency-list")))
-                   (eval (intern (concat "gears-layers/"
-                                         (gears-layer-convert-name layer)
-                                         "-generate-dependency-list")))
-                 (eval (intern (concat "gears-layers/"
-                                       (gears-layer-convert-name layer)
-                                       "-depends")))))
+  (let* ((deps (gears-layer-get-depends layer))
          (package-list (gears-layer-dependencies-packages deps))
          (layer-list (gears-layer-dependencies-layers deps)))
 
@@ -94,9 +86,8 @@
 
   (gears-layer-mark-installed layer)
 
-  (dolist (layer-dep (gears-layer-dependencies-layers (eval (intern (concat "gears-layers/"
-                                                                            (gears-layer-convert-name layer)
-                                                                            "-depends")))))
+  (dolist (layer-dep (gears-layer-dependencies-layers
+                      (gears-layer-get-depends layer)))
     (gears-layer--recursive-mark-installed layer-dep)))
 
 (defun gears-layer-get-depends (layer)
@@ -104,15 +95,15 @@
 
   ;; Prefer the <layer>-generate-dependency-list function, then fall back to
   ;; <layer>-depends
-  (eval (if (boundp (intern (concat "gears-layers/"
-                                           (gears-layer-convert-name layer)
-                                           "-generate-dependency-list")))
-                   (eval (intern (concat "gears-layers/"
-                                         (gears-layer-convert-name layer)
-                                         "-generate-dependency-list")))
-                 (eval (intern (concat "gears-layers/"
-                                       (gears-layer-convert-name layer)
-                                       "-depends"))))))
+  (if (fboundp (intern (concat "gears-layers/"
+                               (gears-layer-convert-name layer)
+                               "-generate-dependency-list")))
+      (funcall (intern (concat "gears-layers/"
+                               (gears-layer-convert-name layer)
+                               "-generate-dependency-list")))
+    (eval (intern (concat "gears-layers/"
+                          (gears-layer-convert-name layer)
+                          "-depends")))))
 
 (defun gears-layer-autoremove-packages ()
   "Removes all packages not used by any layer."
@@ -121,7 +112,9 @@
     ;; Build a list of all used packages from the dependencies of the installed
     ;; layers.
     (dolist (layer gears-layer-installed-list)
-      (add-to-list 'glarp-depended-pkg-list (cdr (assoc 'packages (gears-layer-get-depends layer)))))
+      (add-to-list 'glarp-depended-pkg-list
+                   (cdr (assoc 'packages
+                               (gears-layer-get-depends layer)))))
 
     ;; Iterate over the list of activated packages, delete everything not needed
     ;; in a layer.
