@@ -117,6 +117,11 @@
 (defun gears-layers/cpp-init()
   "Initiaizes the C++ layer."
 
+  (defcustom gears-layers/cpp-cmake-setup-ide t
+    "Setup compiler options and auto-completion."
+    :type 'boolean
+    :group 'gears-layers/cmake)
+
   (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode)
 
   (setq c-default-style "gears")
@@ -155,8 +160,23 @@
                                                                    (or (eq major-mode 'c++-mode)
                                                                        (eq major-mode 'c-mode))))))
 
-  (when (not (gears-layer-installed 'cpp))
-    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)))
+  (when (not (gears-layer-installed 'ycmd))
+    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
+
+  (when (gears-layer-installed 'cmake)
+    (gears-layer-init 'cmake)
+
+    (when gears-layers/cpp-cmake-setup-ide
+      ;; Also setup rtags if the layer has been installed.
+      (add-hook 'c-mode-common-hook #'(lambda ()
+                                        (when (gears-layer-installed 'rtags)
+                                          (require 'rtags))
+
+                                        (when (derived-mode-p 'c-mode 'c++-mode)
+                                          ;; (cppcm-reload-all)
+                                          (cmake-ide-setup)
+                                          (when (gears-layer-installed 'rtags)
+                                            (cmake-ide-maybe-start-rdm))))))))
 
 (defun gears-layers/cpp-install ()
   "Additional install commands for the C++ layer.")

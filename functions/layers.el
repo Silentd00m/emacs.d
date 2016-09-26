@@ -18,14 +18,17 @@
       layer
     (prin1-to-string layer)))
 
-(defun gears-layer-init ()
+(defun gears-layer-init (layer)
+  (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer) "/init.el"))
+  (funcall (intern (concat "gears-layers/" (gears-layer-convert-name layer) "-init"))))
+
+(defun gears-layers-init ()
   "Initializes all installed layers."
 
   (interactive)
 
   (dolist (layer gears-layer-installed-list)
-    (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer) "/init.el"))
-    (funcall (intern (concat "gears-layers/" (gears-layer-convert-name layer) "-init")))))
+    (gears-layer-init layer)))
 
 (defun gears-layer-list-save ()
   "Saves the current value of gears-layers-installed-list"

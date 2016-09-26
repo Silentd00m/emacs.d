@@ -106,7 +106,6 @@ Options:
                                     powerline
                                     powerline-evil
                                     material-theme
-                                    moe-theme
                                     tabbar-ruler
                                     saveplace
                                     git

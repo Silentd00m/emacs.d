@@ -36,4 +36,5 @@
   )
 
 (gears-layer-defdepends rtags
-                        :packages '(rtags))
+                        :packages '(rtags)
+                        :layers '(cpp))

@@ -54,7 +54,7 @@
                                  ("M-x" . helm-M-x)
                                  ("C-o" . helm-find-files)
                                  ("M-o" . helm-fzf)
-                                 ("<f1>" . helm-dash)
+                                 ("<f1>" . helm-descbinds)
                                  ("<f2>" . helm-dash-at-point)
                                  ("<f5>" . helm-make)
                                  ("<f7>" . helm-semantic-or-imenu)

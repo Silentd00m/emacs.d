@@ -3,6 +3,7 @@
 ;;; Code:
 
 (defun gears-layers/python-hydra-add ()
+  ;; TODO : Find why this does not work when the layer is precompiled
   (dynhydra-category--add-head (dynhydra--get-category 'gears-layers/base-hydra-m-g "GOTO")
                                `(,(make-dynhydra-head :key "d"
                                                       :text "Definition"

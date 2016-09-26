@@ -28,7 +28,7 @@
   (gears-install-firstrun-setup))
 
 (load (concat gears-emacs-basepath "/functions/layers"))
-(gears-layer-init)
+(gears-layers-init)
 
 ;; Functions
 (defun compile-emacs-dir ()
