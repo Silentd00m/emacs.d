@@ -110,6 +110,7 @@ Options:
                                     tabbar-ruler
                                     saveplace
                                     git
+                                    magit
                                     visual-regexp
                                     origami
                                     hydra
@@ -118,5 +119,6 @@ Options:
                                     helm-make
                                     helm-projectile
                                     helm-flycheck
+                                    helm-flx
                                     which-key)
                         :layers '(auto_completion))
