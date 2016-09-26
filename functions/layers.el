@@ -1,6 +1,7 @@
 ;;; Code:
 ;; Requires:*
 (require 'f)
+(require 'cl)
 
 (load (concat gears-emacs-basepath "/config/layers"))
 (load (concat gears-emacs-basepath "/functions/packages"))

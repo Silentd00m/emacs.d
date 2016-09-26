@@ -77,19 +77,6 @@
                                       ,(make-dynhydra-head :key "c"
                                                            :text "Go to Character"
                                                            :command 'goto-char
-                                                           :exit t)))
-    ,(make-dynhydra-category :title "GIT"
-                             :heads `(,(make-dynhydra-head :key "S"
-                                                           :text "Show Status"
-                                                           :command 'magit-status
-                                                           :exit t)
-                                      ,(make-dynhydra-head :key "B"
-                                                           :text "Blame Mode"
-                                                           :command 'magit-blame
-                                                           :exit t)
-                                      ,(make-dynhydra-head :key "L"
-                                                           :text "Show Log"
-                                                           :command 'magit-log-all
                                                            :exit t)))))
 
 (defdynhydra gears-layers/base-hydra-m-p
