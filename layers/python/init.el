@@ -33,7 +33,12 @@
     (when gears-layers/python-show-coverage
       (add-hook 'python-mode-hook 'pycoverage-mode))
 
-    (add-hook 'python-mode-hook 'anaconda-mode)))
+    (add-hook 'python-mode-hook 'anaconda-mode)
+    (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+
+  (unless gears-show-minor-modes
+    (add-hook 'after-init-hook '(lambda ()
+                                  (diminish 'anaconda-mode)))))
 
 (defun gears-layers/python-install()
   "Additional commands for layer installation."
