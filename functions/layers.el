@@ -23,7 +23,7 @@
   (funcall (intern (concat "gears-layers/" (gears-layer-convert-name layer) "-init"))))
 
 (defun gears-layers-init ()
-  "Initializes all installed layers."
+  "Initialize all installed layers."
 
   (interactive)
 
@@ -31,7 +31,7 @@
     (gears-layer-init layer)))
 
 (defun gears-layer-list-save ()
-  "Saves the current value of gears-layers-installed-list"
+  "Save the current value of gears-layers-installed-list."
 
   (f-write-text (concat "(setq gears-layer-installed-list '"
                         (prin1-to-string gears-layer-installed-list)
@@ -39,7 +39,7 @@
                 'utf-8 (concat gears-emacs-basepath "/config/layers.el")))
 
 (defun gears-layer-list-available ()
-  "Returns a list of all available configuration layers."
+  "Return a list of all available configuration layers."
 
   (delete "base"
           (directory-files (expand-file-name (concat
@@ -48,7 +48,7 @@
                            nil "^\\([^.]\\|\\.[^.]\\|\\.\\..\\)")))
 
 (defun gears-layer-get-description (layer)
-  "Returns the description of the given layer."
+  "Return the description of the given LAYER."
 
   (load (concat gears-emacs-basepath
                 "/layers/"
@@ -73,7 +73,7 @@
     (remove-duplicates package-list)))
 
 (defun gears-layer-mark-installed (layer)
-  "Marks a layer as installed."
+  "Mark LAYER as installed."
 
   (if (stringp layer)
       (setq gears-layer-installed-list
@@ -86,7 +86,7 @@
                                                       :from-end t)))
 
 (defun gears-layer--recursive-mark-installed (layer)
-  "Marks a layer, its sublayers and all dependencies as installed."
+  "Mark LAYER, its sublayers and all dependencies as installed."
 
   (gears-layer-mark-installed layer)
 
@@ -110,7 +110,7 @@
                           "-depends")))))
 
 (defun gears-layer-autoremove-packages ()
-  "Removes all packages not used by any layer."
+  "Remove all packages not used by any layer."
 
   (let ((glarp-depended-pkg-list nil))
     ;; Build a list of all used packages from the dependencies of the installed
@@ -127,7 +127,7 @@
         (gears-package-remove package)))))
 
 (defun gears-layer-install (layer)
-  "Install a layer and all dependencies."
+  "Install LAYER and all dependencies."
 
   (interactive "sInstall Layer: ")
 
@@ -142,7 +142,7 @@
   (gears-layer--recursive-mark-installed layer))
 
 (defun gears-layer-remove (layer)
-  "Removes a layer and all its files and unused packages."
+  "Remove LAYER and all its files and unused packages."
 
   (funcall (intern (concat "gears-layers/"
                            (gears-layer-convert-name layer)
@@ -156,13 +156,13 @@
   )
 
 (defun gears-layer-installed (layer)
-  "Returns true if layer is installed."
+  "Return true if LAYER is installed."
 
   (> (length (member layer gears-layer-installed-list)) 0))
 
 
 (defmacro gears-layer-defdepends (layer &rest depends)
-  "Simple way to generate a dependency list for a layer."
+  "Simple way to generate a dependency list for LAYER."
 
   `(setq ,(intern (concat "gears-layers/" (gears-layer-convert-name layer) "-depends"))
          (make-gears-layer-dependencies ,@depends)))
