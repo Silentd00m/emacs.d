@@ -81,7 +81,7 @@ Options:
   (projectile-global-mode)
   (global-company-mode)
   (company-quickhelp-mode 1)
-  (global-origami-mode t))
+  (save-place-mode 1))
 
 (defun gears-layers/base-remove()
   "Additional uninstall commands for the base-layer"

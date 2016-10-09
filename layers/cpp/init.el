@@ -122,6 +122,16 @@
     :type 'boolean
     :group 'gears-layers/cmake)
 
+  (unless gears-show-minor-modes
+    (eval-after-load "irony"
+      #'(diminish 'irony-mode))
+
+    (eval-after-load "modern-cpp-font-lock"
+      #'(diminish 'modern-c++-font-lock-mode))
+
+    (eval-after-load "rtags"
+      #'(diminish 'rtags-mode)))
+
   (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode)
 
   (setq c-default-style "gears")
