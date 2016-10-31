@@ -83,7 +83,9 @@
 
 
   (setq gears-layer-installed-list (remove-duplicates gears-layer-installed-list
-                                                      :from-end t)))
+                                                      :from-end t))
+
+  (gears-layer-list-save))
 
 (defun gears-layer--recursive-mark-installed (layer)
   "Mark LAYER, its sublayers and all dependencies as installed."
