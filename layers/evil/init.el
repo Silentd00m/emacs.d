@@ -9,12 +9,9 @@
 
   ;; Overwrite state maps with global keymap.
   (dolist (i gears-global-keymap)
-    (dolist (map '(evil-normal-state-map
-                   evil-insert-state-map
-                   evil-motion-state-map
-                   evil-visual-state-map))
+    (dolist (mode '(insert normal motion visual))
       (unless (string= (car i) "<escape>")
-        (define-key (eval map) (kbd (car i)) (cdr i)))))
+        (evil-define-key mode (current-global-map) (kbd (car i)) (cdr i)))))
 
   (dolist (map '(evil-normal-state-map
                  evil-insert-state-map

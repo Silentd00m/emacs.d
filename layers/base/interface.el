@@ -8,9 +8,17 @@
   :type 'face
   :group 'gears-interface)
 
-(defcustom gears-theme 'moe-dark
+(defcustom gears-theme 'material
   "The used theme."
   :type 'symbolp
+  :group 'gears-interface)
+
+(defcustom gears-theme-load-paths '(("moe-dark" . (f-glob (concat gears-emacs-basepath
+                                                                  "/elpa/moe-theme*")))
+                                    ("moe-light" . (f-glob (concat gears-emacs-basepath
+                                                                   "/elpa/moe-theme*"))))
+  "Additional theme paths."
+  :type '(alist :value (group symbol symbol))
   :group 'gears-interface)
 
 (defcustom gears-enable-tabbar nil
@@ -119,11 +127,13 @@ Set to nil to disable."
 ;; Set configuration
 
 (set-frame-font gears-font)
-(set-face-attribute 'default nil :font gears-font)
+(set-face-attribute 'default t :font gears-font)
 (set-default-font gears-font)
 
 (column-number-mode t)
 
+(add-to-list 'custom-theme-load-path (car (eval (cdr (assoc (prin1-to-string gears-theme)
+                                                            gears-theme-load-paths)))))
 (load-theme gears-theme t)
 
 (when gears-hightlight-current-line
@@ -137,8 +147,6 @@ Set to nil to disable."
   (modify-all-frames-parameters (list (cons 'cursor-type gears-cursor-type))))
 
 (when gears-show-line-numbers
-  ;; (global-nlinum-mode)
-
   (add-hook 'prog-mode-hook 'nlinum-mode)
   (add-hook 'text-mode-hook 'nlinum-mode))
 
@@ -171,14 +179,16 @@ Set to nil to disable."
   (which-key-mode t))
 
 (unless gears-show-minor-modes
-  (require 'diminish)
+  (add-hook 'after-init-hook #'(lambda ()
+                                 (require 'diminish)
 
-  (diminish 'company-mode)
-  (diminish 'helm-mode)
-  (diminish 'which-key-mode)
-  (diminish 'whitespace-mode)
-  (diminish 'undo-tree-mode)
-  (diminish 'smartparens-mode))
+                                 (diminish 'company-mode)
+                                 (diminish 'helm-mode)
+                                 (diminish 'which-key-mode)
+                                 (diminish 'whitespace-mode)
+                                 (diminish 'undo-tree-mode)
+                                 (diminish 'smartparens-mode)
+                                 (diminish 'auto-revert-mode))))
 
 ;; TODO : Add cursor and mode color configuration.
 
