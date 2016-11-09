@@ -10,6 +10,9 @@
 (transient-mark-mode 1)
 (setq x-select-enable-clipboard t)
 
+(when gears-use-evil
+  (evil-mode t))
+
 (require 'smartparens-config)
 (smartparens-global-mode t)
 
@@ -36,7 +39,7 @@
                                  ("M-," . comment-dwim-2)
 
                                  ;; Document navigation
-                                 ("C-t" . origami-forward-toggle-node)
+                                 ("C-t" . hs-toggle-hiding)
 
                                  ;; Window navigation
                                  ("M-S-<left>" . windmove-left)
@@ -44,9 +47,6 @@
 
                                  ("M-S-<up>" . windmove-up)
                                  ("M-S-<down>" . windmove-down)
-
-                                 ;; Documentation
-                                 ("<f3>" . help-command)
 
                                  ;; Helm key bindings
                                  ("C-p" . gears-helm-mini)

@@ -127,7 +127,7 @@ Set to nil to disable."
 ;; Set configuration
 
 (set-frame-font gears-font)
-(set-face-attribute 'default t :font gears-font)
+(set-face-attribute 'default nil :font gears-font)
 (set-default-font gears-font)
 
 (column-number-mode t)
@@ -179,16 +179,30 @@ Set to nil to disable."
   (which-key-mode t))
 
 (unless gears-show-minor-modes
-  (add-hook 'after-init-hook #'(lambda ()
-                                 (require 'diminish)
+  (require 'diminish)
 
-                                 (diminish 'company-mode)
-                                 (diminish 'helm-mode)
-                                 (diminish 'which-key-mode)
-                                 (diminish 'whitespace-mode)
-                                 (diminish 'undo-tree-mode)
-                                 (diminish 'smartparens-mode)
-                                 (diminish 'auto-revert-mode))))
+  (add-hook 'after-init-hook
+            #'(lambda ()
+                (diminish 'company-mode)
+                (diminish 'helm-mode)
+                (diminish 'which-key-mode)
+                (diminish 'undo-tree-mode)
+                (diminish 'smartparens-mode)
+
+                (eval-after-load "whitespace"
+                  #'(diminish 'whitespace-mode))
+
+                (eval-after-load "undo-tree"
+                  #'(diminish 'undo-tree-mode))
+
+                (eval-after-load "yasnippet"
+                  #'(diminish 'eldoc-mode))
+
+                (eval-after-load "yasnippet"
+                  #'(diminish 'yas-minor-mode))
+
+                (eval-after-load "abbrev"
+                  #'(diminish 'abbrev-mode)))))
 
 ;; TODO : Add cursor and mode color configuration.
 
