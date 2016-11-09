@@ -132,8 +132,12 @@ Set to nil to disable."
 
 (column-number-mode t)
 
-(add-to-list 'custom-theme-load-path (car (eval (cdr (assoc (prin1-to-string gears-theme)
-                                                            gears-theme-load-paths)))))
+;; Make sure we don't try to push a nil into the custom-theme-load-path, if theme
+;; does not have an entry.
+(when (car (eval (cdr (assoc (prin1-to-string gears-theme)
+                                                            gears-theme-load-paths))))
+  (add-to-list 'custom-theme-load-path (car (eval (cdr (assoc (prin1-to-string gears-theme)
+                                                              gears-theme-load-paths))))))
 (load-theme gears-theme t)
 
 (when gears-hightlight-current-line
