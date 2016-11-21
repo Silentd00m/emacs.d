@@ -114,10 +114,12 @@ Options:
                                     origami
                                     hydra
                                     projectile
+                                    projectile-speedbar
                                     helm
                                     helm-make
                                     helm-projectile
                                     helm-flycheck
                                     helm-flx
-                                    which-key)
+                                    which-key
+                                    sr-speedbar)
                         :layers '(auto_completion))

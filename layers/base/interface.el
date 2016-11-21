@@ -117,6 +117,17 @@ Set to nil to disable."
   :type 'boolean
   :group 'gears-interface)
 
+(defcustom gears-show-file-sidebar t
+  "Show file sidebar."
+
+  :type 'boolean
+  :group 'gears-interface)
+
+(defcustom gears-file-sidebar-with 20
+  "File sidebar with in characters."
+
+  :type 'integer
+  :group 'gears-interface)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Gears' powerline themes
@@ -135,7 +146,7 @@ Set to nil to disable."
 ;; Make sure we don't try to push a nil into the custom-theme-load-path, if theme
 ;; does not have an entry.
 (when (car (eval (cdr (assoc (prin1-to-string gears-theme)
-                                                            gears-theme-load-paths))))
+                             gears-theme-load-paths))))
   (add-to-list 'custom-theme-load-path (car (eval (cdr (assoc (prin1-to-string gears-theme)
                                                               gears-theme-load-paths))))))
 (load-theme gears-theme t)
@@ -207,6 +218,20 @@ Set to nil to disable."
 
                 (eval-after-load "abbrev"
                   #'(diminish 'abbrev-mode)))))
+
+(when gears-show-file-sidebar
+  (require 'projectile-speedbar)
+
+  (setq sr-speedbar-width-x gears-file-sidebar-with)
+
+  (sr-speedbar-open)
+
+  (with-current-buffer sr-speedbar-buffer-name
+    (setq window-size-fixed 'width))
+
+  (add-hook 'projectile-after-switch-project-hook
+            #'(lambda ()
+                (projectile-speedbar-open-current-project-in-speedbar))))
 
 ;; TODO : Add cursor and mode color configuration.
 
