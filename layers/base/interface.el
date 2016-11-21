@@ -117,7 +117,7 @@ Set to nil to disable."
   :type 'boolean
   :group 'gears-interface)
 
-(defcustom gears-show-file-sidebar t
+(defcustom gears-show-file-sidebar nil
   "Show file sidebar."
 
   :type 'boolean

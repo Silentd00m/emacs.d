@@ -2,7 +2,9 @@
   (require 'flycheck-pos-tip)
 
   (add-hook 'prog-mode-hook #'(lambda()
-                                (setq-local flycheck-display-errors-function (function flycheck-pos-tip-error-message))
+                                (setq-local flycheck-display-errors-function
+                                            (function flycheck-pos-tip-error-message))
+
                                 (flycheck-pos-tip-mode t)))
   (global-flycheck-mode t)
 

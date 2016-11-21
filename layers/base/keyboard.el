@@ -10,9 +10,6 @@
 (transient-mark-mode 1)
 (setq x-select-enable-clipboard t)
 
-(when gears-use-evil
-  (evil-mode t))
-
 (require 'smartparens-config)
 (smartparens-global-mode t)
 

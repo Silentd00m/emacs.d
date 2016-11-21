@@ -34,6 +34,11 @@ Options:
     :type 'boolean
     :group 'gears)
 
+  (defcustom gears-webserver-port 8081
+    "Default port for gears' builtin configuration webserver."
+    :type 'integer
+    :group 'gears)
+
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Set configuration
 

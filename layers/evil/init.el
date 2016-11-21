@@ -1,4 +1,6 @@
 (defun gears-layers/evil-init()
+  (require 'evil)
+
   (defcustom gears-use-evil nil
     "Use evil-mode instead of Gears' cua-mode by default."
     :type 'boolean
