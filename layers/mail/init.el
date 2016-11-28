@@ -3,12 +3,6 @@
 
   :group 'gears-layers)
 
-(defcustom gears-layers/mail-folders-path "~/.mail"
-  "Path to where the downloaded Mail is stored."
-
-  :type 'directory
-  :group 'gears-layers/mail)
-
 (defcustom gears-layers/mail-imap-handler 'elmo
   "Which mail handler to use for fetching mail. offlineimap is faster but has external dependencies"
 
@@ -90,16 +84,62 @@
                  (string :tag "Domain (Mostly Server Domain)"))))
   :group 'gears-layers/mail)
 
+(defcustom gears-layers/mail-default-smtp-account (car (car gears-layers/mail-smtp-accounts))
+  "Default account for smtp."
+
+  :type 'string
+  ;; :options (mapcar (lambda (acc)
+  ;;                    (prin1-to-string (car acc)))
+  ;;                  gears-layers/mail-smtp-accounts)
+  :group 'gears-layers/mail)
+
+(defcustom gears-layers/mail-folders-path "~/.mail"
+  "Path to where the downloaded Mail is stored."
+
+  :type 'directory
+  :group 'gears-layers/mail)
+
+(defcustom gears-layers/mail-draft-folder ".drafts"
+  "Default draft storage folder."
+
+  :type 'string
+  :group 'gears-layers/mail)
+
+(defcustom gears-layers/mail-trash-folder ".trash"
+  "Default trash folder."
+
+  :type 'string
+  :group 'gears-layers/mail)
+
+(defcustom gears-layers/mail-queue-folder ".queue"
+  "Default queue folder."
+
+  :type 'string
+  :group 'gears-layers/mail)
+
 (defun gears-layers/mail-init ()
   (autoload 'wl "wl" "Wanderlust" t)
   (autoload 'wl-other-frame "wl" "Wanderlust on new frame." t)
   (autoload 'wl-draft "wl-draft" "Write draft with Wanderlust." t)
 
-  (setq elmo-imap4-use-modified-utf7 t)
-  (setq wl-template-alist gears-layers/mail-smtp-accounts)
-  (setq elmo-maildir-folder-path gears-layers/mail-folders-path)
-  (setq wl-stay-folder-window t)
-  (setq wl-folders-file gears-layers/mail-folders-file))
+  (setq elmo-imap4-use-modified-utf7 t
+        wl-template-alist gears-layers/mail-smtp-accounts
+        elmo-maildir-folder-path gears-layers/mail-folders-path
+        elmo-localdir-folder-path gears-layers/mail-folders-path
+        wl-stay-folder-window t
+        wl-folders-file gears-layers/mail-folders-file
+        wl-user-mail-address-list `,(mapcar #'(lambda (elem)
+                                                (cdr (assoc 'wl-local-domain (cdr elem))))
+                                            gears-layers/mail-smtp-accounts)
+        wl-default-folder gears-layers/mail-folders-path
+        wl-quicksearch-folder gears-layers/mail-folders-path
+        wl-draft-folder gears-layers/mail-draft-folder
+        wl-trash-folder gears-layers/mail-trash-folder
+        wl-queue-folder gears-layers/mail-queue-folder
+        wl-fcc-force-as-read t
+        wl-from (cdr (assoc 'wl-from
+                            (assoc gears-layers/mail-default-smtp-account
+                                   gears-layers/mail-smtp-accounts)))))
 
 (defcustom gears-layers/mail-folders-file (s-concat gears-emacs-basepath
                                                     "/config/mail-folders.conf")

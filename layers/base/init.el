@@ -98,6 +98,8 @@ Options:
 
   t)
 
+(setq w3m-default-display-inline-images t)
+
 (gears-layer-defdepends base
                         :packages '(bug-hunter
                                     diminish
@@ -126,5 +128,6 @@ Options:
                                     helm-flycheck
                                     helm-flx
                                     which-key
-                                    sr-speedbar)
+                                    sr-speedbar
+                                    w3m)
                         :layers '(auto_completion))
