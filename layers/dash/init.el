@@ -70,4 +70,4 @@
 
 (gears-layer-defdepends dash
                         :packages '(dash-at-point helm-dash)
-                        :layers 'base)
+                        :layers '(base))
