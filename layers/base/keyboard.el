@@ -59,32 +59,32 @@
                                  ("C-u" . undo-tree-visualize)
 
                                  ;; Hydras
+                                 ("M-a" . (lambda ()
+                                            (interactive)
+                                            (eval (dynhydra--open gears-layers/base-hydra-m-a))))
+                                 ("M-c" . (lambda ()
+                                            (interactive)
+                                            (eval (dynhydra--open gears-layers/base-hydra-m-c))))
                                  ("M-e" . (lambda ()
                                             (interactive)
-
                                             (eval (dynhydra--open gears-layers/base-hydra-m-e))))
                                  ("M-f" . (lambda ()
                                             (interactive)
-
                                             (eval (dynhydra--open gears-layers/base-hydra-m-f))))
                                  ("M-g" . (lambda ()
                                             (interactive)
                                             (eval (dynhydra--open gears-layers/base-hydra-m-g))))
                                  ("M-p" . (lambda ()
                                             (interactive)
-
                                             (eval (dynhydra--open gears-layers/base-hydra-m-p))))
                                  ("M-r" . (lambda ()
                                             (interactive)
-
                                             (eval (dynhydra--open gears-layers/base-hydra-m-r))))
                                  ("M-s" . (lambda ()
                                             (interactive)
-
                                             (eval (dynhydra--open gears-layers/base-hydra-m-s))))
                                  ("M-t" . (lambda ()
                                             (interactive)
-
                                             (eval (dynhydra--open gears-layers/base-hydra-m-t)))))
 
   ""

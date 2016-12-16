@@ -3,7 +3,39 @@
 
 ;;; Code:
 
-(defvar gears-layers/base-hydra-list '())
+;; (defvar gears-layers/base-hydra-list '())
+
+(defdynhydra gears-layers/base-hydra-m-a
+  `(,(make-dynhydra-category :title "Align"
+                             :heads `(,(make-dynhydra-head :key "s"
+                                                           :text "Selection"
+                                                           :command 'align-current)
+                                      ,(make-dynhydra-head :key "f"
+                                                           :text "File"
+                                                           :command 'align-entire)))))
+
+(defdynhydra gears-layers/base-hydra-m-b `())
+
+(defdynhydra gears-layers/base-hydra-m-c
+  `(,(make-dynhydra-category :title "Selection"
+                             :heads `(,(make-dynhydra-head :key "c"
+                                                           :text "Copy"
+                                                           :command 'cua-copy-region)
+                                      ,(make-dynhydra-head :key "x"
+                                                           :text "Cut"
+                                                           :command 'cua-cut-region)))
+    ,(make-dynhydra-category :title "Convert"
+                             :heads `(,(make-dynhydra-head :key "L"
+                                                           :text "Lowercase"
+                                                           :command 'downcase-dwim)
+                                      ,(make-dynhydra-head :key "U"
+                                                           :text "Uppercase"
+                                                           :command 'upcase-dwim)
+                                      ,(make-dynhydra-head :key "C"
+                                                           :text "Capitalize"
+                                                           :command 'capitalize-dwim)))))
+
+(defdynhydra gears-layers/base-hydra-m-d `())
 
 (defdynhydra gears-layers/base-hydra-m-e
   `(,(make-dynhydra-category :title "Edit"
