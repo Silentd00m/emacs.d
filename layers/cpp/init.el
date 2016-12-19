@@ -95,6 +95,17 @@
 (defun gears-cpp-align-template-args-cont (langelem)
   )
 
+(defun gears-layers/cpp-install-irony ()
+  (irony-install-server (format
+                         (concat "%s %s %s && %s --build . "
+                                 "--use-stderr --config Release --target install")
+                         (shell-quote-argument irony-cmake-executable)
+                         (shell-quote-argument (concat "-DCMAKE_INSTALL_PREFIX="
+                                                       (expand-file-name
+                                                        irony-server-install-prefix)))
+                         (shell-quote-argument irony-server-source-dir)
+                         (shell-quote-argument irony-cmake-executable))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Apply fixes
 

@@ -58,7 +58,8 @@
   (funcall (intern (concat "gears-layers/" (gears-layer-convert-name layer) "-description"))))
 
 (defun gears-layer--recursive-list-dependencies (layer)
-  (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer) "/init"))
+  (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer)
+                "/init"))
 
   ;; Prefer the <layer>-generate-dependency-list function, then fall back to
   ;; <layer>-depends
@@ -97,7 +98,7 @@
     (gears-layer--recursive-mark-installed layer-dep)))
 
 (defun gears-layer-get-depends (layer)
-  "Returns the dependencies for a given layer."
+  "Return the dependencies for the givne LAYER."
 
   ;; Prefer the <layer>-generate-dependency-list function, then fall back to
   ;; <layer>-depends
