@@ -1,3 +1,13 @@
+(defgroup gears-layers/git nil
+  "Git Layer Configuration"
+
+  :group 'gears-layers)
+
+(defcustom gears-layers/git-askpass-handler nil
+  "Askpass handler. No handler if empty."
+
+  :type 'file)
+
 (defun gears-layers/git-init()
   (require 'git-gutter-fringe+)
 
@@ -19,7 +29,10 @@
                                                                                    :command 'magit-log-all
                                                                                    :exit t)))))
 
-  (global-git-gutter+-mode))
+  (global-git-gutter+-mode)
+
+  (when gears-layers/git-askpass-handler
+    (setenv "SSH_ASKPASS" gears-layers/git-askpass-handler)))
 
 (defun gears-layers/git-description()
   "Returns the description of the git Layer."
