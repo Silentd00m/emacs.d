@@ -158,7 +158,9 @@
                                  (irony-mode t)
                                  (irony-eldoc t)
 
-                                 (add-to-list 'company-backends '(company-irony-c-headers company-c-headers company-irony)))))
+                                 (add-to-list 'company-backends '(company-irony-c-headers
+                                                                  company-c-headers
+                                                                  company-irony)))))
 
   (when (gears-layer-installed 'dash)
     (add-hook 'c++-mode-hook '(lambda()

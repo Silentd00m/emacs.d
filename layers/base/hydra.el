@@ -9,10 +9,12 @@
   `(,(make-dynhydra-category :title "Align"
                              :heads `(,(make-dynhydra-head :key "s"
                                                            :text "Selection"
-                                                           :command 'align-current)
+                                                           :command 'align-current
+                                                           :exit t)
                                       ,(make-dynhydra-head :key "f"
                                                            :text "File"
-                                                           :command 'align-entire)))))
+                                                           :command 'align-entire
+                                                           :exit t)))))
 
 (defdynhydra gears-layers/base-hydra-m-b `())
 

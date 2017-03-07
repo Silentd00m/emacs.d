@@ -27,7 +27,11 @@
 
 (defun gears-layers/rtags-init ()
   ;; Add goto-definition for c-modes.
-  (gears-layers/rtags-hydra-add))
+  (gears-layers/rtags-hydra-add)
+
+  (when (gears-layer-installed 'auto_completion)
+    (setq rtags-completions-enabled t)
+    (add-to-list 'company-backends 'company-rtags)))
 
 (defun gears-layers/rtags-description ()
   "Client/Server indexer for C++.")
