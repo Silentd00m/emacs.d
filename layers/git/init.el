@@ -27,6 +27,10 @@
                                                               ,(make-dynhydra-head :key "L"
                                                                                    :text "Show Log"
                                                                                    :command 'magit-log-all
+                                                                                   :exit t)
+                                                              ,(make-dynhydra-head :key "T"
+                                                                                   :text "Time Machine"
+                                                                                   :command 'git-timemachine
                                                                                    :exit t)))))
 
   (global-git-gutter+-mode)
@@ -46,4 +50,4 @@
   )
 
 (gears-layer-defdepends git
-                        :packages '(magit git-gutter-fringe+))
+                        :packages '(magit git-gutter-fringe+ git-timemachine))
