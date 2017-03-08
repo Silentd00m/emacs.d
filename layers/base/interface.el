@@ -129,6 +129,18 @@ Set to nil to disable."
   :type 'integer
   :group 'gears-interface)
 
+(defcustom gears-show-documentation-mode 'minibuffer
+  "Defines how the code documentation should be shown
+
+Options:
+ - popup: Documentation is shown in a popup window near the cursor.
+ - minibuffer: Documentation is shown in the minibuffer (with color)
+ - overlay: Documentation is shown in a text overlay above the cursor.
+ - none: Do not show the documentation."
+  :options '('popup 'minibuffer 'overlay 'none)
+  :type 'symbolp
+  :group 'gears-interface)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Gears' powerline themes
 
@@ -232,6 +244,17 @@ Set to nil to disable."
   (add-hook 'projectile-after-switch-project-hook
             #'(lambda ()
                 (projectile-speedbar-open-current-project-in-speedbar))))
+
+(cond ((equal gears-show-documentation-mode 'popup)
+       (require 'pos-tip)
+
+       (defun eldoc-popup-message (format-string &rest args)
+         "Display eldoc message near point."
+         (when format-string
+           (pos-tip-show (apply 'format format-string args))))
+       (setq eldoc-message-function #'eldoc-popup-message))
+      ((equal gears-show-documentation-mode 'overlay)
+       (add-hook 'eldoc-mode-hook 'eldoc-overlay-mode)))
 
 ;; TODO : Add cursor and mode color configuration.
 

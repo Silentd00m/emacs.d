@@ -156,7 +156,9 @@
     (add-hook 'company-backends 'company-irony)
     (add-hook 'c++-mode-hook #'(lambda ()
                                  (irony-mode t)
-                                 (irony-eldoc t)
+
+                                 (unless (equal gears-show-documentation-mode 'none)
+                                   (irony-eldoc t))
 
                                  (add-to-list 'company-backends '(company-irony-c-headers
                                                                   company-c-headers

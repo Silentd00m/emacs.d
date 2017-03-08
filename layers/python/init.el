@@ -25,7 +25,6 @@
   (when (not (gears-layer-installed 'ycmd))
     (gears-layers/python-hydra-add)
 
-    (add-hook 'anaconda-mode-hook 'anaconda-eldoc-mode)
     (add-hook 'anaconda-mode-hook #'(lambda ()
                                       (eval-after-load "company"
                                         '(add-to-list 'company-backends '(company-anaconda)))))
@@ -34,11 +33,11 @@
       (add-hook 'python-mode-hook 'pycoverage-mode))
 
     (add-hook 'python-mode-hook 'anaconda-mode)
-    (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+    (unless (equal gears-show-documentation-mode 'none)
+      (add-hook 'anaconda-mode-hook 'anaconda-eldoc-mode)))
 
   (unless gears-show-minor-modes
-    (add-hook 'after-init-hook '(lambda ()
-                                  (diminish 'anaconda-mode)))))
+    (eval-after-load "anaconda" #'(diminish 'anaconda-mode))))
 
 (defun gears-layers/python-install()
   "Additional commands for layer installation."
@@ -53,6 +52,7 @@
 (gears-layer-defdepends python
                         :packages '(elpy
                                     company-anaconda
+                                    anaconda-mode
                                     helm-pydoc
                                     pycoverage
                                     py-yapf
