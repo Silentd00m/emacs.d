@@ -33,8 +33,13 @@
       (add-hook 'python-mode-hook 'pycoverage-mode))
 
     (add-hook 'python-mode-hook 'anaconda-mode)
+
     (unless (equal gears-show-documentation-mode 'none)
-      (add-hook 'anaconda-mode-hook 'anaconda-eldoc-mode)))
+      (add-hook 'anaconda-mode-hook 'anaconda-eldoc-mode))
+
+    (add-hook 'anaconda-mode-hook #'(lambda ()
+                                      (dolist (i gears-global-keymap)
+                                        (define-key anaconda-mode-map (kbd (car i)) (cdr i))))))
 
   (unless gears-show-minor-modes
     (eval-after-load "anaconda" #'(diminish 'anaconda-mode))))
