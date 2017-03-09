@@ -19,7 +19,7 @@
 (require 's)
 (require 'hydra)
 
-(cl-defstruct dynhydra name categories)
+(cl-defstruct dynhydra name categories persistent)
 (cl-defstruct dynhydra-category title heads)
 (cl-defstruct dynhydra-head key text command exit condition)
 
@@ -43,8 +43,18 @@
 
     return-list))
 
+(defun dynhydra--get (name)
+  "Return a dynhydra by NAME."
+
+  (cdr (assoc name dynhydra-list)))
+
+(defun dynhydra--set-options (hydra options)
+  "Set the options for HYDRA to OPTIONS."
+
+  (setf (dynhydra-options hydra) options))
+
 (defun dynhydra-category--add-head (category head)
-  "Adds a head to a category."
+  "Add a HEAD to a CATEGORY."
 
   (setf (dynhydra-category-heads category)
         (append head (dynhydra-category-heads category))))
@@ -224,24 +234,32 @@
 (defmacro dynhydra--generate (name hydra)
   "Generates a hydra from the given name and dynhydra-struct"
 
-  (let ((docstring (eval (dynhydra--format (eval hydra))))
-        (heads (dynhydra--list-active-keys (eval hydra))))
-    `(defhydra ,name (:hint nil)
-       ,docstring
-       ,@heads
-       ("<ESC>" nil "Close Help"))))
+  (if (dynhydra-persistent hydra)
+      (let ((docstring (eval (dynhydra--format (eval hydra))))
+            (heads (dynhydra--list-active-keys (eval hydra))))
+        `(defhydra ,name (:hint nil
+                                :color pink)
+           ,docstring
+           ,@heads))
+    (let ((docstring (eval (dynhydra--format (eval hydra))))
+          (heads (dynhydra--list-active-keys (eval hydra))))
+      `(defhydra ,name (:hint nil)
+         ,docstring
+         ,@heads
+         ("<ESC>" nil "Close Help" :exit t)))))
 
 (defmacro dynhydra--update (hydra)
   "Updates the hydra with the given name so new heads and categories are shown."
 
   `(dynhydra--generate ,hydra ,(cdr (assoc hydra dynhydra-list))))
 
-(defmacro defdynhydra (name categories)
+(defmacro defdynhydra (name categories &optional persistent)
   "Adds the given hydra to the hydra-list and generates it.
 Modifies it if already exists"
 
   (let ((hydra (make-dynhydra :name (prin1-to-string name)
-                              :categories (eval categories))))
+                              :categories (eval categories)
+                              :persistent persistent)))
 
     (if (not (assoc name dynhydra-list))
         (setq dynhydra-list (push `(,name . ,hydra) dynhydra-list))
