@@ -127,6 +127,7 @@ Options:
                                     helm-projectile
                                     helm-flycheck
                                     helm-flx
+                                    helm-descbinds
                                     which-key
                                     sr-speedbar
                                     w3m)
