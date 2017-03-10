@@ -1,5 +1,7 @@
 ;;; -*- lexical-binding: t -*-
 
+(require 's)
+
 (defun gears-layers/dash-init()
   ""
 
@@ -8,7 +10,7 @@
 
     :group 'gears-layers)
 
-  (defcustom gears-layers/dash-docset-list '("Emacs_Lisp")
+  (defcustom gears-layers/dash-docset-list '("Emacs Lisp")
     "List of all docsets to install and keep updated."
 
     :type 'listp
@@ -45,7 +47,7 @@
                                    "/docsets/"
                                    docset
                                    ".docset"))
-      (helm-dash-install-docset docset)))
+      (helm-dash-install-docset (s-replace " " "_" docset))))
 
   (dolist (item gears-layers/dash-docset-mode-autoloads)
     (add-hook (car item) `(lambda()
@@ -69,5 +71,5 @@
   (customize-group 'gears-layers/dash))
 
 (gears-layer-defdepends dash
-                        :packages '(dash-at-point helm-dash)
+                        :packages '(dash-at-point helm-dash s)
                         :layers '(base))
