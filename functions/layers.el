@@ -20,6 +20,7 @@
 
 (defun gears-layer-init (layer)
   (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer) "/init.el"))
+
   (funcall (intern (concat "gears-layers/" (gears-layer-convert-name layer) "-init"))))
 
 (defun gears-layers-init ()

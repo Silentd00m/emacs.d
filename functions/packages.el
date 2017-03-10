@@ -2,23 +2,21 @@
 
 (require 'dash)
 
-(defun gears-package-install-packages (pkg-list &optional background)
-  (unless background
-    (generate-new-buffer-name "*gears-install*")
-    (switch-to-buffer "*gears-install*")
-
-    (read-only-mode t)
-
-    (let ((inhibit-read-only t))
-      (princ "Refreshing package repository cache before installation."
-             (current-buffer))))
-
+(cl-defun gears-package-install-packages (pkg-list &optional (background nil))
   (package-refresh-contents)
 
   (if background
       (dolist (pkg pkg-list)
         (package-install pkg))
     (progn
+      (generate-new-buffer-name "*gears-install*")
+      (switch-to-buffer "*gears-install*")
+
+      (read-only-mode t)
+
+      (let ((inhibit-read-only t))
+        (princ "Refreshing package repository cache before installation."
+               (current-buffer)))
       (let ((gip-installed-package-count 0))
         (dolist (pkg pkg-list)
           (unless (package-installed-p pkg)
