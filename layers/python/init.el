@@ -17,8 +17,13 @@
     "Python Layer Configuration"
     :group 'gears-layers)
 
-  (defcustom gears-layers/python-show-coverage t
+  (defcustom gears-layers/python-show-coverage nil
     "Show coverage test indicators in python-mode."
+    :type 'boolean
+    :group 'gears-layers/python)
+
+  (defcustom gears-layers/python-show-indent-guides t
+    "Show indentation guides in python-mode"
     :type 'boolean
     :group 'gears-layers/python)
 
@@ -31,6 +36,9 @@
 
     (when gears-layers/python-show-coverage
       (add-hook 'python-mode-hook 'pycoverage-mode))
+
+    (when gears-layers/python-show-indent-guides
+      (add-hook 'python-mode-hook 'highlight-indent-guides-mode))
 
     (add-hook 'python-mode-hook 'anaconda-mode)
 
@@ -82,4 +90,5 @@
                                     pycoverage
                                     py-yapf
                                     python-docstring
-                                    pip-requirements))
+                                    pip-requirements
+                                    highlight-indent-guides))
