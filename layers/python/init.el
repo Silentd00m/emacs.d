@@ -42,7 +42,27 @@
                                         (define-key anaconda-mode-map (kbd (car i)) (cdr i))))))
 
   (unless gears-show-minor-modes
-    (eval-after-load "anaconda" #'(diminish 'anaconda-mode))))
+    (eval-after-load "anaconda" #'(diminish 'anaconda-mode)))
+
+  (unless (dynhydra--get-category 'gears-layers/base-hydra-m-f "Format")
+    (dynhydra--add-category 'gears-layers/base-hydra-m-f
+                            `(,(make-dynhydra-category :title "Format"))))
+
+
+  (dynhydra-category--add-head
+   (dynhydra--get-category
+    'gears-layers/base-hydra-m-f "Format")
+   `(,(make-dynhydra-head :key "F"
+                          :text "Format Buffer"
+                          :command '(lambda ()
+                                      (interactive)
+
+                                      (py-yapf-buffer)
+                                      (py-autopep8))
+                          :exit t
+                          :condition (lambda ()
+                                       (or (eq major-mode 'python-mode)
+                                           (eq major-mode 'anaconda-mode)))))))
 
 (defun gears-layers/python-install()
   "Additional commands for layer installation."
