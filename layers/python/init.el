@@ -22,9 +22,17 @@
     :type 'boolean
     :group 'gears-layers/python)
 
-  (defcustom gears-layers/python-show-indent-guides t
-    "Show indentation guides in python-mode"
-    :type 'boolean
+  (defcustom gears-layers/python-indent-guide-style 'fill
+    "Define how indentation guides should be shown in python-mode.
+
+Options:
+ - fill: Fill the background of indentation levels in alternating colors.
+ - column: Fill first character of the indentation levels in alternating colors.
+ - character: Show a line character to indicate indentation levels.
+ - none: Do not show indentation.
+"
+    :options '('fill 'column 'character 'none)
+    :type 'symbolp
     :group 'gears-layers/python)
 
   (when (not (gears-layer-installed 'ycmd))
@@ -37,12 +45,15 @@
     (when gears-layers/python-show-coverage
       (add-hook 'python-mode-hook 'pycoverage-mode))
 
-    (when gears-layers/python-show-indent-guides
-      (add-hook 'python-mode-hook 'highlight-indent-guides-mode))
+    (unless (eq gears-layers/python-indent-guide-style 'none)
+      (add-hook 'python-mode-hook 'highlight-indent-guides-mode)
+
+      (setq highlight-indent-guides-method
+            gears-layers/python-indent-guide-style))
 
     (add-hook 'python-mode-hook 'anaconda-mode)
 
-    (unless (equal gears-show-documentation-mode 'none)
+    (unless (eq gears-show-documentation-mode 'none)
       (add-hook 'anaconda-mode-hook 'anaconda-eldoc-mode))
 
     (add-hook 'anaconda-mode-hook #'(lambda ()
