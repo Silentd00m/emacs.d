@@ -232,7 +232,7 @@
     return-list))
 
 (defmacro dynhydra--generate (name hydra)
-  "Generates a hydra from the given name and dynhydra-struct"
+  "Generates a hydra from the given NAME and dynHYDRA-struct"
 
   (if (dynhydra-persistent hydra)
       (let ((docstring (eval (dynhydra--format (eval hydra))))

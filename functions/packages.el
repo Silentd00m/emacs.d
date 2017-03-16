@@ -49,24 +49,29 @@
   "Return t if the installed version of PACKAGE is outdated."
 
   (let* ((remote-version (package-desc-version
-                          (cadr (assq package package-archive-contents))))
+                          (cadr (assoc package package-archive-contents))))
          (local-version (package-desc-version
-                         (cadr (or (assq package package-alist)
-                                   (assq package package--builtins))))))
+                         (cadr (or (assoc package package-alist)
+                                   (assoc package package--builtins))))))
     (not (version-list-<= remote-version local-version))))
 
 (defun gears-package-list-outdated-packages ()
   "Return a list of outdated packages."
 
   (let ((outdated-package-list nil))
-    (dolist (package package-selected-packages)
-      (when (gears-package-is-outdated package)
-        (setf outdated-package-list (append outdated-package-list package))))
+    (dolist (pkg package-selected-packages)
+      (when (gears-package-is-outdated pkg)
+        (add-to-list 'outdated-package-list pkg)))
 
     outdated-package-list))
 
 (defun gears-package-update (package &optional background)
   (gears-package-install-packages `(,package) background))
+
+(defun gears-package-update-all-packages ()
+  (interactive)
+
+  (gears-package-install-packages (gears-package-list-outdated-packages)))
 
 (defun gears-package-remove (package)
   (package-delete (gears-package-get-desc-vector package)))

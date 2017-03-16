@@ -17,10 +17,21 @@
 (require 'f)
 (setq gears-emacs-basepath (f-dirname (f-this-file)))
 
+(unless (f-dir? (concat gears-emacs-basepath "/config"))
+  (f-mkdir (concat gears-emacs-basepath "/config")))
+
 (setq custom-file (concat gears-emacs-basepath "/config/custom.el"))
-(load custom-file)
-(load (concat gears-emacs-basepath "/config/layers"))
-(load (concat gears-emacs-basepath "/config/config"))
+
+(when (f-file? (concat gears-emacs-basepath "/config/custom.el"))
+    (load custom-file)
+    (load (concat gears-emacs-basepath "/config/config.el")))
+
+(if (f-file? (concat gears-emacs-basepath "/config/layers.el"))
+    (load (concat gears-emacs-basepath "/config/layers"))
+  (progn (f-write-text "(setq gears-layer-installed-list '())"
+                       'utf-8
+                       (concat gears-emacs-basepath "/config/layers.el"))
+         (load (concat gears-emacs-basepath "/config/layers"))))
 
 (unless (> (length gears-layer-installed-list) 0)
   (load "~/.emacs.d/functions/install")

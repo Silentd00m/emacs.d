@@ -1,3 +1,10 @@
+(load "custom")
+
+(defgroup gears nil
+  "Awesome Emacs configuration"
+  :group 'environment
+  :link '(url-link :tag "Github" "https://github.com/Silentd00m/emacs.d"))
+
 (defun gears-layers/base-init()
   (defcustom gears-indent-mode 'spaces
     "Defines how text is indented.
