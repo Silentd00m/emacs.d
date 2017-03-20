@@ -2,6 +2,7 @@
 ;; Requires:*
 (require 'f)
 (require 'cl)
+(require 'dash)
 
 (load (concat gears-emacs-basepath "/config/layers"))
 (load (concat gears-emacs-basepath "/functions/packages"))
@@ -72,7 +73,7 @@
       (setq package-list (append package-list
                                  (gears-layer--recursive-list-dependencies layer-dep))))
 
-    (remove-duplicates package-list)))
+    (-non-nil (remove-duplicates package-list))))
 
 (defun gears-layer-mark-installed (layer)
   "Mark LAYER as installed."
@@ -130,11 +131,27 @@
       (unless (member package glarp-depended-pkg-list)
         (gears-package-remove package)))))
 
-(defun gears-layer-install (layer)
-  "Install LAYER and all dependencies."
+(defun gears-layer-install ()
+  "Install a layer and all dependencies."
 
-  (interactive "sInstall Layer: ")
+  (interactive)
 
+  (helm :sources
+        (helm-build-sync-source "Layers"
+          :candidates #'(lambda ()
+                          (let ((layer-folders
+                                 (f-directories (concat gears-emacs-basepath
+                                                        "/layers/")))
+                                (layer-list '()))
+                            (dolist (layer layer-folders)
+                              (unless (gears-layer-installed-p (intern (f-filename layer)))
+                                (add-to-list 'layer-list (f-filename layer) t)))
+                            layer-list))
+          :fuzzy-match t
+          :action '-gears-layer-install)
+        :buffer "*gears layer-install*"))
+
+(defun -gears-layer-install (layer)
   ;; ;; Add layer to list of layers
   ;; (add-to-list 'gears-layer-installed-list layer)
   ;; (gears-layer-list-save)
@@ -159,7 +176,7 @@
   ;; TODO : Uninstall unused packages.
   )
 
-(defun gears-layer-installed (layer)
+(defun gears-layer-installed-p (layer)
   "Return true if LAYER is installed."
 
   (> (length (member layer gears-layer-installed-list)) 0))

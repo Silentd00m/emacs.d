@@ -14,8 +14,21 @@
 (helm-occur-init-source)
 (helm-attrset 'follow 1 helm-source-occur)
 
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-(define-key helm-map (kbd "ESC") 'helm-keyboard-quit)
+(defcustom gears-helm-enable-tab-completion t
+  "Enables completion using the <tab> key when inside a helm buffer."
+  :type 'boolean
+  :group 'gears-interface)
+
+(defcustom gears-helm-enable-close-on-esc t
+  "Enables closing helm using the <ESC> key."
+  :type 'boolean
+  :group 'gears-interface)
+
+(when gears-helm-enable-tab-completion
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action))
+
+(when gears-helm-enable-close-on-esc
+  (define-key helm-map (kbd "ESC") 'helm-keyboard-quit))
 
 (helm-flx-mode 1)
 
@@ -43,8 +56,8 @@
 (advice-add 'helm-ff-delete-char-backward :around #'gears/helm-find-files-navigate-back)
 
 (defun gears/helm-find-files-navigate-back (orig-fun &rest args)
-  "Go up one directory when pressing backspace in a directory when no additional"
-  "Characters have been entered."
+  "Go up one directory when pressing backspace in a directory when no additional
+  Characters have been entered."
   (if (= (length helm-pattern) (length (helm-find-files-initial-input)))
       (helm-find-files-up-one-level 1)
     (apply orig-fun args)))

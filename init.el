@@ -23,8 +23,7 @@
 (setq custom-file (concat gears-emacs-basepath "/config/custom.el"))
 
 (when (f-file? (concat gears-emacs-basepath "/config/custom.el"))
-    (load custom-file)
-    (load (concat gears-emacs-basepath "/config/config.el")))
+    (load custom-file))
 
 (if (f-file? (concat gears-emacs-basepath "/config/layers.el"))
     (load (concat gears-emacs-basepath "/config/layers"))
@@ -45,6 +44,5 @@
 (defun compile-emacs-dir ()
   (interactive)
   (byte-recompile-directory (expand-file-name "~/.emacs.d/plugins") 0)
-  (byte-recompile-directory (expand-file-name "~/.emacs.d/config") 0)
   (byte-recompile-directory (expand-file-name "~/.emacs.d/elpa") 0)
   (byte-recompile-directory (expand-file-name "~/.emacs.d/functions") 0))
