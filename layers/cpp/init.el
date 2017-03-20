@@ -147,12 +147,12 @@
 
   (setq c-default-style "gears")
 
-  (when (gears-layer-installed 'refactor))
+  (when (gears-layer-installed-p 'refactor))
 
   (add-hook 'c++-mode-hook 'gears-cpp-mode-hook)
 
-  (when (and (not (gears-layer-installed 'ycmd))
-             (gears-layer-installed 'auto_completion))
+  (when (and (not (gears-layer-installed-p 'ycmd))
+             (gears-layer-installed-p 'auto_completion))
     (add-hook 'company-backends 'company-irony)
     (add-hook 'c++-mode-hook #'(lambda ()
                                  (irony-mode t)
@@ -164,7 +164,7 @@
                                                                   company-c-headers
                                                                   company-irony)))))
 
-  (when (gears-layer-installed 'dash)
+  (when (gears-layer-installed-p 'dash)
     (add-hook 'c++-mode-hook '(lambda()
                                 (message "[Dash] Loaded docset 'C++' and 'C'.")
                                 (setq-local helm-dash-docsets '("C++" "C")))))
@@ -185,22 +185,22 @@
                                                                    (or (eq major-mode 'c++-mode)
                                                                        (eq major-mode 'c-mode))))))
 
-  (when (not (gears-layer-installed 'ycmd))
+  (when (not (gears-layer-installed-p 'ycmd))
     (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
 
-  (when (gears-layer-installed 'cmake)
+  (when (gears-layer-installed-p 'cmake)
     (gears-layer-init 'cmake)
 
     (when gears-layers/cpp-cmake-setup-ide
       ;; Also setup rtags if the layer has been installed.
       (add-hook 'c-mode-common-hook #'(lambda ()
-                                        (when (gears-layer-installed 'rtags)
+                                        (when (gears-layer-installed-p 'rtags)
                                           (require 'rtags))
 
                                         (when (derived-mode-p 'c-mode 'c++-mode)
                                           ;; (cppcm-reload-all)
                                           (cmake-ide-setup)
-                                          (when (gears-layer-installed 'rtags)
+                                          (when (gears-layer-installed-p 'rtags)
                                             (cmake-ide-maybe-start-rdm))))))))
 
 (defun gears-layers/cpp-install ()
@@ -208,36 +208,36 @@
 
 (gears-layer-defdepends cpp
                         :packages `(modern-cpp-font-lock
-                                    ,(unless (gears-layer-installed 'ycmd)
+                                    ,(unless (gears-layer-installed-p 'ycmd)
                                        'irony)
-                                    ,(unless (gears-layer-installed 'ycmd)
+                                    ,(unless (gears-layer-installed-p 'ycmd)
                                        'irony-eldoc)
-                                    ,(when (and (gears-layer-installed 'flycheck)
-                                                (not (gears-layer-installed 'ycmd)))
+                                    ,(when (and (gears-layer-installed-p 'flycheck)
+                                                (not (gears-layer-installed-p 'ycmd)))
                                        'flycheck-irony)
-                                    ,(when (gears-layer-installed 'auto-completion)
+                                    ,(when (gears-layer-installed-p 'auto-completion)
                                        'company-irony)
-                                    ,(when (gears-layer-installed 'auto-completion)
+                                    ,(when (gears-layer-installed-p 'auto-completion)
                                        'company-irony-c-headers)
-                                    ,(when (gears-layer-installed 'cmake)
+                                    ,(when (gears-layer-installed-p 'cmake)
                                        'cmake-ide)
-                                    ,(when (gears-layer-installed 'cmake)
+                                    ,(when (gears-layer-installed-p 'cmake)
                                        'cpputils-cmake)))
 
 ;; (defun gears-layers/cpp-generate-dependency-list ()
 ;;   (let (gl-pkg-cppdeplist (list 'modern-cpp-font-lock))
-;;     (unless (gears-layer-installed 'ycmd)
+;;     (unless (gears-layer-installed-p 'ycmd)
 ;;       (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'irony 'irony-eldoc)))
 
-;;       (when (gears-layer-installed 'flycheck)
+;;       (when (gears-layer-installed-p 'flycheck)
 ;;         (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'flycheck-irony))))
 
-;;       (when (gears-layer-installed 'auto_completion)
+;;       (when (gears-layer-installed-p 'auto_completion)
 ;;         (setq gl-pkg-cppdeplist (append (list 'company-irony
 ;;                                               'company-irony-c-headers)
 ;;                                         gl-pkg-cppdeplist)))
 
-;;       (when (gears-layer-installed 'cmake)
+;;       (when (gears-layer-installed-p 'cmake)
 ;;         (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'cmake-ide
 ;;                                                                 'cpputils-cmake)))))
 

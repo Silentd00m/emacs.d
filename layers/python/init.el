@@ -35,7 +35,7 @@ Options:
     :type 'symbolp
     :group 'gears-layers/python)
 
-  (when (not (gears-layer-installed 'ycmd))
+  (when (not (gears-layer-installed-p 'ycmd))
     (gears-layers/python-hydra-add)
 
     (add-hook 'anaconda-mode-hook #'(lambda ()

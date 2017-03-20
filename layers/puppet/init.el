@@ -1,5 +1,5 @@
 (defun gears-layers/puppet-init()
-  (when (gears-layer-installed 'flycheck)
+  (when (gears-layer-installed-p 'flycheck)
     (add-hook 'puppet-mode '(lambda ()
                               (flycheck-mode t)))))
 

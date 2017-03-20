@@ -30,7 +30,7 @@
 
   ;; Company setup
 
-  (when (gears-layer-installed 'auto_completion)
+  (when (gears-layer-installed-p 'auto_completion)
     (require 'company-ycmd)
     (company-ycmd-setup)
 

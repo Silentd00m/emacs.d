@@ -51,7 +51,7 @@
   ;; Add goto-definition for c-modes.
   (gears-layers/rtags-hydra-add)
 
-  (when (and (gears-layer-installed 'auto_completion)
+  (when (and (gears-layer-installed-p 'auto_completion)
              gears-layers/rtags-provide-completion)
     (setq rtags-completions-enabled t)
     (add-to-list 'company-backends 'company-rtags))
