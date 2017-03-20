@@ -206,23 +206,41 @@
 (defun gears-layers/cpp-install ()
   "Additional install commands for the C++ layer.")
 
-(defun gears-layers/cpp-generate-dependency-list ()
-  (let (gl-pkg-cppdeplist (list 'modern-cpp-font-lock))
-    (unless (gears-layer-installed 'ycmd)
-      (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'irony 'irony-eldoc)))
+(gears-layer-defdepends cpp
+                        :packages `(modern-cpp-font-lock
+                                    ,(unless (gears-layer-installed 'ycmd)
+                                       'irony)
+                                    ,(unless (gears-layer-installed 'ycmd)
+                                       'irony-eldoc)
+                                    ,(when (and (gears-layer-installed 'flycheck)
+                                                (not (gears-layer-installed 'ycmd)))
+                                       'flycheck-irony)
+                                    ,(when (gears-layer-installed 'auto-completion)
+                                       'company-irony)
+                                    ,(when (gears-layer-installed 'auto-completion)
+                                       'company-irony-c-headers)
+                                    ,(when (gears-layer-installed 'cmake)
+                                       'cmake-ide)
+                                    ,(when (gears-layer-installed 'cmake)
+                                       'cpputils-cmake)))
 
-      (when (gears-layer-installed 'flycheck)
-        (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'flycheck-irony))))
+;; (defun gears-layers/cpp-generate-dependency-list ()
+;;   (let (gl-pkg-cppdeplist (list 'modern-cpp-font-lock))
+;;     (unless (gears-layer-installed 'ycmd)
+;;       (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'irony 'irony-eldoc)))
 
-      (when (gears-layer-installed 'auto_completion)
-        (setq gl-pkg-cppdeplist (append (list 'company-irony
-                                              'company-irony-c-headers)
-                                        gl-pkg-cppdeplist)))
+;;       (when (gears-layer-installed 'flycheck)
+;;         (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'flycheck-irony))))
 
-      (when (gears-layer-installed 'cmake)
-        (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'cmake-ide
-                                                                'cpputils-cmake)))))
+;;       (when (gears-layer-installed 'auto_completion)
+;;         (setq gl-pkg-cppdeplist (append (list 'company-irony
+;;                                               'company-irony-c-headers)
+;;                                         gl-pkg-cppdeplist)))
 
-    (princ gl-pkg-cppdeplist (current-buffer))
+;;       (when (gears-layer-installed 'cmake)
+;;         (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'cmake-ide
+;;                                                                 'cpputils-cmake)))))
 
-    (make-gears-layer-dependencies :packages gl-pkg-cppdeplist)))
+;;     (princ gl-pkg-cppdeplist (current-buffer))
+
+;;     (make-gears-layer-dependencies :packages gl-pkg-cppdeplist)))
