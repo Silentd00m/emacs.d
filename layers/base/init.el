@@ -93,7 +93,9 @@ Options:
   (projectile-global-mode)
   (global-company-mode)
   (company-quickhelp-mode 1)
-  (save-place-mode 1))
+  (save-place-mode 1)
+
+  (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:")))))
 
 (defun gears-layers/base-remove()
   "Additional uninstall commands for the base-layer"
