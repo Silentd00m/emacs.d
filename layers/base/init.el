@@ -5,6 +5,12 @@
   :group 'environment
   :link '(url-link :tag "Github" "https://github.com/Silentd00m/emacs.d"))
 
+(defcustom gears-branch "master"
+  "The branch to use when updating."
+
+  :type 'string
+  :group 'gears)
+
 (defun gears-layers/base-init()
   (defcustom gears-indent-mode 'spaces
     "Defines how text is indented.
