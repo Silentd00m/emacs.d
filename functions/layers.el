@@ -158,23 +158,47 @@
 
   (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer) "/init"))
 
+  ;; Execute pre-install if defined
+  (when (boundp (intern (concat "gears-layers/"
+                                (gears-layer-convert-name layer)
+                                "-pre-install")))
+    (funcall (intern (concat "gears-layers/"
+                             (gears-layer-convert-name layer)
+                             "-pre-install"))))
+
   ;; Install all layer dependencies
   (gears-package-install-packages (gears-layer--recursive-list-dependencies layer))
-  (gears-layer--recursive-mark-installed layer))
+  (gears-layer--recursive-mark-installed layer)
+
+    ;; Execute pre-install if defined
+  (when (boundp (intern (concat "gears-layers/"
+                                (gears-layer-convert-name layer)
+                                "-post-install")))
+    (funcall (intern (concat "gears-layers/"
+                             (gears-layer-convert-name layer)
+                             "-post-install")))))
 
 (defun gears-layer-remove (layer)
   "Remove LAYER and all its files and unused packages."
 
-  (funcall (intern (concat "gears-layers/"
-                           (gears-layer-convert-name layer)
-                           "-remove")))
+  (when (boundp (intern (concat "gears-layers/"
+                                (gears-layer-convert-name layer)
+                                "-pre-remove")))
+    (funcall (intern (concat "gears-layers/"
+                             (gears-layer-convert-name layer)
+                             "-pre-remove"))))
 
   (delete layer gears-layer-installed-list)
 
   (gears-layer-list-save)
 
   ;; TODO : Uninstall unused packages.
-  )
+  (when (boundp (intern (concat "gears-layers/"
+                                (gears-layer-convert-name layer)
+                                "-post-remove")))
+    (funcall (intern (concat "gears-layers/"
+                             (gears-layer-convert-name layer)
+                             "-post-remove")))))
 
 (defun gears-layer-installed-p (layer)
   "Return true if LAYER is installed."
