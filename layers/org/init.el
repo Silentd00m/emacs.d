@@ -11,7 +11,8 @@
 (defun gears-layers/org-init ()
   (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
 
-  (setq org-replace-disputed-keys gears-layers/org-default-editor-bindings))
+  (setq org-replace-disputed-keys gears-layers/org-default-editor-bindings)
+  (setq org-support-shift-select 'always))
 
 (defun gears-layers/org-description ()
   "Returns the description of the org Layer."
