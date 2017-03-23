@@ -144,7 +144,8 @@
                                                         "/layers/")))
                                 (layer-list '()))
                             (dolist (layer layer-folders)
-                              (unless (gears-layer-installed-p (intern (f-filename layer)))
+                              (unless (gears-layer-installed-p
+                                       (intern (f-filename layer)))
                                 (add-to-list 'layer-list (f-filename layer) t)))
                             layer-list))
           :fuzzy-match t
