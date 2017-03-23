@@ -14,7 +14,7 @@
   (let ((inhibit-read-only t))
     (erase-buffer)
     (load (concat gears-emacs-basepath "/functions/layers"))
-    (gears-layer-install 'base)
+    (-gears-layer-install 'base)
     (load (concat gears-emacs-basepath "/config/layers"))
     (gears-layer-init))
 
@@ -114,7 +114,7 @@
 
                            ;; Install all selected layers
                            (dolist (layer gic-layer-list)
-                             (gears-layer-install layer)))
+                             (-gears-layer-install layer)))
                  "Next")
 
   (use-local-map widget-keymap)
