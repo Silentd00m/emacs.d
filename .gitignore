@@ -16,4 +16,4 @@ projectile-bookmarks.eld
 anaconda-mode
 .python-environments
 semanticdb
-config/custom.el
+config/*
