@@ -20,7 +20,7 @@
     :ensure t))
 
 (require 'f)
-(setq gears-emacs-basepath (f-dirname (f-this-file)))
+(defvar gears-emacs-basepath (f-dirname (f-this-file)))
 
 (unless (f-dir? (concat gears-emacs-basepath "/config"))
   (f-mkdir (concat gears-emacs-basepath "/config")))
