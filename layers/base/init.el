@@ -140,7 +140,6 @@ Options:
                                     nlinum
                                     multiple-cursors
                                     powerline
-                                    powerline-evil
                                     material-theme
                                     tabbar-ruler
                                     saveplace
