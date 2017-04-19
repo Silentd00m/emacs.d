@@ -28,7 +28,7 @@
 (setq custom-file (concat gears-emacs-basepath "/config/custom.el"))
 
 (when (f-file? (concat gears-emacs-basepath "/config/custom.el"))
-    (load custom-file))
+  (load custom-file))
 
 (if (f-file? (concat gears-emacs-basepath "/config/layers.el"))
     (load (concat gears-emacs-basepath "/config/layers"))
@@ -46,7 +46,7 @@
 (load (concat gears-emacs-basepath "/functions/layers"))
 (gears-layers-init)
 
-(if (f-file? (concat gears-emacs-basepath "/config/custom-init.el"))
-    (load (concat gears-emacs-basepath "/config/custom-init")))
+(when (f-file? (concat gears-emacs-basepath "/config/custom-init.el"))
+  (load (concat gears-emacs-basepath "/config/custom-init")))
 
 ;;; init.el ends here

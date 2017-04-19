@@ -17,6 +17,7 @@ Recompiling increases performance."
     (git-pull "origin" gears-branch)
     (git-stash-pop))
 
+  (package-refresh-contents)
   (gears-package-update-all-packages)
 
   (when (bound-and-true-p recompile)
