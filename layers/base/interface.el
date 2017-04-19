@@ -141,6 +141,14 @@ Options:
   :type 'symbolp
   :group 'gears-interface)
 
+(defcustom gears-show-current-context t
+  "Show current namespace/function/class on top of the buffer.
+
+Functions will be shown with their parameters."
+
+  :type 'boolean
+  :group 'gears-interface)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Gears' powerline themes
 

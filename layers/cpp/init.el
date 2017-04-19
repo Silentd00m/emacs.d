@@ -223,24 +223,3 @@
                                        'cmake-ide)
                                     ,(when (gears-layer-installed-p 'cmake)
                                        'cpputils-cmake)))
-
-;; (defun gears-layers/cpp-generate-dependency-list ()
-;;   (let (gl-pkg-cppdeplist (list 'modern-cpp-font-lock))
-;;     (unless (gears-layer-installed-p 'ycmd)
-;;       (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'irony 'irony-eldoc)))
-
-;;       (when (gears-layer-installed-p 'flycheck)
-;;         (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'flycheck-irony))))
-
-;;       (when (gears-layer-installed-p 'auto_completion)
-;;         (setq gl-pkg-cppdeplist (append (list 'company-irony
-;;                                               'company-irony-c-headers)
-;;                                         gl-pkg-cppdeplist)))
-
-;;       (when (gears-layer-installed-p 'cmake)
-;;         (setq gl-pkg-cppdeplist (append gl-pkg-cppdeplist (list 'cmake-ide
-;;                                                                 'cpputils-cmake)))))
-
-;;     (princ gl-pkg-cppdeplist (current-buffer))
-
-;;     (make-gears-layer-dependencies :packages gl-pkg-cppdeplist)))

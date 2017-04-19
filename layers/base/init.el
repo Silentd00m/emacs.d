@@ -52,6 +52,12 @@ Options:
     :type 'integer
     :group 'gears)
 
+  (defcustom gears-enable-semantic-mode t
+    "Enable semantic mode by default."
+
+    :type 'boolean
+    :group 'gears)
+
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Set configuration
 
@@ -101,6 +107,14 @@ Options:
   (company-quickhelp-mode 1)
   (save-place-mode 1)
 
+  (when gears-show-current-context
+    (add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
+
+    (require 'stickyfunc-enhance))
+
+  (when gears-enable-semantic-mode
+    (semantic-mode 1))
+
   (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:")))))
 
 (defun gears-layers/base-remove()
@@ -145,5 +159,6 @@ Options:
                                     helm-descbinds
                                     which-key
                                     sr-speedbar
+                                    stickyfunc-mode
                                     w3m)
                         :layers '(auto_completion))
