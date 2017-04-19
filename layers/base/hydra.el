@@ -140,7 +140,20 @@
                                                            :command 'undo-tree-redo)
                                       ,(make-dynhydra-head :key "r"
                                                            :text "Replace"
-                                                           :command 'vr/replace)))))
+                                                           :command 'vr/replace)))
+    ,(when gears-enable-semantic-mode
+       (make-dynhydra-category :title "Refactor"
+                                :heads `(,(make-dynhydra-head :key "M"
+                                                              :text "Show Menu"
+                                                              :command 'srefactor-refactor-at-point
+                                                              :exit t
+                                                              :condition (lambda ()
+                                                                           (and gears-enable-semantic-mode
+                                                                                (or (eq major-mode 'c++-mode)
+                                                                                    (eq major-mode 'c-mode)
+                                                                                    (eq major-mode 'python-mode)
+                                                                                    (eq major-mode 'lisp-mode)
+                                                                                    (eq major-mode 'emacs-lisp-mode))))))))))
 
 (defdynhydra gears-layers/base-hydra-m-s
   `(,(make-dynhydra-category :title "Buffer"

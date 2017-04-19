@@ -113,6 +113,8 @@ Options:
     (require 'stickyfunc-enhance))
 
   (when gears-enable-semantic-mode
+    (require 'srefactor)
+
     (semantic-mode 1))
 
   (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:")))))
