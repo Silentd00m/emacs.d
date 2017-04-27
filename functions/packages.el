@@ -2,48 +2,50 @@
 
 (require 'dash)
 
-(cl-defun gears-package-install-packages (pkg-list &optional (background nil))
+(defun gears-package-install-packages (pkg-list)
   (package-refresh-contents)
 
-  (if background
-      (dolist (pkg pkg-list)
-        (package-install pkg))
-    (progn
-      (generate-new-buffer-name "*gears-install*")
+  (generate-new-buffer-name "*gears-install*")
+  (switch-to-buffer "*gears-install*")
+
+  (read-only-mode t)
+
+  (let ((inhibit-read-only t))
+    (princ "Refreshing package repository cache before installation."
+           (current-buffer)))
+  (let ((gip-installed-package-count 0))
+    (dolist (pkg pkg-list)
+      (unless (package-installed-p pkg)
+        (let ((inhibit-read-only t))
+          (package-install pkg)))
+
+      (setq gip-installed-package-count
+            (+ gip-installed-package-count 1))
+
       (switch-to-buffer "*gears-install*")
 
-      (read-only-mode t)
-
       (let ((inhibit-read-only t))
-        (princ "Refreshing package repository cache before installation."
-               (current-buffer)))
-      (let ((gip-installed-package-count 0))
-        (dolist (pkg pkg-list)
-          (unless (package-installed-p pkg)
-            (let ((inhibit-read-only t))
-              (package-install pkg)))
+        (erase-buffer)
+        (princ "Please wait, installing packages... [" (current-buffer))
+        (princ gip-installed-package-count (current-buffer))
+        (princ "/" (current-buffer))
+        (princ (length pkg-list) (current-buffer))
+        (princ "]\n" (current-buffer))
+        (gears-princ-progress-bar
+         (current-buffer)
+         (floor (* (/ (float gip-installed-package-count)
+                      (length pkg-list))
+                   100))))))
 
-          (setq gip-installed-package-count
-                (+ gip-installed-package-count 1))
+  (let ((inhibit-read-only t))
+    (princ "\n\n" (current-buffer))
+    (princ "Installation complete." (current-buffer))))
 
-          (switch-to-buffer "*gears-install*")
+(defun -gears-package-install-packages (pkg-list)
+  (package-refresh-contents)
 
-          (let ((inhibit-read-only t))
-            (erase-buffer)
-            (princ "Please wait, installing packages... [" (current-buffer))
-            (princ gip-installed-package-count (current-buffer))
-            (princ "/" (current-buffer))
-            (princ (length pkg-list) (current-buffer))
-            (princ "]\n" (current-buffer))
-            (gears-princ-progress-bar
-             (current-buffer)
-             (floor (* (/ (float gip-installed-package-count)
-                          (length pkg-list))
-                       100))))))
-
-      (let ((inhibit-read-only t))
-        (princ "\n\n" (current-buffer))
-        (princ "Installation complete." (current-buffer))))))
+  (dolist (pkg pkg-list)
+    (package-install pkg)))
 
 (defun gears-package-is-outdated (package)
   "Return t if the installed version of PACKAGE is outdated."
@@ -66,7 +68,7 @@
     outdated-package-list))
 
 (defun gears-package-update (package &optional background)
-  (gears-package-install-packages `(,package) background))
+  (gears-package-install-packages `(,package) 0))
 
 (defun gears-package-update-all-packages ()
   (interactive)

@@ -13,13 +13,14 @@
   (defcustom gears-layers/dash-docset-list '("Emacs Lisp")
     "List of all docsets to install and keep updated."
 
-    :type 'listp
+    :type 'list
     :group 'gears-layers/dash)
 
-  (defcustom gears-layers/dash-docset-path (concat "~/.emacs.d/docsets")
+  (defcustom gears-layers/dash-docset-path (concat gears-emacs-basepath
+                                                   "/docsets")
     "Directory where the docsets should be stored."
 
-    :type 'stringp
+    :type 'string
     :group 'gears-layers/dash)
 
   (defcustom gears-layers/dash-docset-mode-autoloads '((c-mode-hook . '("C++"))
@@ -34,7 +35,7 @@
   (defcustom gears-layers/dash-minimum-characters 3
     "Minimum search string length."
 
-    :type 'integerp
+    :type 'integer
     :group 'gears-layers/dash)
 
   (setq helm-dash-browser-func 'eww)

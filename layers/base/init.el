@@ -161,5 +161,6 @@ Options:
                                     which-key
                                     sr-speedbar
                                     stickyfunc-mode
-                                    w3m)
+                                    w3m
+                                    fill-column-indicator)
                         :layers '(auto_completion))
