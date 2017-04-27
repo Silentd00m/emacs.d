@@ -10,7 +10,7 @@
 
 (defcustom gears-theme 'material
   "The used theme."
-  :type 'symbolp
+  :type 'symbol
   :group 'gears-interface)
 
 (defcustom gears-theme-load-paths '(("moe-dark" . (f-glob (concat gears-emacs-basepath
@@ -87,7 +87,7 @@ Options:
  - slant-left: Diagonal from left.
  - slant-right: Diagonal from right."
   :options '('arrow 'half 'curve 'rounded 'chamfer 'slant 'slant-left 'slant-right)
-  :type 'symbolp
+  :type 'symbol
   :group 'gears-interface)
 
 (defcustom gears-enable-rainbow-delimiters t
@@ -95,11 +95,23 @@ Options:
   :type 'boolean
   :group 'gears-interface)
 
-(defcustom gears-highlight-after-column 80
-  "Highlights any character after the provided column number.
+(defcustom gears-column-highlight 80
+  "The line where to start indicating overlength in programming modes."
 
-Set to nil to disable."
   :type 'integer
+  :group 'gears-interface)
+
+(defcustom gears-column-highlight-style 'both
+  "Specify how to indicate line overlength in programming modes.
+
+Options:
+ - face: Highlight the fore- and/or background of any character after the limit.
+ - line: Draw a line after the defined column-highlight position.
+ - both: Both of the above.
+ - disabled: None of the above."
+
+  :options '(face line both disabled)
+  :type 'symbol
   :group 'gears-interface)
 
 (defcustom gears-enable-toolbar nil
@@ -165,11 +177,12 @@ Functions will be shown with their parameters."
 
 ;; Make sure we don't try to push a nil into the custom-theme-load-path, if theme
 ;; does not have an entry.
-(when (car (eval (cdr (assoc (prin1-to-string gears-theme)
-                             gears-theme-load-paths))))
-  (add-to-list 'custom-theme-load-path (car (eval (cdr (assoc (prin1-to-string gears-theme)
-                                                              gears-theme-load-paths))))))
-(load-theme gears-theme t)
+(when gears-theme
+  (when (car (eval (cdr (assoc (prin1-to-string gears-theme)
+                               gears-theme-load-paths))))
+    (add-to-list 'custom-theme-load-path (car (eval (cdr (assoc (prin1-to-string gears-theme)
+                                                                gears-theme-load-paths))))))
+  (load-theme gears-theme t))
 
 (when gears-hightlight-current-line
   (global-hl-line-mode t))
@@ -192,10 +205,19 @@ Functions will be shown with their parameters."
 (when gears-enable-rainbow-delimiters
   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
 
-(when (not (< gears-highlight-after-column 0))
-  (setq whitespace-line-column gears-highlight-after-column)
-  (setq whitespace-style '(face lines-tail))
-  (add-hook 'prog-mode-hook 'whitespace-mode))
+(cond ((eq gears-column-highlight-style 'both)
+       (setq whitespace-line-column gears-column-highlight
+             fci-rule-column gears-column-highlight)
+       (setq whitespace-style '(face lines-tail))
+       (add-hook 'prog-mode-hook 'whitespace-mode)
+       (add-hook 'prog-mode-hook 'fci-mode))
+      ((eq gears-highlight-column-style 'face)
+       (setq whitespace-line-column gears-column-highlight)
+       (setq whitespace-style '(face lines-tail))
+       (add-hook 'prog-mode-hook 'whitespace-mode))
+      ((eq gears-highlight-column-style 'line)
+       (setq fci-rule-column gears-column-highlight)
+       (add-hook 'prog-mode-hook 'fci-mode)))
 
 (if gears-enable-toolbar
     (tool-bar-mode 1)
