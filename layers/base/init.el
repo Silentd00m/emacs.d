@@ -160,7 +160,7 @@ Options:
                                     helm-descbinds
                                     which-key
                                     sr-speedbar
-                                    stickyfunc-mode
+                                    stickyfunc-enhance
                                     w3m
                                     fill-column-indicator)
                         :layers '(auto_completion))

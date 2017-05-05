@@ -206,6 +206,9 @@
 
   (> (length (member layer gears-layer-installed-list)) 0))
 
+(defun gears-layer-update (layer)
+  (when (gears-layer-installed-p layer)
+    (-gears-layer-install layer)))
 
 (defmacro gears-layer-defdepends (layer &rest depends)
   "Simple way to generate a dependency list for LAYER."

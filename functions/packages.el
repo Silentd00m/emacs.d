@@ -3,8 +3,6 @@
 (require 'dash)
 
 (defun gears-package-install-packages (pkg-list)
-  (package-refresh-contents)
-
   (generate-new-buffer-name "*gears-install*")
   (switch-to-buffer "*gears-install*")
 
@@ -42,8 +40,6 @@
     (princ "Installation complete." (current-buffer))))
 
 (defun -gears-package-install-packages (pkg-list)
-  (package-refresh-contents)
-
   (dolist (pkg pkg-list)
     (package-install pkg)))
 

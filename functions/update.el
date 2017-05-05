@@ -17,6 +17,9 @@ Recompiling increases performance."
     (git-pull "origin" gears-branch)
     (git-stash-pop))
 
+  (dolist (layer gears-layer-installed-list)
+    (gears-layer-update layer))
+
   (package-refresh-contents)
   (gears-package-update-all-packages)
 
