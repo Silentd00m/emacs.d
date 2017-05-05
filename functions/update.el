@@ -10,10 +10,11 @@ If RECOMPILE is set, all layers and functions will be recompiled."
 
   (interactive)
 
-  (let ((git-repo gears-emacs-basepath))
-    (git-stash)
+  (let ((git-repo gears-emacs-basepath)
+        (stash (git-stash)))
     (git-pull "origin" gears-branch)
-    (git-stash-pop))
+    (when stash
+      (git-stash-pop)))
 
   (package-refresh-contents)
 
