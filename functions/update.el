@@ -6,9 +6,7 @@
 (defun gears-update (&optional recompile)
   "Update the Emacs directory to the newest version.
 
-If RECOMPILE is set, all layers and functions will be recompiled.
-
-Recompiling increases performance."
+If RECOMPILE is set, all layers and functions will be recompiled."
 
   (interactive)
 
@@ -17,10 +15,11 @@ Recompiling increases performance."
     (git-pull "origin" gears-branch)
     (git-stash-pop))
 
+  (package-refresh-contents)
+
   (dolist (layer gears-layer-installed-list)
     (gears-layer-update layer))
 
-  (package-refresh-contents)
   (gears-package-update-all-packages)
 
   (when (bound-and-true-p recompile)
