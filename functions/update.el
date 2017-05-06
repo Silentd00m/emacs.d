@@ -16,6 +16,15 @@ If RECOMPILE is set, all layers and functions will be recompiled."
     (when stash
       (git-stash-pop)))
 
+  (generate-new-buffer "*gears-install*")
+  (switch-to-buffer "*gears-install*")
+
+  (read-only-mode t)
+
+  (let ((inhibit-read-only t))
+    (princ "Refreshing package repository cache before update."
+           (current-buffer)))
+
   (package-refresh-contents)
 
   (dolist (layer gears-layer-installed-list)

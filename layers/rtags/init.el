@@ -70,5 +70,7 @@
   )
 
 (gears-layer-defdepends rtags
-                        :packages '(rtags)
+                        :packages '(rtags
+                                    helm-rtags
+                                    flycheck-rtags)
                         :layers '(cpp))
