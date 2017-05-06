@@ -19,10 +19,22 @@
       layer
     (prin1-to-string layer)))
 
-(defun gears-layer-init (layer)
-  (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer) "/init.el"))
+(defun gears-load-layer (layer)
+  "Load LAYER without initializing it."
 
-  (funcall (intern (concat "gears-layers/" (gears-layer-convert-name layer) "-init"))))
+  (load (concat gears-emacs-basepath
+                "/layers/"
+                (gears-layer-convert-name layer)
+                "/init.el")))
+
+(defun gears-layer-init (layer)
+  "Load and initialize LAYER."
+
+  (gears-load-layer layer)
+
+  (funcall (intern (concat "gears-layers/"
+                           (gears-layer-convert-name layer)
+                           "-init"))))
 
 (defun gears-layers-init ()
   "Initialize all installed layers."

@@ -3,7 +3,7 @@
 (require 'git)
 (require 'f)
 
-(defun gears-update (&optional recompile)
+(defun gears-update ()
   "Update the Emacs directory to the newest version.
 
 If RECOMPILE is set, all layers and functions will be recompiled."
@@ -16,6 +16,10 @@ If RECOMPILE is set, all layers and functions will be recompiled."
     (when stash
       (git-stash-pop)))
 
+  ;; Reload layer definitions to update dependencies.
+  (dolist (layer gears-layer-installed-list)
+    (gears-load-layer layer))
+
   (generate-new-buffer "*gears-install*")
   (switch-to-buffer "*gears-install*")
 
@@ -27,13 +31,15 @@ If RECOMPILE is set, all layers and functions will be recompiled."
 
   (package-refresh-contents)
 
+  ;; Update all layers, install missing dependencies.
   (dolist (layer gears-layer-installed-list)
     (gears-layer-update layer))
 
+  ;; Update all outdated packages
   (gears-package-update-all-packages)
 
-  (when (bound-and-true-p recompile)
-    (gears-update-recompile)))
+  ;; Recompile
+  (gears-update-recompile))
 
 (defun gears-update-recompile ()
   "Recompile all elisp files to increase performance."
