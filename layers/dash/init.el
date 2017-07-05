@@ -25,7 +25,7 @@
 
   (defcustom gears-layers/dash-docset-mode-autoloads '((c-mode-hook . '("C++"))
                                                        (cpp-mode-hook . '("C++"))
-                                                       (emacs-lisp-mode-hook . '("Emacs_Lisp"))
+                                                       (emacs-lisp-mode-hook . '("Emacs Lisp"))
                                                        (python-mode-hook . '("Python 3")))
     "Defines which Docsets should be loaded in what mode."
 
@@ -44,8 +44,8 @@
 
   (dolist (docset gears-layers/dash-docset-list)
     ;; Install missing docsets
-    (unless (file-exists-p (concat gears-emacs-basepath
-                                   "/docsets/"
+    (unless (file-exists-p (concat helm-dash-docsets-path
+                                   "/"
                                    docset
                                    ".docset"))
       (helm-dash-install-docset (s-replace " " "_" docset))))

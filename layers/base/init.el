@@ -140,6 +140,7 @@ Options:
                                     use-package
                                     rainbow-delimiters
                                     nlinum
+                                    nlinum-hl
                                     multiple-cursors
                                     powerline
                                     material-theme

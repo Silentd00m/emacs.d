@@ -101,7 +101,7 @@ Options:
   :type 'integer
   :group 'gears-interface)
 
-(defcustom gears-column-highlight-style 'both
+(defcustom gears-column-highlight-style 'face
   "Specify how to indicate line overlength in programming modes.
 
 Options:
@@ -195,8 +195,16 @@ Functions will be shown with their parameters."
   (modify-all-frames-parameters (list (cons 'cursor-type gears-cursor-type))))
 
 (when gears-show-line-numbers
+  (require 'nlinum-hl)
+
   (add-hook 'prog-mode-hook 'nlinum-mode)
-  (add-hook 'text-mode-hook 'nlinum-mode))
+  (add-hook 'text-mode-hook 'nlinum-mode)
+
+  ;;(add-hook 'nlinum-mode-hook 'nlinum-hl-mode)
+  (setq nlinum-highlight-current-line t)
+
+  (add-hook 'focus-in-hook  #'nlinum-hl-flush-all-windows)
+  (add-hook 'focus-out-hook #'nlinum-hl-flush-all-windows))
 
 (when gears-powerline-theme
   (setq powerline-default-separator gears-powerline-shape)
@@ -211,11 +219,11 @@ Functions will be shown with their parameters."
        (setq whitespace-style '(face lines-tail))
        (add-hook 'prog-mode-hook 'whitespace-mode)
        (add-hook 'prog-mode-hook 'fci-mode))
-      ((eq gears-highlight-column-style 'face)
+      ((eq gears-column-highlight-style 'face)
        (setq whitespace-line-column gears-column-highlight)
        (setq whitespace-style '(face lines-tail))
        (add-hook 'prog-mode-hook 'whitespace-mode))
-      ((eq gears-highlight-column-style 'line)
+      ((eq gears-column-highlight-style 'line)
        (setq fci-rule-column gears-column-highlight)
        (add-hook 'prog-mode-hook 'fci-mode)))
 

@@ -3,7 +3,7 @@
 (require 'dash)
 
 (defun gears-package-install-packages (pkg-list)
-  (generate-new-buffer "*gears-install*")
+  (get-buffer-create "*gears-install*")
   (switch-to-buffer "*gears-install*")
 
   (read-only-mode t)

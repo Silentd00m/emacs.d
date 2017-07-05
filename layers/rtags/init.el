@@ -2,6 +2,16 @@
 
 ;;; Code:
 
+(defun gears-layers/rtags-get-rtags-directory ()
+  "Return the directory of the newest rtags version."
+
+  (concat gears-emacs-basepath
+          "/dep/rtags/"
+          (nth 1 (cl-sort (directory-files (concat gears-emacs-basepath
+                                                   "/dep/rtags/"))
+                          'string-greaterp
+                          :key 'downcase))))
+
 (defun gears-layers/rtags-hydra-add ()
   (dynhydra-category--add-head (dynhydra--get-category 'gears-layers/base-hydra-m-g "GOTO")
                                `(,(make-dynhydra-head :key "d"
@@ -44,12 +54,16 @@
     :group 'gears-layers/rtags)
 
   (require 'flycheck-rtags)
-  (require 'rtags-helm)
+  (require 'helm-rtags)
 
   (setq rtags-use-helm t)
 
   ;; Add goto-definition for c-modes.
   (gears-layers/rtags-hydra-add)
+
+  ;; Auto-start rdm and rc when opening a C++ buffer
+
+  (rtags-start-process-unless-running)
 
   (when (and (gears-layer-installed-p 'auto_completion)
              gears-layers/rtags-provide-completion)
@@ -61,13 +75,26 @@
               #'(lambda ()
                   (flycheck-select-checker 'rtags)
                   (setq-local flycheck-highlighting-mode nil)
-                  (setq-local flycheck-check-syntax-automatically nil)))))
+                  (setq-local flycheck-check-syntax-automatically nil))))
+
+  (setq rtags-path (concat (gears-layers/rtags-get-rtags-directory)
+                           "/bin"))
+
+  (when (gears-layer-installed-p 'cmake)
+    (require 'cmake-ide)
+
+    (setq cmake-ide-rdm-executable (concat (gears-layers/rtags-get-rtags-directory)
+                                           "/bin/rdm")
+          cmake-ide-rdm-rc-path (concat (gears-layers/rtags-get-rtags-directory)
+                                        "/bin/rdm"))))
 
 (defun gears-layers/rtags-description ()
   "Client/Server indexer for C++.")
 
 (defun gears-layers/rtags-install ()
-  )
+  "Blerp."
+
+  (rtags-install (concat gears-emacs-basepath "/dep/rtags")))
 
 (gears-layer-defdepends rtags
                         :packages '(rtags
