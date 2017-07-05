@@ -61,10 +61,6 @@
   ;; Add goto-definition for c-modes.
   (gears-layers/rtags-hydra-add)
 
-  ;; Auto-start rdm and rc when opening a C++ buffer
-
-  (rtags-start-process-unless-running)
-
   (when (and (gears-layer-installed-p 'auto_completion)
              gears-layers/rtags-provide-completion)
     (setq rtags-completions-enabled t)
@@ -86,7 +82,10 @@
     (setq cmake-ide-rdm-executable (concat (gears-layers/rtags-get-rtags-directory)
                                            "/bin/rdm")
           cmake-ide-rdm-rc-path (concat (gears-layers/rtags-get-rtags-directory)
-                                        "/bin/rdm"))))
+                                        "/bin/rdm")))
+
+  ;; Auto-start rdm and rc when opening a C++ buffer
+  (rtags-start-process-unless-running))
 
 (defun gears-layers/rtags-description ()
   "Client/Server indexer for C++.")
