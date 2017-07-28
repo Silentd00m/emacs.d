@@ -12,19 +12,20 @@
   (switch-to-buffer "*gears-install*")
 
   (let ((inhibit-read-only t))
+    (package-refresh-contents)
+
     (erase-buffer)
     (load (concat gears-emacs-basepath "/functions/layers"))
     (-gears-layer-install 'base)
     (load (concat gears-emacs-basepath "/config/layers"))
-    (gears-layer-init))
+    (gears-layers-init))
 
   (load-theme 'material t)
 
   (let ((inhibit-read-only t))
-    (erase-buffer)
-
     (switch-to-buffer "*gears-install*")
 
+    (princ "\n" (current-buffer))
     (princ "Next step: " (current-buffer))
 
     (remove-overlays)

@@ -123,7 +123,7 @@
 (defun gears-layers/cpp-description()
   "Returns the description of the C++ layer."
 
-  (eval "General C++ configuration and package layer."))
+  "General C++ configuration and package layer.")
 
 (defun gears-layers/cpp-init()
   "Initiaizes the C++ layer."

@@ -10,13 +10,16 @@
 
   (let ((gip-installed-package-count 0))
     (dolist (pkg pkg-list)
-      (unless (package-installed-p pkg)
-        (let ((inhibit-read-only t))
-          (package-install pkg)))
+      ;; (unless (package-installed-p pkg)
+      ;;   (let ((inhibit-read-only t))
+      ;;     (package-install pkg)))
 
-      (when (gears-package-is-outdated pkg)
-        (let ((inhibit-read-only t))
-          (package-install pkg)))
+      ;; (when (package-installed-p pkg)
+      ;;   (when (gears-package-is-outdated pkg)
+      ;;     (let ((inhibit-read-only t))
+      ;;       (package-install pkg))))
+
+      (package-install pkg)
 
       (setq gip-installed-package-count
             (+ gip-installed-package-count 1))

@@ -12,5 +12,10 @@
 
   t)
 
+(defun gears-layers/markdown-description()
+  "Returns the description of the Markdown layer."
+
+  "General Markdown configuration and package layer.")
+
 (gears-layer-defdepends markdown
                         :packages '(markdown-preview-mode))
