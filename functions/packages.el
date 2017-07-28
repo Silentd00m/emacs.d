@@ -14,6 +14,10 @@
         (let ((inhibit-read-only t))
           (package-install pkg)))
 
+      (when (gears-package-is-outdated pkg)
+        (let ((inhibit-read-only t))
+          (package-install pkg)))
+
       (setq gip-installed-package-count
             (+ gip-installed-package-count 1))
 

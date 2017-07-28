@@ -69,7 +69,8 @@
                 (gears-layer-convert-name layer)
                 "/init"))
 
-  (funcall (intern (concat "gears-layers/" (gears-layer-convert-name layer) "-description"))))
+  (funcall (intern (concat "gears-layers/" (gears-layer-convert-name layer)
+                           "-description"))))
 
 (defun gears-layer--recursive-list-dependencies (layer)
   (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer)
@@ -82,8 +83,9 @@
          (layer-list (gears-layer-dependencies-layers deps)))
 
     (dolist (layer-dep layer-list)
-      (setq package-list (append package-list
-                                 (gears-layer--recursive-list-dependencies layer-dep))))
+      (setq package-list
+            (append package-list
+                    (gears-layer--recursive-list-dependencies layer-dep))))
 
     (-non-nil (remove-duplicates package-list))))
 
@@ -169,7 +171,8 @@
   ;; (add-to-list 'gears-layer-installed-list layer)
   ;; (gears-layer-list-save)
 
-  (load (concat gears-emacs-basepath "/layers/" (gears-layer-convert-name layer) "/init"))
+  (load (concat gears-emacs-basepath "/layers/"
+                (gears-layer-convert-name layer) "/init"))
 
   ;; Execute pre-install if defined
   (when (boundp (intern (concat "gears-layers/"
@@ -180,7 +183,8 @@
                              "-pre-install"))))
 
   ;; Install all layer dependencies
-  (gears-package-install-packages (gears-layer--recursive-list-dependencies layer))
+  (gears-package-install-packages
+   (gears-layer--recursive-list-dependencies layer))
   (gears-layer--recursive-mark-installed layer)
 
     ;; Execute pre-install if defined
@@ -225,5 +229,6 @@
 (defmacro gears-layer-defdepends (layer &rest depends)
   "Simple way to generate a dependency list for LAYER."
 
-  `(setq ,(intern (concat "gears-layers/" (gears-layer-convert-name layer) "-depends"))
+  `(setq ,(intern (concat "gears-layers/" (gears-layer-convert-name layer)
+                          "-depends"))
          (make-gears-layer-dependencies ,@depends)))

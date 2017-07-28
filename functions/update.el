@@ -20,8 +20,10 @@ If RECOMPILE is set, all layers and functions will be recompiled."
   (dolist (layer gears-layer-installed-list)
     (gears-load-layer layer))
 
-  (generate-new-buffer "*gears-install*")
+  (get-buffer-create "*gears-install*")
   (switch-to-buffer "*gears-install*")
+
+  (package-refresh-contents)
 
   (read-only-mode t)
 
