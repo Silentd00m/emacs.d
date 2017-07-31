@@ -163,5 +163,6 @@ Options:
                                     sr-speedbar
                                     stickyfunc-enhance
                                     w3m
-                                    fill-column-indicator)
+                                    fill-column-indicator
+                                    sublimity)
                         :layers '(auto_completion))

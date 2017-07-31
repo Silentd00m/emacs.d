@@ -161,6 +161,26 @@ Functions will be shown with their parameters."
   :type 'boolean
   :group 'gears-interface)
 
+(defcustom gears-smooth-scrolling t
+  "Improve the scrolling and Pg-Up/Pg-Down experience by animating the scrolling."
+
+  :type 'boolean
+  :group 'gears-interface)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Enable smooth scrolling
+
+(when gears-smooth-scrolling
+  (require 'sublimity)
+  (require 'sublimity-scroll)
+
+  (setq sublimity-scroll-weight 5
+        sublimity-scroll-drift-length 10)
+
+  (sublimity-mode 1)
+
+  (setq scroll-margin 0))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Gears' powerline themes
 
