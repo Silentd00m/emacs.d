@@ -153,7 +153,7 @@ Options:
   :type 'symbolp
   :group 'gears-interface)
 
-(defcustom gears-show-current-context t
+(defcustom gears-show-current-context nil
   "Show current namespace/function/class on top of the buffer.
 
 Functions will be shown with their parameters."
@@ -290,18 +290,22 @@ Functions will be shown with their parameters."
                   #'(diminish 'abbrev-mode)))))
 
 (when gears-show-file-sidebar
-  (require 'projectile-speedbar)
+  (require 'treemacs)
+  (require 's)
 
-  (setq sr-speedbar-width-x gears-file-sidebar-with)
+  (setq treemacs-width gears-file-sidebar-with)
 
-  (sr-speedbar-open)
+  (when (gears-layer-installed-p 'git)
+    (setq treemacs-git-integration t))
 
-  (with-current-buffer sr-speedbar-buffer-name
-    (setq window-size-fixed 'width))
+  (treemacs)
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+  (treemacs-persist)
 
   (add-hook 'projectile-after-switch-project-hook
             #'(lambda ()
-                (projectile-speedbar-open-current-project-in-speedbar))))
+                (treemacs-projectile))))
 
 (cond ((equal gears-show-documentation-mode 'popup)
        (require 'pos-tip)
@@ -313,6 +317,13 @@ Functions will be shown with their parameters."
        (setq eldoc-message-function #'eldoc-popup-message))
       ((equal gears-show-documentation-mode 'overlay)
        (add-hook 'eldoc-mode-hook 'eldoc-overlay-mode)))
+
+(unless gears-show-current-context
+  (add-to-list 'semantic-inhibit-functions
+               (lambda ()
+                 (member major-mode '(html-mode
+                                      lisp-mode
+                                      emacs-lisp-mode)))))
 
 ;; TODO : Add cursor and mode color configuration.
 

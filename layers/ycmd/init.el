@@ -5,7 +5,7 @@
     "YCMD Layer Configuration"
     :group 'gears-layers)
 
-  (defcustom gears-layers/ycmd-path (concat gears-emacs-basepath "/dep/ycmd/third_party/ycmd/")
+  (defcustom gears-layers/ycmd-path (concat gears-emacs-basepath "/dep/ycmd/third_party/ycmd/ycmd/")
     "Path to the YCMD server."
 
     :type 'directory

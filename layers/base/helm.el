@@ -37,7 +37,9 @@
 (defun gears-helm-mini ()
   "Preconfigured `helm' lightweight version \(buffer -> recentf\)."
   (interactive)
-  (require 'helm-files)
+
+  (require 'helm-for-files)
+  ;; (require 'helm-files)
   (unless helm-source-buffers-list
     (setq helm-source-buffers-list
           (helm-make-source "Buffers" 'helm-source-buffers)))

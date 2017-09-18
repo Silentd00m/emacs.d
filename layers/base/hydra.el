@@ -141,19 +141,19 @@
                                       ,(make-dynhydra-head :key "r"
                                                            :text "Replace"
                                                            :command 'vr/replace)))
-    ,(when gears-enable-semantic-mode
-       (make-dynhydra-category :title "Refactor"
-                                :heads `(,(make-dynhydra-head :key "M"
-                                                              :text "Show Menu"
-                                                              :command 'srefactor-refactor-at-point
-                                                              :exit t
-                                                              :condition (lambda ()
-                                                                           (and gears-enable-semantic-mode
-                                                                                (or (eq major-mode 'c++-mode)
-                                                                                    (eq major-mode 'c-mode)
-                                                                                    (eq major-mode 'python-mode)
-                                                                                    (eq major-mode 'lisp-mode)
-                                                                                    (eq major-mode 'emacs-lisp-mode))))))))))
+
+    ,(make-dynhydra-category :title "Refactor"
+                             :heads `(,(make-dynhydra-head :key "M"
+                                                           :text "Show Menu"
+                                                           :command 'srefactor-refactor-at-point
+                                                           :exit t
+                                                           :condition (lambda ()
+                                                                        (and gears-enable-semantic-mode
+                                                                             (or (eq major-mode 'c++-mode)
+                                                                                 (eq major-mode 'c-mode)
+                                                                                 (eq major-mode 'python-mode)
+                                                                                 (eq major-mode 'lisp-mode)
+                                                                                 (eq major-mode 'emacs-lisp-mode)))))))))
 
 (defdynhydra gears-layers/base-hydra-m-s
   `(,(make-dynhydra-category :title "Buffer"
@@ -180,7 +180,15 @@
                                                            :exit t)
                                       ,(make-dynhydra-head :key "o"
                                                            :text "Close Other"
-                                                           :command 'delete-other-windows
+                                                           :command '(lambda ()
+                                                                       (interactive)
+
+                                                                       (delete-other-windows)
+
+                                                                       (when gears-show-file-sidebar
+                                                                         (if (projectile-project-p)
+                                                                             (treemacs-projectile)
+                                                                           (treemacs))))
                                                            :exit t)))
     ,(make-dynhydra-category :title "Search"
                              :heads `(,(make-dynhydra-head :key "b"

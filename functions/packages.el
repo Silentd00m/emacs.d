@@ -50,12 +50,12 @@
 (defun gears-package-is-outdated (package)
   "Return t if the installed version of PACKAGE is outdated."
 
-  (let* ((remote-version (package-desc-version
-                          (cadr (assoc package package-archive-contents))))
-         (local-version (package-desc-version
-                         (cadr (or (assoc package package-alist)
-                                   (assoc package package--builtins))))))
-    (not (version-list-<= remote-version local-version))))
+  (if (member package package-selected-packages)
+      (let* ((remote-version (package-desc-version
+                              (cadr (assoc package package-archive-contents))))
+             (local-version (pkg-info-package-version package)))
+        (not (version-list-<= remote-version local-version)))
+    nil))
 
 (defun gears-package-list-outdated-packages ()
   "Return a list of outdated packages."

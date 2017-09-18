@@ -161,7 +161,7 @@
                                    (irony-eldoc t))
 
                                  (add-to-list 'company-backends '(company-irony-c-headers
-                                                                  company-c-headers
+                                                                  ;;company-c-headers
                                                                   company-irony)))))
 
   (when (gears-layer-installed-p 'dash)

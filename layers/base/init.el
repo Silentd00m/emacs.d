@@ -52,7 +52,7 @@ Options:
     :type 'integer
     :group 'gears)
 
-  (defcustom gears-enable-semantic-mode t
+  (defcustom gears-enable-semantic-mode false
     "Enable semantic mode by default."
 
     :type 'boolean
@@ -75,14 +75,15 @@ Options:
   (when gears-delete-trailing-whitespace
     (add-hook 'before-save-hook 'delete-trailing-whitespace)) ;; Delete useless whitespace before saving
 
-  (add-hook 'after-change-major-mode-hook (lambda()
-                                            (unless (eq gears-indent-mode 'tabs)
-                                              (setq indent-tabs-mode nil))
+  (add-hook 'after-change-major-mode-hook
+            #'(lambda()
+                (unless (eq gears-indent-mode 'tabs)
+                  (setq indent-tabs-mode nil))
 
-                                            (setq tab-width gears-indent-width)
+                (setq tab-width gears-indent-width)
 
-                                            (when gears-insert-eof-newline
-                                              (setq require-final-newline t))))
+                (when gears-insert-eof-newline
+                  (setq require-final-newline t))))
 
   (when gears-disable-alarms
     (setq ring-bell-function 'my-bell-function)
@@ -160,9 +161,10 @@ Options:
                                     helm-flx
                                     helm-descbinds
                                     which-key
-                                    sr-speedbar
+                                    treemacs
                                     stickyfunc-enhance
                                     w3m
                                     fill-column-indicator
-                                    sublimity)
+                                    sublimity
+                                    switch-buffer-functions)
                         :layers '(auto_completion))
