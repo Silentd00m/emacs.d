@@ -39,7 +39,8 @@
 (defun gears-cpp-mode-hook ()
   (setq font-lock-maximum-decoration 6)
   (font-lock-fontify-buffer)
-  (local-set-key (kbd "RET") 'newline-and-indent)
+  ;; (local-set-key (kbd "RET") 'newline-and-indent)
+  (local-set-key (kbd "RET") 'c-indent-new-comment-line)
   (yas-minor-mode 1)
   (setq flycheck-clang-args "-std=c++14")
   (setq flycheck-check-syntax-automatically '(mode-enabled save))
@@ -131,6 +132,10 @@
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Custom options
 
+  (defgroup gears-layers/cpp nil
+    "C++ Layer configuration."
+    :group 'gears-layers)
+
   (defcustom gears-layers/cpp-cmake-setup-ide t
     "Setup compiler options and auto-completion."
     :type 'boolean
@@ -144,7 +149,7 @@
   (defcustom gears-layer/cpp-format-and-fix-includes-on-save t
     "Reformat file and fix includes when saving a C++ file."
     :type 'boolean
-    :group 'gears-layers/cmake)
+    :group 'gears-layers/cpp)
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Prerequisite loading
@@ -185,10 +190,7 @@
                                   (when (or (eq major-mode 'c-mode)
                                             (eq major-mode 'c++-mode))
                                     (when gears-layer/cpp-format-and-fix-includes-on-save
-                                      (when (boundp 'clang-format-buffer)
-                                        (clang-format-buffer))
-                                      (when (boundp 'clang-include-fixer)
-                                        (clang-include-fixer))))))
+                                      (clang-format-buffer)))))
 
   (when (and (not (gears-layer-installed-p 'ycmd))
              (gears-layer-installed-p 'auto_completion))
@@ -200,7 +202,6 @@
                                    (irony-eldoc t))
 
                                  (add-to-list 'company-backends '(company-irony-c-headers
-                                                                  ;;company-c-headers
                                                                   company-irony)))))
 
   (when (gears-layer-installed-p 'dash)
@@ -217,9 +218,8 @@
     (dynhydra--add-category 'gears-layers/base-hydra-m-f
                             `(,(make-dynhydra-category :title "Format"))))
 
-  ;; (princ (cdr (assoc 'gears-layers/base-hydra-m-f dynhydra-list))(current-buffer))
-
-  (dynhydra-category--add-head (dynhydra--get-category 'gears-layers/base-hydra-m-f "Format")
+  (dynhydra-category--add-head (dynhydra--get-category
+                                'gears-layers/base-hydra-m-f "Format")
                                `(,(make-dynhydra-head :key "F"
                                                       :text "Format Buffer"
                                                       :command 'clang-format-buffer

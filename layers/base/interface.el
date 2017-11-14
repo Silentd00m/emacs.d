@@ -150,7 +150,7 @@ Options:
  - overlay: Documentation is shown in a text overlay above the cursor.
  - none: Do not show the documentation."
   :options '('popup 'minibuffer 'overlay 'none)
-  :type 'symbolp
+  :type 'symbol
   :group 'gears-interface)
 
 (defcustom gears-show-current-context nil
@@ -314,6 +314,7 @@ Functions will be shown with their parameters."
          "Display eldoc message near point."
          (when format-string
            (pos-tip-show (apply 'format format-string args))))
+
        (setq eldoc-message-function #'eldoc-popup-message))
       ((equal gears-show-documentation-mode 'overlay)
        (add-hook 'eldoc-mode-hook 'eldoc-overlay-mode)))
