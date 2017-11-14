@@ -128,10 +128,39 @@
 (defun gears-layers/cpp-init()
   "Initiaizes the C++ layer."
 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Custom options
+
   (defcustom gears-layers/cpp-cmake-setup-ide t
     "Setup compiler options and auto-completion."
     :type 'boolean
+    :group 'gears-layers/cpp)
+
+  (defcustom gears-layers/cpp-clang-tools-path "/usr/share/clang"
+    "Path to clang's emacs tools."
+    :type 'string
+    :group 'gears-layers/cpp)
+
+  (defcustom gears-layer/cpp-format-and-fix-includes-on-save t
+    "Reformat file and fix includes when saving a C++ file."
+    :type 'boolean
     :group 'gears-layers/cmake)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Prerequisite loading
+
+  (add-to-list 'load-path gears-layers/cpp-clang-tools-path)
+
+  (when (f-exists-p (concat gears-layers/cpp-clang-tools-path
+                            "/clang-include-fixer.el"))
+    (require 'clang-include-fixer))
+
+  (when (f-exists-p (concat gears-layers/cpp-clang-tools-path
+                            "/clang-rename.el"))
+    (require 'clang-rename))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Apply options
 
   (unless gears-show-minor-modes
     (eval-after-load "irony"
@@ -143,13 +172,23 @@
     (eval-after-load "rtags"
       #'(diminish 'rtags-mode)))
 
-  (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode)
-
   (setq c-default-style "gears")
 
-  (when (gears-layer-installed-p 'refactor))
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Hooks
+
+  (add-hook 'c++-mode-hook #'modern-c++-font-lock-mode)
 
   (add-hook 'c++-mode-hook 'gears-cpp-mode-hook)
+
+  (add-hook 'before-save-hook #'(lambda ()
+                                  (when (or (eq major-mode 'c-mode)
+                                            (eq major-mode 'c++-mode))
+                                    (when gears-layer/cpp-format-and-fix-includes-on-save
+                                      (when (boundp 'clang-format-buffer)
+                                        (clang-format-buffer))
+                                      (when (boundp 'clang-include-fixer)
+                                        (clang-include-fixer))))))
 
   (when (and (not (gears-layer-installed-p 'ycmd))
              (gears-layer-installed-p 'auto_completion))
@@ -169,10 +208,14 @@
                                 (message "[Dash] Loaded docset 'C++' and 'C'.")
                                 (setq-local helm-dash-docsets '("C++" "C")))))
 
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Interface setup
+
   ;; Add formater to hydra.
 
   (unless (dynhydra--get-category 'gears-layers/base-hydra-m-f "Format")
-    (dynhydra--add-category 'gears-layers/base-hydra-m-f `(,(make-dynhydra-category :title "Format"))))
+    (dynhydra--add-category 'gears-layers/base-hydra-m-f
+                            `(,(make-dynhydra-category :title "Format"))))
 
   ;; (princ (cdr (assoc 'gears-layers/base-hydra-m-f dynhydra-list))(current-buffer))
 
