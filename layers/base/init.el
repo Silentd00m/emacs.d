@@ -108,6 +108,9 @@ Options:
   (company-quickhelp-mode 1)
   (save-place-mode 1)
 
+  ;; Fix tramp hanging when the shell output is colored
+  (setq shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(^[\\[[0-9;]*[a-zA-Z] *\\)*")
+
   (when gears-show-current-context
     (add-to-list 'semantic-default-submodes 'global-semantic-stickyfunc-mode)
 
