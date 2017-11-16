@@ -75,5 +75,5 @@
   )
 
 (gears-layer-defdepends git
-                        :packages '(magit git-gutter-fringe+ git-timemachine
-                                          vdiff vdiff-magit))
+                        :packages '(magit git-gutter-fringe+ git-timemachine)
+                        :layers '(diff))
