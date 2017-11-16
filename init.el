@@ -44,6 +44,7 @@
 
 (load (concat gears-emacs-basepath "/functions/update"))
 (load (concat gears-emacs-basepath "/functions/layers"))
+(load (concat gears-emacs-basepath "/functions/helper"))
 (gears-layers-init)
 
 (when (f-file? (concat gears-emacs-basepath "/config/custom-init.el"))

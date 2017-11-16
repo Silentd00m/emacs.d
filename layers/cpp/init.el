@@ -37,19 +37,33 @@
                 (comment-intro . 0))))
 
 (defun gears-cpp-mode-hook ()
-  (setq font-lock-maximum-decoration 6)
+  ;; (setq font-lock-maximum-decoration 6)
   (font-lock-fontify-buffer)
   ;; (local-set-key (kbd "RET") 'newline-and-indent)
-  (local-set-key (kbd "RET") 'c-indent-new-comment-line)
+  (local-set-key (kbd "RET") #'(lambda ()
+                                 (interactive)
+
+                                 (if (gears--in-comment-p (point))
+                                     (c-indent-new-comment-line)
+                                   (newline-and-indent))))
   (yas-minor-mode 1)
-  (setq flycheck-clang-args "-std=c++14")
-  (setq flycheck-check-syntax-automatically '(mode-enabled save))
+  (setq-local flycheck-clang-args "-std=c++14")
+  (setq-local flycheck-check-syntax-automatically '(mode-enabled save))
   ;; (fci-mode 1)
   (yas-minor-mode-on)
   (c-set-style "gears")
   (gears-cpp-fix-indent)
-  (setq flycheck-clang-language-standard "c++11")
-  (hideshowvis-minor-mode))
+  (setq-local flycheck-clang-language-standard "c++11")
+  (hideshowvis-minor-mode)
+
+  ;; Keep semantic from indexing the system headers
+  (setq-mode-local c-mode semanticdb-find-default-throttle
+                   '(local project unloaded recursive))
+  (setq-mode-local c++-mode semanticdb-find-default-throttle
+                   '(local project unloaded recursive))
+
+  (semantic-remove-system-include "/usr/include/" 'c++-mode)
+  (semantic-remove-system-include "/usr/local/include/" 'c++-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Language element indentation fix

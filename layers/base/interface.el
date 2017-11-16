@@ -64,6 +64,17 @@ Options:
   :type 'boolean
   :group 'gears-interface)
 
+(defcustom gears-scrollbar-mode 'yascroll
+  "Defines how scrollbars are displayed.
+
+Options:
+ - standard: Emacs' standard scrollbars.
+ - yascroll: GTK-Theme indepent ascii scrollbars (Default).
+ - none: No scrollbars"
+  :options '(standard yascroll none)
+  :type 'symbolp
+  :group 'gears-interface)
+
 (defcustom gears-show-line-numbers t
   "Controls wheter line number should be displayed."
   :type 'boolean
@@ -141,6 +152,12 @@ Options:
   :type 'integer
   :group 'gears-interface)
 
+(defcustom gears-autoresize-splits t
+  "Automatically resize window layout to give more space to the active buffer"
+
+  :type 'integer
+  :group 'gears-interface)
+
 (defcustom gears-show-documentation-mode 'minibuffer
   "Defines how the code documentation should be shown
 
@@ -200,8 +217,9 @@ Functions will be shown with their parameters."
 (when gears-theme
   (when (car (eval (cdr (assoc (prin1-to-string gears-theme)
                                gears-theme-load-paths))))
-    (add-to-list 'custom-theme-load-path (car (eval (cdr (assoc (prin1-to-string gears-theme)
-                                                                gears-theme-load-paths))))))
+    (add-to-list 'custom-theme-load-path
+                 (car (eval (cdr (assoc (prin1-to-string gears-theme)
+                                        gears-theme-load-paths))))))
   (load-theme gears-theme t))
 
 (when gears-hightlight-current-line
@@ -263,6 +281,10 @@ Functions will be shown with their parameters."
 (unless gears-disable-auto-key-help
   (which-key-mode t))
 
+(when gears-autoresize-splits
+  (setq zoom-ignored-buffer-name-regexps '("^*helm" "^helm"))
+  (zoom-mode t))
+
 (unless gears-show-minor-modes
   (require 'diminish)
 
@@ -318,6 +340,18 @@ Functions will be shown with their parameters."
        (setq eldoc-message-function #'eldoc-popup-message))
       ((equal gears-show-documentation-mode 'overlay)
        (add-hook 'eldoc-mode-hook 'eldoc-overlay-mode)))
+
+(cond ((eq gears-scrollbar-mode 'yascroll)
+       (add-to-list 'load-path (concat gears-emacs-basepath "/dep/yascroll-el/"))
+
+       (require 'yascroll)
+
+       (global-yascroll-bar-mode t)
+       (scroll-bar-mode -1))
+      ((eq gears-scrollbar-mode 'standard)
+       (scroll-bar-mode t))
+      ((eq gears-scrollbar-mode 'none)
+       (scroll-bar-mode -1)))
 
 (unless gears-show-current-context
   (add-to-list 'semantic-inhibit-functions

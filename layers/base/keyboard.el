@@ -53,6 +53,7 @@
                                  ("M-o" . helm-fzf)
                                  ("<f1>" . helm-descbinds)
                                  ("<f2>" . helm-dash-at-point)
+                                 ("<f3>" . helm-dash)
                                  ("<f5>" . helm-make)
                                  ("<f7>" . helm-semantic-or-imenu)
                                  ("<f8>" . helm-flycheck)

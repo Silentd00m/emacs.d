@@ -166,5 +166,7 @@ Options:
                                     w3m
                                     fill-column-indicator
                                     sublimity
-                                    switch-buffer-functions)
+                                    switch-buffer-functions
+                                    zoom-mode
+                                    yascroll)
                         :layers '(auto_completion))
