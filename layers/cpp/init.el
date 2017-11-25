@@ -37,7 +37,7 @@
                 (comment-intro . 0))))
 
 (defun gears-cpp-mode-hook ()
-  ;; (setq font-lock-maximum-decoration 6)
+  (setq-local font-lock-maximum-decoration 6)
   (font-lock-fontify-buffer)
   ;; (local-set-key (kbd "RET") 'newline-and-indent)
   (local-set-key (kbd "RET") #'(lambda ()

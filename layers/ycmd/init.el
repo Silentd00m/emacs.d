@@ -5,7 +5,7 @@
     "YCMD Layer Configuration"
     :group 'gears-layers)
 
-  (defcustom gears-layers/ycmd-path (concat gears-emacs-basepath "/dep/ycmd/third_party/ycmd/ycmd/")
+  (defcustom gears-layers/ycmd-path (concat gears-emacs-basepath "/dep/ycmd/ycmd/")
     "Path to the YCMD server."
 
     :type 'directory
@@ -64,7 +64,7 @@
   ;; TODO : Add compilation of ycmd-server.
   (require 'git)
 
-  (git-clone "https://github.com/Valloric/YouCompleteMe"
+  (git-clone "https://github.com/Valloric/ycmd"
              (concat gears-emacs-basepath "/dep/ycmd"))
 
   t)
