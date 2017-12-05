@@ -353,12 +353,12 @@ Functions will be shown with their parameters."
       ((eq gears-scrollbar-mode 'none)
        (scroll-bar-mode -1)))
 
-(unless gears-show-current-context
-  (add-to-list 'semantic-inhibit-functions
-               (lambda ()
-                 (member major-mode '(html-mode
-                                      lisp-mode
-                                      emacs-lisp-mode)))))
+;; (unless gears-show-current-context
+;;   (add-to-list 'semantic-inhibit-functions
+;;                (lambda ()
+;;                  (member major-mode '(html-mode
+;;                                       lisp-mode
+;;                                       emacs-lisp-mode)))))
 
 ;; TODO : Add cursor and mode color configuration.
 

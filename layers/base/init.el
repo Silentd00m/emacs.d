@@ -52,7 +52,7 @@ Options:
     :type 'integer
     :group 'gears)
 
-  (defcustom gears-enable-semantic-mode false
+  (defcustom gears-enable-semantic-mode nil
     "Enable semantic mode by default."
 
     :type 'boolean
