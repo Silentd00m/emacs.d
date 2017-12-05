@@ -3,6 +3,7 @@
 (defun gears-layers/refactor-init ()
   "Initializes the refactoring layer."
 
+  (require 'srefactor)
   t)
 
 (defun gears-layers/refactor-description ()

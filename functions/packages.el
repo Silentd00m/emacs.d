@@ -28,11 +28,12 @@
 
       (let ((inhibit-read-only t))
         (erase-buffer)
-        (princ "Please wait, installing packages... [" (current-buffer))
-        (princ gip-installed-package-count (current-buffer))
-        (princ "/" (current-buffer))
-        (princ (length pkg-list) (current-buffer))
-        (princ "]\n" (current-buffer))
+        (princ "Please wait, installing packages... ["
+               (get-buffer-create "*gears-install*"))
+        (princ gip-installed-package-count (get-buffer-create "*gears-install*"))
+        (princ "/" (get-buffer-create "*gears-install*"))
+        (princ (length pkg-list) (get-buffer-create "*gears-install*"))
+        (princ "]\n" (get-buffer-create "*gears-install*"))
         (gears-princ-progress-bar
          (current-buffer)
          (floor (* (/ (float gip-installed-package-count)

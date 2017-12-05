@@ -220,7 +220,8 @@ Functions will be shown with their parameters."
     (add-to-list 'custom-theme-load-path
                  (car (eval (cdr (assoc (prin1-to-string gears-theme)
                                         gears-theme-load-paths))))))
-  (load-theme gears-theme t))
+  (unless (string= gears-theme "")
+    (load-theme gears-theme t)))
 
 (when gears-hightlight-current-line
   (global-hl-line-mode t))
@@ -353,12 +354,12 @@ Functions will be shown with their parameters."
       ((eq gears-scrollbar-mode 'none)
        (scroll-bar-mode -1)))
 
-;; (unless gears-show-current-context
-;;   (add-to-list 'semantic-inhibit-functions
-;;                (lambda ()
-;;                  (member major-mode '(html-mode
-;;                                       lisp-mode
-;;                                       emacs-lisp-mode)))))
+(unless gears-show-current-context
+  (add-to-list 'semantic-inhibit-functions
+               (lambda ()
+                 (member major-mode '(html-mode
+                                      lisp-mode
+                                      emacs-lisp-mode)))))
 
 ;; TODO : Add cursor and mode color configuration.
 
