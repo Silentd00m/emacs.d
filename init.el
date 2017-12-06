@@ -11,16 +11,13 @@
 
 (setq inhibit-startup-message t)
 
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
 (unless (package-installed-p 'f)
-  (use-package f
-    :ensure t))
+  (package-refresh-contents)
+  (package-install 'f))
 
 (require 'f)
-(defvar gears-emacs-basepath (f-dirname (f-this-file)))
+(defvar gears-emacs-basepath (f-dirname (f-this-file))
+  "Location of the installation.")
 
 (unless (f-dir? (concat gears-emacs-basepath "/config"))
   (f-mkdir (concat gears-emacs-basepath "/config")))
@@ -30,12 +27,17 @@
 (when (f-file? (concat gears-emacs-basepath "/config/custom.el"))
   (load custom-file))
 
+;; Check for the layers config file
 (if (f-file? (concat gears-emacs-basepath "/config/layers.el"))
+    ;; Load if it exists
     (load (concat gears-emacs-basepath "/config/layers"))
-  (progn (f-write-text "(setq gears-layer-installed-list '())"
-                       'utf-8
-                       (concat gears-emacs-basepath "/config/layers.el"))
-         (load (concat gears-emacs-basepath "/config/layers"))))
+  (progn
+    ;; Create a new file if it does not exist.
+
+    (f-write-text "(setq gears-layer-installed-list '())"
+                  'utf-8
+                  (concat gears-emacs-basepath "/config/layers.el"))
+    (load (concat gears-emacs-basepath "/config/layers"))))
 
 (unless (> (length gears-layer-installed-list) 0)
   (load "~/.emacs.d/functions/install")

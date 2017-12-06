@@ -8,7 +8,8 @@
 (cua-mode t)                                                                    ;; Sane C-c, C-x and C-v
 (setq cua-keep-region-after-copy t)
 (transient-mark-mode 1)
-(setq x-select-enable-clipboard t)
+(setq x-select-enable-clipboard t
+      select-enable-clipboard t)
 
 (require 'smartparens-config)
 (smartparens-global-mode t)
