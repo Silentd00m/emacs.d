@@ -91,6 +91,9 @@
 
   ""
   :type '(alist :value (group key-sequence symbol))
+  :set #'(lambda (sym val)
+           (custom-set-default sym val)
+           (gears-layers/base/config-global-keymap val))
   :group 'gears)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -108,8 +111,10 @@
         ad-do-it
       (fset 'one-window-p (symbol-function 'orig-one-window-p)))))
 
-(dolist (i gears-global-keymap)
-  (global-set-key (kbd (car i)) (cdr i)))
+;; (dolist (i gears-global-keymap)
+;;   (global-set-key (kbd (car i)) (cdr i)))
+
+(gears-layers/base/config-global-keymap gears-global-keymap)
 
 ;; Company mode
 (with-eval-after-load 'company

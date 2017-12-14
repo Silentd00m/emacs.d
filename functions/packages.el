@@ -27,6 +27,7 @@
       (switch-to-buffer "*gears-install*")
 
       (let ((inhibit-read-only t))
+        (switch-to-buffer "*gears-install*")
         (erase-buffer)
         (princ "Please wait, installing packages... ["
                (get-buffer-create "*gears-install*"))
@@ -35,14 +36,14 @@
         (princ (length pkg-list) (get-buffer-create "*gears-install*"))
         (princ "]\n" (get-buffer-create "*gears-install*"))
         (gears-princ-progress-bar
-         (current-buffer)
+         (get-buffer-create "*gears-install*")
          (floor (* (/ (float gip-installed-package-count)
                       (length pkg-list))
                    100))))))
 
   (let ((inhibit-read-only t))
-    (princ "\n\n" (current-buffer))
-    (princ "Installation complete." (current-buffer))))
+    (princ "\n\n" (get-buffer-create "*gears-install*"))
+    (princ "Installation complete." (get-buffer-create "*gears-install*"))))
 
 (defun -gears-package-install-packages (pkg-list)
   (dolist (pkg pkg-list)

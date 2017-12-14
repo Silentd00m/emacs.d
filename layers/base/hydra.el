@@ -128,7 +128,6 @@
                                                            :command 'helm-projectile-find-dwim
                                                            :exit t)))))
 
-
 (defdynhydra gears-layers/base-hydra-m-r
   `(,(make-dynhydra-category :title "Buffer"
                              :heads `(,(make-dynhydra-head :key "R"
