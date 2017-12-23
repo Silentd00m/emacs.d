@@ -375,7 +375,7 @@ Options:
   (setq-default save-place t)
   (setq save-place-file (concat gears-emacs-basepath "/saved-places"))
   (setq save-place-forget-unreadable-files nil)
-  (global-undo-tree-mode 1)
+  ;(global-undo-tree-mode 1)
   (projectile-global-mode)
   (global-company-mode)
   (company-quickhelp-mode 1)
@@ -453,6 +453,7 @@ Options:
                                     smartparens
                                     comment-dwim-2
                                     rainbow-delimiters
+                                    hideshowvis
                                     nlinum
                                     nlinum-hl
                                     multiple-cursors

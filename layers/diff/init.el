@@ -15,7 +15,7 @@
 (defun gears-layers/diff-description ()
   "Returns the Dash layer description."
 
-  (eval "Display Dash docsets inside emacs to browse documentation. "))
+  (eval "Display file diffs inside helm. "))
 
 (defun gears-layers/diff-install ()
   "Additional commands for layer installation.")

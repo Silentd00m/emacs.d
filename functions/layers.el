@@ -163,7 +163,9 @@
                                 (add-to-list 'layer-list (f-filename layer) t)))
                             layer-list))
           :fuzzy-match t
-          :action '-gears-layer-install)
+          :action '(lambda (package)
+                     (package-refresh-contents)
+                     (-gears-layer-install package)))
         :buffer "*gears layer-install*"))
 
 (defun -gears-layer-install (layer)

@@ -46,11 +46,11 @@
                                  (if (gears--in-comment-p (point))
                                      (c-indent-new-comment-line)
                                    (newline-and-indent))))
-  (yas-minor-mode 1)
+  ;; (yas-minor-mode 1)
   (setq-local flycheck-clang-args "-std=c++14")
   (setq-local flycheck-check-syntax-automatically '(mode-enabled save))
   ;; (fci-mode 1)
-  (yas-minor-mode-on)
+  ;; (yas-minor-mode-on)
   (c-set-style "gears")
   (gears-cpp-fix-indent)
   (setq-local flycheck-clang-language-standard "c++11")
@@ -248,6 +248,8 @@
   (when (gears-layer-installed-p 'cmake)
     (gears-layer-init 'cmake)
 
+    (require 'subr-x)
+
     (when gears-layers/cpp-cmake-setup-ide
       ;; Also setup rtags if the layer has been installed.
       (add-hook 'c-mode-common-hook #'(lambda ()
@@ -256,6 +258,7 @@
 
                                         (when (derived-mode-p 'c-mode 'c++-mode)
                                           ;; (cppcm-reload-all)
+                                          (require 'subr-x)
                                           (cmake-ide-setup)
                                           (when (gears-layer-installed-p 'rtags)
                                             (cmake-ide-maybe-start-rdm))))))))
@@ -264,7 +267,8 @@
   "Additional install commands for the C++ layer.")
 
 (gears-layer-defdepends cpp
-                        :packages `(modern-cpp-font-lock
+                        :packages `(clang-format
+                                    modern-cpp-font-lock
                                     ,(unless (gears-layer-installed-p 'ycmd)
                                        'irony)
                                     ,(unless (gears-layer-installed-p 'ycmd)
