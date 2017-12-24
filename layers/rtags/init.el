@@ -53,6 +53,9 @@
     :type 'boolean
     :group 'gears-layers/rtags)
 
+  (unless (f-exists-p (concat gears-emacs-basepath "/dep/rtags"))
+    (gears-layers/rtags-install))
+
   (require 'flycheck-rtags)
   (require 'helm-rtags)
 
@@ -92,6 +95,8 @@
 
 (defun gears-layers/rtags-install ()
   "Blerp."
+
+  (require 'rtags)
 
   (rtags-install (concat gears-emacs-basepath "/dep/rtags")))
 
