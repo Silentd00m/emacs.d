@@ -200,28 +200,35 @@
 
   (add-hook 'c++-mode-hook 'gears-cpp-mode-hook)
 
-  (add-hook 'before-save-hook #'(lambda ()
-                                  (when (or (eq major-mode 'c-mode)
-                                            (eq major-mode 'c++-mode))
-                                    (when gears-layer/cpp-format-and-fix-includes-on-save
-                                      (clang-format-buffer)))))
+  (add-hook 'before-save-hook
+            #'(lambda ()
+                (when (or (eq major-mode 'c-mode)
+                          (eq major-mode 'c++-mode))
+                  (when gears-layer/cpp-format-and-fix-includes-on-save
+                    (clang-format-buffer)))))
 
   (when (and (not (gears-layer-installed-p 'ycmd))
              (gears-layer-installed-p 'auto_completion))
     (add-hook 'company-backends 'company-irony)
     (add-hook 'c++-mode-hook #'(lambda ()
-                                 (irony-mode t)
+                                 (unless (gears-layer-installed-p 'cmake)
+                                   (irony-mode t))
 
-                                 (unless (equal gears-show-documentation-mode 'none)
+                                 (unless (equal gears-show-documentation-mode
+                                                'none)
                                    (irony-eldoc t))
 
-                                 (add-to-list 'company-backends '(company-irony-c-headers
-                                                                  company-irony)))))
+                                 (add-to-list 'company-backends
+                                              '(company-irony-c-headers
+                                                company-irony)))))
 
   (when (gears-layer-installed-p 'dash)
     (add-hook 'c++-mode-hook '(lambda()
                                 (message "[Dash] Loaded docset 'C++' and 'C'.")
                                 (setq-local helm-dash-docsets '("C++" "C")))))
+
+    (when (gears-layer-installed-p 'lsp)
+      (add-hook 'c++-mode-hook 'lsp-mode))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Interface setup

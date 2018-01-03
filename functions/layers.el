@@ -189,7 +189,23 @@
    (gears-layer--recursive-list-dependencies layer))
   (gears-layer--recursive-mark-installed layer)
 
+  (dolist (installed-layer gears-layer-installed-list)
+    (gears-load-layer installed-layer)
+
+    (dolist (dependency (gears-layer--recursive-list-dependencies
+                         installed-layer)
+                        (when dependency
+                          (package-install dependency)))))
+
     ;; Execute pre-install if defined
+  (when (boundp (intern (concat "gears-layers/"
+                                (gears-layer-convert-name layer)
+                                "-post-install")))
+    (funcall (intern (concat "gears-layers/"
+                             (gears-layer-convert-name layer)
+                             "-post-install"))))
+
+  ;; Execute post-install if defined
   (when (boundp (intern (concat "gears-layers/"
                                 (gears-layer-convert-name layer)
                                 "-post-install")))

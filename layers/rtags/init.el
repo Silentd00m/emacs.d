@@ -59,7 +59,9 @@
   (require 'flycheck-rtags)
   (require 'helm-rtags)
 
-  (setq rtags-use-helm t)
+  (setq rtags-use-helm t
+        cmake-ide-header-search-other-file nil
+        cmake-ide-header-search-first-including nil)
 
   ;; Add goto-definition for c-modes.
   (gears-layers/rtags-hydra-add)
