@@ -35,7 +35,11 @@
   (require 'cquery)
 
   (setq cquery-executable (concat gears-emacs-basepath "/dep/cquery/build/release/bin/cquery"))
-  (add-hook 'c++-mode-hook 'lsp-cquery-enable))
+  (add-hook 'c++-mode-hook 'lsp-cquery-enable)
+  (add-hook 'c++-mode-hook 'flycheck-popup-tip-mode)
+  (add-hook 'c++-mode-hook 'yas-minor-mode)
+
+  (gears-layers/cquery-hydra-add))
 
 (defun gears-layers/cquery-description ()
   "Provides cquery highlighting, autocompletion and sets compiler options.")
@@ -44,4 +48,5 @@
   "Additional installation commands for cquery-layer.")
 
 (gears-layer-defdepends cquery
+                        :packages '(flycheck-popup-tip yasnippet)
                         :layers '(lsp cpp))

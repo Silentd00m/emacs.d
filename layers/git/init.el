@@ -9,10 +9,10 @@
   :type 'file)
 
 (defun gears-layers/git-init()
-  (require 'git-gutter-fringe+)
+  (require 'diff-hl)
 
   (unless gears-show-minor-modes
-    (diminish 'git-gutter+-mode))
+    (diminish 'diff-hl-mode))
 
   (dynhydra--add-category 'gears-layers/base-hydra-m-g
                           `(,(make-dynhydra-category :title "GIT"
@@ -36,7 +36,7 @@
                                                                                    :command 'magit-status
                                                                                    :exit t)))))
 
-  (global-git-gutter+-mode)
+  (global-diff-hl-mode)
 
   (when gears-layers/git-askpass-handler
     (setenv "SSH_ASKPASS" gears-layers/git-askpass-handler))
@@ -75,5 +75,5 @@
   )
 
 (gears-layer-defdepends git
-                        :packages '(magit git-gutter-fringe+ git-timemachine)
+                        :packages '(magit diff-hl git-timemachine)
                         :layers '(diff))

@@ -454,8 +454,9 @@ Options:
                                     comment-dwim-2
                                     rainbow-delimiters
                                     hideshowvis
-                                    nlinum
-                                    nlinum-hl
+                                    (when (version<= emacs-version "26.0")
+                                      nlinum
+                                      nlinum-hl)
                                     multiple-cursors
                                     powerline
                                     material-theme

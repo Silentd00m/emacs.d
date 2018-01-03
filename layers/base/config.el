@@ -121,17 +121,22 @@
 (defun gears-layers/base/config-show-line-numbers (val)
   "Setter callback function for gears-show-line-numbers."
 
-  (require 'nlinum-hl)
+  (if (version<= emacs-version "26.0")
+      (progn
+        (require 'nlinum-hl)
 
-  (if val
-      (progn (add-hook 'prog-mode-hook 'nlinum-mode)
-             (add-hook 'text-mode-hook 'nlinum-mode)
-             (add-hook 'focus-in-hook 'nlinum-hl-flush-all-windows)
-             (add-hook 'focus-out-hook 'nlinum-hl-flush-all-windows))
-    (progn (remove-hook 'prog-mode-hook 'nlinum-mode)
-           (remove-hook 'text-mode-hook 'nlinum-mode)
-           (remove-hook 'focus-in-hook 'nlinum-hl-flush-all-windows)
-           (remove-hook 'focus-out-hook 'nlinum-hl-flush-all-windows))))
+        (if val
+            (progn (add-hook 'prog-mode-hook 'nlinum-mode)
+                   (add-hook 'text-mode-hook 'nlinum-mode)
+                   (add-hook 'focus-in-hook 'nlinum-hl-flush-all-windows)
+                   (add-hook 'focus-out-hook 'nlinum-hl-flush-all-windows))
+          (progn (remove-hook 'prog-mode-hook 'nlinum-mode)
+                 (remove-hook 'text-mode-hook 'nlinum-mode)
+                 (remove-hook 'focus-in-hook 'nlinum-hl-flush-all-windows)
+                 (remove-hook 'focus-out-hook 'nlinum-hl-flush-all-windows))))
+    (progn
+      (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+      (add-hook 'text-mode-hook 'display-line-numbers-mode))))
 
 (defun gears-layers/base/config-powerline-theme (val)
   "Setter callback function for gears-powerline-theme."

@@ -11,7 +11,7 @@
   (require 'company)
   (require 'lsp-ui)
 
-  (when (gears-layer-installed-p 'autocompletion)
+  (when (gears-layer-installed-p 'auto_completion)
     (push 'company-lsp company-backends))
 
   (add-hook 'lsp-mode-hook 'lsp-ui-mode)

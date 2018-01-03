@@ -14,4 +14,4 @@
   "Additional installation commands for rtags-layer.")
 
 (gears-layer-defdepends cmake
-                        :packages '(cmake-mode cpputils-cmake cmake-ide))
+                        :packages '(cmake-mode))
