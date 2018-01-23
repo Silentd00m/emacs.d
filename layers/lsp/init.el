@@ -14,7 +14,13 @@
   (when (gears-layer-installed-p 'auto_completion)
     (push 'company-lsp company-backends))
 
-  (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  (setq company-lsp-async t
+        company-lsp-cache-candidates t)
+
+  ;; (add-hook 'lsp-ui-mode-hook 'lsp-ui-doc-mode)
+  ;; (add-hook 'lsp-mode-hook 'lsp-ui-mode)
+  ;; (add-hook 'lsp-mode-hook '(lambda ()
+  ;;                             flycheck-pos-tip-mode t))
 
   (when (gears-layer-installed-p 'cpp)
     (add-hook 'c++-mode-hook #'lsp-mode))

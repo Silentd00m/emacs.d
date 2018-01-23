@@ -207,7 +207,8 @@
                   (when gears-layer/cpp-format-and-fix-includes-on-save
                     (clang-format-buffer)))))
 
-  (when (and (not (gears-layer-installed-p 'ycmd))
+  (when (and (not (or (gears-layer-installed-p 'ycmd)
+                      (gears-layer-installed-p 'cquery)))
              (gears-layer-installed-p 'auto_completion))
     (add-hook 'company-backends 'company-irony)
     (add-hook 'c++-mode-hook #'(lambda ()
@@ -218,9 +219,8 @@
                                                 'none)
                                    (irony-eldoc t))
 
-                                 (add-to-list 'company-backends
-                                              '(company-irony-c-headers
-                                                company-irony)))))
+                                 (push 'company-irony 'company-backends)
+                                 (push 'company-irony-c-headers 'company-backends))))
 
   (when (gears-layer-installed-p 'dash)
     (add-hook 'c++-mode-hook '(lambda()
@@ -266,9 +266,12 @@
                                         (when (derived-mode-p 'c-mode 'c++-mode)
                                           ;; (cppcm-reload-all)
                                           (require 'subr-x)
-                                          (cmake-ide-setup)
-                                          (when (gears-layer-installed-p 'rtags)
-                                            (cmake-ide-maybe-start-rdm))))))))
+
+                                          ;; (cmake-ide-setup)
+
+                                          ;; (when (gears-layer-installed-p 'rtags)
+                                          ;;   (cmake-ide-maybe-start-rdm))
+                                          ))))))
 
 (defun gears-layers/cpp-install ()
   "Additional install commands for the C++ layer.")

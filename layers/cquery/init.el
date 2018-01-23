@@ -30,11 +30,15 @@
 (defun gears-layers/cquery-init ()
   "Initializes the cquery layer."
 
-  (add-to-list 'load-path (concat gears-emacs-basepath "/dep/cquery/emacs"))
+  (add-to-list 'load-path (concat gears-emacs-basepath "/dep/emacs-cquery"))
 
   (require 'cquery)
 
-  (setq cquery-executable (concat gears-emacs-basepath "/dep/cquery/build/release/bin/cquery"))
+  (setq cquery-executable (concat gears-emacs-basepath "/dep/cquery/build/release/bin/cquery")
+        cquery-extra-init-params '(:enableComments 2 :cacheFormat "msgpack")
+        cquery-sem-highlight-method 'overlay
+        max-specpdl-size 32000)
+
   (add-hook 'c++-mode-hook 'lsp-cquery-enable)
   (add-hook 'c++-mode-hook 'flycheck-popup-tip-mode)
   (add-hook 'c++-mode-hook 'yas-minor-mode)
