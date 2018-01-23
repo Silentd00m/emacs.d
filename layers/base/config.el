@@ -176,6 +176,22 @@
         ((eq val 'line)
          (add-hook 'prog-mode-hook 'fci-mode))))
 
+(defun gears-layers/base/config-helm-display-mode (val)
+  "Setter callback function for gears-helm-display-mode"
+
+  (cond ((eq val 'minibuffer)
+         (setq helm-display-function 'helm-split-window-default-side
+               helm-display-buffer-reuse-frame t
+               helm-use-undecorated-frame-option t))
+        ((eq val 'frame)
+         (setq helm-display-function 'helm-display-buffer-in-own-frame
+               helm-display-buffer-reuse-frame t
+               helm-use-undecorated-frame-option t))
+        ((eq val 'child-frame)
+         (setq helm-display-function 'gears-helm-display-child-frame
+               helm-display-buffer-reuse-frame t
+               helm-display-buffer-width 80))))
+
 (defun gears-layers/base/config-enable-toolbar (val)
   "Setter callback function for gears-enable-toolbar."
 
@@ -281,7 +297,10 @@
 
          (setq eldoc-message-function #'eldoc-popup-message))
         ((equal val 'overlay)
-         (add-hook 'eldoc-mode-hook 'eldoc-overlay-mode))
+         (add-hook 'eldoc-mode-hook 'eldoc-overlay-mode)
+         (setq eldoc-message-function #'inline-docs))
+        ((equal val 'minibuffer)
+         (global-eldoc-mode t))
         ((equal val 'none)
          (eldoc-mode nil))))
 
@@ -305,15 +324,14 @@
 (defun gears-layers/base/config-smooth-scrolling (val)
   "Setter callback function for gears-autoresize-splits."
 
-  (require 'sublimity)
-  (require 'sublimity-scroll)
+  (when val
+    (require 'sublimity)
+    (require 'sublimity-scroll)
 
-  (setq sublimity-scroll-weight 5
-        sublimity-scroll-drift-length 5)
+    (setq sublimity-scroll-weight 5
+          sublimity-scroll-drift-length 5)
 
-  (if val
-      (sublimity-mode t)
-    (sublimity-mode nil)))
+    (sublimity-mode t)))
 
 ;; Keyboard
 

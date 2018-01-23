@@ -333,6 +333,20 @@ Options:
              (gears-layers/base/config-show-current-context val))
     :group 'gears-interface)
 
+  (defcustom gears-helm-display-mode 'frame
+    "Defines how the helm will be shown.
+
+Options:
+- minibuffer: Show helm inside the minibuffer.
+- frame: Show helm inside a frame at the cursor position.
+- child-frame: Create a child-frame at the cursor position."
+
+    :type 'symbol
+    :set #'(lambda (sym val)
+             (custom-set-default sym val)
+             (gears-layers/base/config-helm-display-mode val))
+    :group 'gears-interface)
+
   (defcustom gears-smooth-scrolling t
     "Improve the scrolling and Pg-Up/Pg-Down experience by animating the scrolling."
 
