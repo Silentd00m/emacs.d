@@ -4,12 +4,12 @@
   :group 'gears)
 
 ;; General
-(setq shift-select-mode t)                                                      ;; Allow shift+arrow selection
-(cua-mode t)                                                                    ;; Sane C-c, C-x and C-v
-(setq cua-keep-region-after-copy t)
-(transient-mark-mode 1)
-(setq x-select-enable-clipboard t
+(setq shift-select-mode t                                                       ;; Allow shift+arrow selection
+      cua-keep-region-after-copy t
+      x-select-enable-clipboard t
       select-enable-clipboard t)
+(cua-mode t)                                                                    ;; Sane C-c, C-x and C-v
+(transient-mark-mode 1)
 
 (require 'smartparens-config)
 (smartparens-global-mode t)

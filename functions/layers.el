@@ -169,10 +169,7 @@
         :buffer "*gears layer-install*"))
 
 (defun -gears-layer-install (layer)
-  ;; ;; Add layer to list of layers
-  ;; (add-to-list 'gears-layer-installed-list layer)
-  ;; (gears-layer-list-save)
-
+  ;; Add layer to list of layers
   (load (concat gears-emacs-basepath "/layers/"
                 (gears-layer-convert-name layer) "/init"))
 

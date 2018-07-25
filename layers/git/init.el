@@ -1,14 +1,15 @@
-(defgroup gears-layers/git nil
-  "Git Layer Configuration"
-
-  :group 'gears-layers)
-
-(defcustom gears-layers/git-askpass-handler nil
-  "Askpass handler. No handler if empty."
-
-  :type 'file)
-
 (defun gears-layers/git-init()
+  (defgroup gears-layers/git nil
+    "Git Layer Configuration"
+
+    :group 'gears-layers)
+
+  (defcustom gears-layers/git-askpass-handler nil
+    "Askpass handler. No handler if empty."
+
+    :type 'file)
+
+
   (require 'diff-hl)
 
   (unless gears-show-minor-modes

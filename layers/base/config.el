@@ -51,7 +51,8 @@
 
   (set-frame-font val)
   (set-face-attribute 'default nil :font val)
-  (set-default-font val))
+  ;(set-default-font val)
+  )
 
 (defun gears-layers/base/config-theme (val)
   "Setter callback function for gears-theme."
@@ -180,7 +181,7 @@
   "Setter callback function for gears-helm-display-mode"
 
   (cond ((eq val 'minibuffer)
-         (setq helm-display-function 'helm-split-window-default-side
+         (setq helm-display-function 'helm-default-display-buffer
                helm-display-buffer-reuse-frame t
                helm-use-undecorated-frame-option t))
         ((eq val 'frame)

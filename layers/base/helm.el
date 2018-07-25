@@ -15,7 +15,7 @@
 (helm-attrset 'follow 1 helm-source-occur)
 
 ;; https://gist.github.com/fuxialexander/5ad46671689d96a29f9865c1c0b42d10
-(defun gears-helm-display-child-frame (buffer)
+(defun gears-helm-display-child-frame (buffer &optional resume)
     "Display `helm-buffer' in a separate frame.
 Function suitable for `helm-display-function',
 `helm-completion-in-region-display-function'

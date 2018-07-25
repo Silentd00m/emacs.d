@@ -60,13 +60,15 @@ Options:
                                       (dolist (i gears-global-keymap)
                                         (define-key anaconda-mode-map (kbd (car i)) (cdr i))))))
 
+  (require 'lsp-python)
+  (add-hook 'python-mode-hook #'lsp-python-enable)
+
   (unless gears-show-minor-modes
     (eval-after-load "anaconda" #'(diminish 'anaconda-mode)))
 
   (unless (dynhydra--get-category 'gears-layers/base-hydra-m-f "Format")
     (dynhydra--add-category 'gears-layers/base-hydra-m-f
                             `(,(make-dynhydra-category :title "Format"))))
-
 
   (dynhydra-category--add-head
    (dynhydra--get-category

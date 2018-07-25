@@ -10,15 +10,6 @@
 
   (let ((gip-installed-package-count 0))
     (dolist (pkg pkg-list)
-      ;; (unless (package-installed-p pkg)
-      ;;   (let ((inhibit-read-only t))
-      ;;     (package-install pkg)))
-
-      ;; (when (package-installed-p pkg)
-      ;;   (when (gears-package-is-outdated pkg)
-      ;;     (let ((inhibit-read-only t))
-      ;;       (package-install pkg))))
-
       (package-install pkg)
 
       (setq gip-installed-package-count
@@ -43,7 +34,10 @@
 
   (let ((inhibit-read-only t))
     (princ "\n\n" (get-buffer-create "*gears-install*"))
-    (princ "Installation complete." (get-buffer-create "*gears-install*"))))
+    (princ "Installation complete. Press q to close."
+           (get-buffer-create "*gears-install*")))
+
+  (local-set-key (kbd "q") 'kill-this-buffer))
 
 (defun -gears-package-install-packages (pkg-list)
   (dolist (pkg pkg-list)

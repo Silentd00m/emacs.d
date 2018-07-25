@@ -3,7 +3,8 @@
 
 ;;; Code:
 
-(package-initialize)
+(when (< emacs-major-version 27)
+  (package-initialize))
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
                          ("marmalade" . "https://marmalade-repo.org/packages/")

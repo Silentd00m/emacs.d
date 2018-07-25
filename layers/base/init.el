@@ -386,7 +386,9 @@ Options:
 
   (setq auto-save-default nil)
 
-  (setq-default save-place t)
+  (if (version<= emacs-version "25.0")
+      (setq-default save-place t)
+    (save-place-mode t))
   (setq save-place-file (concat gears-emacs-basepath "/saved-places"))
   (setq save-place-forget-unreadable-files nil)
   ;(global-undo-tree-mode 1)
@@ -453,7 +455,7 @@ Options:
 
   t)
 
-(defun gears-layers/base-install()
+(defun gears-layers/base-install ()
   "Additional install commands for the base-layer"
 
   t)
@@ -461,16 +463,16 @@ Options:
 (setq w3m-default-display-inline-images t)
 
 (gears-layer-defdepends base
-                        :packages '(bug-hunter
+                        :packages `(bug-hunter
                                     diminish
                                     undo-tree
                                     smartparens
                                     comment-dwim-2
                                     rainbow-delimiters
                                     hideshowvis
-                                    (when (version<= emacs-version "26.0")
-                                      nlinum
-                                      nlinum-hl)
+                                    ,(when (version<= emacs-version "26.0")
+                                       nlinum
+                                       nlinum-hl)
                                     multiple-cursors
                                     powerline
                                     material-theme
