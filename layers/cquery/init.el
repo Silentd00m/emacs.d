@@ -30,6 +30,13 @@
     "cquery Layer configuration."
     :group 'gears-layers)
 
+  (defcustom gears-layers/cquery-executable-path
+    (concat gears-emacs-basepath "/dep/cquery/build/cquery")
+    "Specify the path to the cquery executable."
+
+    :type 'string
+    :group 'gears-layers/cquery)
+
   (add-to-list 'load-path (concat gears-emacs-basepath "/dep/emacs-cquery"))
 
   (require 'cquery)
@@ -38,7 +45,7 @@
                                                    :cacheFormat "msgpack"
                                                    :completion (:detailedLabel t))
         cquery-sem-highlight-method 'overlay
-        ;; cquery-executable (concat gears-emacs-basepath "/dep/cquery/build/release/bin/cquery")
+        cquery-executable gears-layers/cquery-executable-path
         max-specpdl-size 32000)
 
   (add-hook 'c++-mode-hook #'(lambda ()
@@ -57,10 +64,7 @@
   "Provides cquery highlighting, autocompletion and sets compiler options.")
 
 (defun gears-layers/cquery-install ()
-  "Additional installation commands for cquery-layer."
-
-  (custom-set-default 'cquery-executable
-                      (concat gears-emacs-basepath "/dep/cquery/build/release/bin/cquery")))
+  "Additional installation commands for cquery-layer.")
 
 (gears-layer-defdepends cquery
                         :packages '(flycheck-popup-tip yasnippet)
