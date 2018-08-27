@@ -7,7 +7,10 @@
   (defcustom gears-layers/git-askpass-handler nil
     "Askpass handler. No handler if empty."
 
-    :type 'file)
+    :type '(file :must-match t)
+    :set #'(lambda (sym val)
+             (custom-set-default sym val)
+             (setenv "SSH_ASKPASS" gears-layers/git-askpass-handler)))
 
 
   (require 'diff-hl)
