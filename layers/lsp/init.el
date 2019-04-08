@@ -14,21 +14,20 @@
   (when (gears-layer-installed-p 'auto_completion)
     (push 'company-lsp company-backends))
 
-  ;; (setq company-lsp-async t
-  ;;       company-lsp-cache-candidates t)
-
-  ;; (add-hook 'lsp-ui-mode-hook 'lsp-ui-doc-mode)
-  ;; (add-hook 'lsp-mode-hook 'lsp-ui-mode)
-  ;; (add-hook 'lsp-mode-hook '(lambda ()
-  ;;                             flycheck-pos-tip-mode t))
+  (setq company-lsp-async t
+        company-lsp-cache-candidates t)
 
   (when (gears-layer-installed-p 'cpp)
     (add-hook 'c++-mode-hook #'lsp-mode))
 
+  (add-hook 'lsp-mode-hook #'(progn
+      (flycheck-mode)))
+
   (when (gears-layer-installed-p 'flycheck)
     (require 'flycheck)
     (with-eval-after-load 'lsp-mode
-      (lsp-ui-mode))))
+      (lsp-ui-mode)
+      (dap-mode 1))))
 
 (defun gears-layers/lsp-description ()
   "Provides lsp highlighting, autocompletion and sets compiler options.")
@@ -37,4 +36,5 @@
   "Additional installation commands for lsp-layer.")
 
 (gears-layer-defdepends lsp
-                        :packages '(lsp-mode lsp-ui company-lsp))
+                        :packages '(lsp-mode lsp-ui company-lsp dap-mode)
+                        :layers '(flycheck))

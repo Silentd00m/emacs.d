@@ -37,10 +37,6 @@
     :type 'string
     :group 'gears-layers/cquery)
 
-  (add-to-list 'load-path (concat gears-emacs-basepath "/dep/emacs-cquery"))
-
-  (require 'cquery)
-
   (setq cquery-extra-init-params '(:enableComments 2
                                                    :cacheFormat "msgpack"
                                                    :completion (:detailedLabel t))
@@ -67,5 +63,5 @@
   "Additional installation commands for cquery-layer.")
 
 (gears-layer-defdepends cquery
-                        :packages '(flycheck-popup-tip yasnippet)
+                        :packages '(flycheck-popup-tip yasnippet cquery)
                         :layers '(lsp cpp))

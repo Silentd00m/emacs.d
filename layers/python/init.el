@@ -51,7 +51,7 @@ Options:
       (setq highlight-indent-guides-method
             gears-layers/python-indent-guide-style))
 
-    (add-hook 'python-mode-hook 'anaconda-mode)
+    ;; (add-hook 'python-mode-hook 'anaconda-mode)
 
     (unless (eq gears-show-documentation-mode 'none)
       (add-hook 'anaconda-mode-hook 'anaconda-eldoc-mode))
@@ -60,8 +60,9 @@ Options:
                                       (dolist (i gears-global-keymap)
                                         (define-key anaconda-mode-map (kbd (car i)) (cdr i))))))
 
-  (require 'lsp-python)
-  (add-hook 'python-mode-hook #'lsp-python-enable)
+  (add-hook 'python-mode-hook #'flycheck-mode)
+  (add-hook 'python-mode-hook #'lsp)
+  (add-hook 'python-mode-hook #'yapf-mode)
 
   (unless gears-show-minor-modes
     (eval-after-load "anaconda" #'(diminish 'anaconda-mode)))
@@ -101,7 +102,7 @@ Options:
                                     anaconda-mode
                                     helm-pydoc
                                     pycoverage
-                                    py-yapf
+                                    yapfify
                                     python-docstring
                                     pip-requirements
                                     highlight-indent-guides))

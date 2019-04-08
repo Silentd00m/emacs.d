@@ -1,21 +1,21 @@
 (load "custom")
 
-(defgroup gears nil
-  "Awesome Emacs configuration"
-  :group 'environment
-  :link '(url-link :tag "Github" "https://github.com/Silentd00m/emacs.d"))
-
-(defcustom gears-branch "master"
-  "The branch to use when updating."
-
-  :type 'string
-  :group 'gears)
-
 (defun gears-layers/base-init()
   (load (concat gears-emacs-basepath "/layers/base/config"))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; General config
+
+  (defgroup gears nil
+    "Awesome Emacs configuration"
+    :group 'environment
+    :link '(url-link :tag "Github" "https://github.com/Silentd00m/emacs.d"))
+
+  (defcustom gears-branch "master"
+    "The branch to use when updating."
+
+    :type 'string
+    :group 'gears)
 
   (defcustom gears-indent-mode 'spaces
     "Defines how text is indented.
@@ -358,6 +358,9 @@ Options:
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Set configuration
+
+  ;; Make sure deadkeys work
+  (require 'iso-transl)
 
   (electric-indent-mode)
   (fset 'yes-or-no-p 'y-or-n-p) ;; shorten yes/no to y/n
