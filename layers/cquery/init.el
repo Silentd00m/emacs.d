@@ -37,18 +37,13 @@
     :type 'string
     :group 'gears-layers/cquery)
 
-  (setq cquery-extra-init-params '(:enableComments 2
-                                                   :cacheFormat "msgpack"
-                                                   :completion (:detailedLabel t))
-        cquery-sem-highlight-method 'overlay
-        cquery-executable gears-layers/cquery-executable-path
-        max-specpdl-size 32000)
+  (require 'ccls)
 
   (add-hook 'c++-mode-hook #'(lambda ()
                                (setq-local company-transformers nil)
                                (setq-local company-lsp-async t)
                                (setq-local company-lsp-cache-candidates nil)
-                               (lsp-cquery-enable)))
+                               (lsp)))
   (add-hook 'c++-mode-hook 'flycheck-popup-tip-mode)
   (add-hook 'c++-mode-hook 'yas-minor-mode)
 

@@ -11,8 +11,8 @@
 (setq helm-imenu-fuzzy-match t)
 (setq helm-candidate-number-limit 30)
 (helm-autoresize-mode 1)
-(helm-occur-init-source)
-(helm-attrset 'follow 1 helm-source-occur)
+;; (helm-occur-init-source)
+;; (helm-attrset 'follow 1 helm-source-occur)
 
 ;; https://gist.github.com/fuxialexander/5ad46671689d96a29f9865c1c0b42d10
 (defun gears-helm-display-child-frame (buffer &optional resume)

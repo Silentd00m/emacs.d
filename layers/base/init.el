@@ -359,6 +359,8 @@ Options:
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Set configuration
 
+  (require 'undo-tree)
+
   ;; Make sure deadkeys work
   (require 'iso-transl)
 
@@ -394,7 +396,7 @@ Options:
     (save-place-mode t))
   (setq save-place-file (concat gears-emacs-basepath "/saved-places"))
   (setq save-place-forget-unreadable-files nil)
-  ;(global-undo-tree-mode 1)
+  (global-undo-tree-mode 1)
   (projectile-global-mode)
   (global-company-mode)
   (company-quickhelp-mode 1)

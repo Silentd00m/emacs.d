@@ -207,28 +207,13 @@
                   (when gears-layer/cpp-format-and-fix-includes-on-save
                     (clang-format-buffer)))))
 
-  (when (and (not (or (gears-layer-installed-p 'ycmd)
-                      (gears-layer-installed-p 'cquery)))
-             (gears-layer-installed-p 'auto_completion))
-    (add-hook 'company-backends 'company-irony)
-    (add-hook 'c++-mode-hook #'(lambda ()
-                                 (unless (gears-layer-installed-p 'cmake)
-                                   (irony-mode t))
-
-                                 (unless (equal gears-show-documentation-mode
-                                                'none)
-                                   (irony-eldoc t))
-
-                                 (push 'company-irony 'company-backends)
-                                 (push 'company-irony-c-headers 'company-backends))))
-
   (when (gears-layer-installed-p 'dash)
     (add-hook 'c++-mode-hook '(lambda()
                                 (message "[Dash] Loaded docset 'C++' and 'C'.")
                                 (setq-local helm-dash-docsets '("C++" "C")))))
 
     (when (gears-layer-installed-p 'lsp)
-      (add-hook 'c++-mode-hook 'lsp-mode))
+      (add-hook 'c++-mode-hook 'lsp))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   ;; Interface setup
@@ -249,9 +234,6 @@
                                                                    (or (eq major-mode 'c++-mode)
                                                                        (eq major-mode 'c-mode))))))
 
-  (when (not (gears-layer-installed-p 'ycmd))
-    (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options))
-
   (when (gears-layer-installed-p 'cmake)
     (gears-layer-init 'cmake)
 
@@ -265,13 +247,7 @@
 
                                         (when (derived-mode-p 'c-mode 'c++-mode)
                                           ;; (cppcm-reload-all)
-                                          (require 'subr-x)
-
-                                          ;; (cmake-ide-setup)
-
-                                          ;; (when (gears-layer-installed-p 'rtags)
-                                          ;;   (cmake-ide-maybe-start-rdm))
-                                          ))))))
+                                          (require 'subr-x)))))))
 
 (defun gears-layers/cpp-install ()
   "Additional install commands for the C++ layer.")

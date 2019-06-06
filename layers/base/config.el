@@ -166,13 +166,15 @@
 (defun gears-layers/base/config-column-highlight-style (val)
   "Setter callback function for gears-column-highlight-style."
 
+  (require 'whitespace)
+
   (cond ((eq val 'both)
-         (setq whitespace-style '(face lines-tail))
+         (add-to-list 'whitespace-style '(face lines-tail))
 
          (add-hook 'prog-mode-hook 'whitespace-mode)
          (add-hook 'prog-mode-hook 'fci-mode))
         ((eq val 'face)
-         (setq whitespace-style '(face lines-tail))
+         (add-to-list 'whitespace-style '(face lines-tail))
          (add-hook 'prog-mode-hook 'whitespace-mode))
         ((eq val 'line)
          (add-hook 'prog-mode-hook 'fci-mode))))
