@@ -104,6 +104,9 @@ configure frame size."
 
 (require 'helm-projectile)
 
+(define-key helm-map (kbd "<left>") 'helm-previous-source)
+(define-key helm-map (kbd "<right>") 'helm-next-source)
+
 (defun gears-helm-mini ()
   "Preconfigured `helm' lightweight version \(buffer -> recentf\)."
   (interactive)
