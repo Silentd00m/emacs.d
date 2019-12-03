@@ -1,20 +1,14 @@
-(defun gears-layers/elisp-init()
-  ""
-
-  (add-hook 'emacs-lisp-mode-hook #'aggressive-indent-mode))
-
-(defun gears-layers/elisp-description()
-  "Returns the elisp layer description."
-
-  (eval "Sane emacs-lisp configuration."))
-
-(defun gears-layers/elisp-install()
-  "Additional commands for layer installation.")
-
-(defun gears-layers/elisp-remove()
-  "Removes the Dash layer including packages."
-  )
-
-(gears-layer-defdepends elisp
-                        :packages '(parinfer)
-                        :layers '(base))
+(use-package parinfer
+  :ensure t
+  :bind (("C-," . parinfer-toggle-mode))
+  :init (progn (setq parinfer-extensions
+                     '(defaults       ; should be included.
+                        pretty-parens  ; different paren styles for different modes.
+                        paredit        ; Introduce some paredit commands.
+                        smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
+                        smart-yank))); Yank behavior depend on mode.
+  :hook ((common-lisp-mode-hook
+          clojure-mode-hook
+          scheme-mode-hook
+          lisp-mode-hook
+          emacs-lisp-mode-hook) . parinfer-mode))

@@ -1,19 +1,3 @@
-(require 'helm-config)
-
-(helm-mode 1)
-(setq helm-quick-update t)
-(setq helm-X-x-fuzzy-match t)
-(setq helm-buffers-fuzzy-matching t)
-(setq helm-recentf-fuzzy-matching t)
-(setq helm-move-to-line-cycle-in-source t)
-(setq helm-semantic-fuzzy-match t)
-(setq helm-apropos-fuzzy-match t)
-(setq helm-imenu-fuzzy-match t)
-(setq helm-candidate-number-limit 30)
-(helm-autoresize-mode 1)
-;; (helm-occur-init-source)
-;; (helm-attrset 'follow 1 helm-source-occur)
-
 ;; https://gist.github.com/fuxialexander/5ad46671689d96a29f9865c1c0b42d10
 (defun gears-helm-display-child-frame (buffer &optional resume)
     "Display `helm-buffer' in a separate frame.
@@ -80,10 +64,6 @@ configure frame size."
         (helm-display-buffer-popup-frame buffer default-frame-alist))
       (helm-log-run-hook 'helm-window-configuration-hook)))
 
-;; (setq helm-display-function 'helm-display-buffer-in-own-frame
-;;       helm-display-buffer-reuse-frame t
-;;       helm-use-undecorated-frame-option t)
-
 (defcustom gears-helm-enable-tab-completion t
   "Enables completion using the <tab> key when inside a helm buffer."
   :type 'boolean
@@ -94,18 +74,11 @@ configure frame size."
   :type 'boolean
   :group 'gears-interface)
 
-(when gears-helm-enable-tab-completion
-  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action))
+;;(when gears-helm-enable-tab-completion
+;;  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action))
 
-(when gears-helm-enable-close-on-esc
-  (define-key helm-map (kbd "ESC") 'helm-keyboard-quit))
-
-(helm-flx-mode 1)
-
-(require 'helm-projectile)
-
-(define-key helm-map (kbd "<left>") 'helm-previous-source)
-(define-key helm-map (kbd "<right>") 'helm-next-source)
+;;(when gears-helm-enable-close-on-esc
+;;  (define-key helm-map (kbd "ESC") 'helm-keyboard-quit))
 
 (defun gears-helm-mini ()
   "Preconfigured `helm' lightweight version \(buffer -> recentf\)."
@@ -128,7 +101,6 @@ configure frame size."
           :truncate-lines helm-buffers-truncate-lines)))
 
 ;; (require 'helm-fzf)
-(advice-add 'helm-ff-delete-char-backward :around #'gears/helm-find-files-navigate-back)
 
 (defun gears/helm-find-files-navigate-back (orig-fun &rest args)
   "Go up one directory when pressing backspace in a directory when no additional

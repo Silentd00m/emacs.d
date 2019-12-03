@@ -1,0 +1,148 @@
+(load "custom")
+
+(defun gears-layers/base-init()
+  (load (concat gears-emacs-basepath "/layers/base/config"))
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  ;; Set configuration
+
+  (require 'undo-tree)
+
+  ;; Make sure deadkeys work
+  (require 'iso-transl)
+
+  (electric-indent-mode)
+  (fset 'yes-or-no-p 'y-or-n-p) ;; shorten yes/no to y/n
+  (setq scroll-conservatively 10000)
+  (setq tramp-default-method "ssh")
+
+  (setq create-lockfiles nil)  ;; No lock files
+  (setq make-backup-files nil) ;; No backup files
+  (setq frame-resize-pixelwise t) ;; Resize by pixels instead of rows
+
+  (setq scroll-step 1)
+
+  (add-hook 'after-change-major-mode-hook
+            #'(lambda()
+                (gears-layers/base/config-indent-mode gears-indent-mode)
+                (gears-layers/base/config-indent-width gears-indent-width)
+                (gears-layers/base/config-insert-eof-newline
+                 gears-insert-eof-newline)))
+
+  (when gears-indent-comments
+    (setq aggressive-indent-comments-too t))
+
+  (load (concat gears-emacs-basepath "/layers/base/helm"))
+  (load (concat gears-emacs-basepath "/layers/base/keyboard"))
+  ;; (load (concat gears-emacs-basepath "/layers/base/interface"))
+
+  (setq auto-save-default nil)
+
+  (if (version<= emacs-version "25.0")
+      (setq-default save-place t)
+    (save-place-mode t))
+  (setq save-place-file (concat gears-emacs-basepath "/saved-places"))
+  (setq save-place-forget-unreadable-files nil)
+  (global-undo-tree-mode 1)
+  (projectile-global-mode)
+  (global-company-mode)
+  (company-quickhelp-mode 1)
+  (save-place-mode 1)
+
+  (column-number-mode t)
+
+  ;; General
+  (gears-layers/base/config-delete-trailing-whitespace gears-delete-trailing-whitespace)
+  (gears-layers/base/config-indent-mode gears-indent-mode)
+  (gears-layers/base/config-indent-width gears-indent-width)
+  (gears-layers/base/config-disable-alarms gears-disable-alarms)
+
+  ;; Interface
+  (gears-layers/base/config-theme-load-paths gears-theme-load-paths)
+  (gears-layers/base/config-theme gears-theme)
+  (gears-layers/base/config-highlight-current-line gears-hightlight-current-line)
+  (gears-layers/base/config-show-paren-mode gears-show-paren-mode)
+  (gears-layers/base/config-cursor-type gears-cursor-type)
+  (gears-layers/base/config-show-line-numbers gears-show-line-numbers)
+  (gears-layers/base/config-powerline-shape gears-powerline-shape)
+  (gears-layers/base/config-powerline-theme gears-powerline-theme)
+  (gears-layers/base/config-enable-rainbow-delimiters gears-enable-rainbow-delimiters)
+  (gears-layers/base/config-column-highlight gears-column-highlight)
+  (gears-layers/base/config-column-highlight-style gears-column-highlight-style)
+  (gears-layers/base/config-enable-toolbar gears-enable-toolbar)
+  (gears-layers/base/config-enable-tabbar gears-enable-tabbar)
+  (gears-layers/base/config-disable-auto-key-help gears-disable-auto-key-help)
+  (gears-layers/base/config-autoresize-splits gears-autoresize-splits)
+  (gears-layers/base/config-show-minor-modes gears-show-minor-modes)
+  (gears-layers/base/config-show-file-sidebar gears-show-file-sidebar)
+  (gears-layers/base/config-show-documentation-mode gears-show-documentation-mode)
+  (gears-layers/base/config-scrollbar-mode gears-scrollbar-mode)
+
+  (when gears-maximize-after-start
+    (add-to-list 'default-frame-alist '(fullscreen . maximized)))
+
+  (when gears-use-evil
+    (setq evil-normal-state-cursor '(box "green")
+          evil-insert-state-cursor '(bar "DeepSkyBlue")
+          evil-visual-state-cursor '(box "orange")
+          evil-replace-state-cursor '(hbar "red")))
+
+  ;; Fix tramp hanging when the shell output is colored
+  (setq shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(^[\\[[0-9;]*[a-zA-Z] *\\)*")
+
+  (when gears-enable-semantic-mode
+    (semantic-mode 1))
+
+  (set-default 'tramp-default-proxies-alist (quote ((".*" "\\`root\\'" "/ssh:%h:")))))
+
+(defun gears-layers/base-remove ()
+  "Additional uninstall commands for the base-layer"
+
+  t)
+
+(defun gears-layers/base-install ()
+  "Additional install commands for the base-layer"
+
+  t)
+
+(setq w3m-default-display-inline-images t)
+
+(gears-layer-defdepends base
+                        :packages `(bug-hunter
+                                    diminish
+                                    undo-tree
+                                    smartparens
+                                    comment-dwim-2
+                                    rainbow-delimiters
+                                    hideshowvis
+                                    ,(when (version<= emacs-version "26.0")
+                                       nlinum
+                                       nlinum-hl)
+                                    multiple-cursors
+                                    powerline
+                                    material-theme
+                                    tabbar-ruler
+                                    saveplace
+                                    git
+                                    magit
+                                    visual-regexp
+                                    origami
+                                    hydra
+                                    projectile
+                                    projectile-speedbar
+                                    helm
+                                    helm-make
+                                    helm-projectile
+                                    helm-flycheck
+                                    helm-flx
+                                    helm-descbinds
+                                    which-key
+                                    treemacs
+                                    stickyfunc-enhance
+                                    w3m
+                                    fill-column-indicator
+                                    sublimity
+                                    switch-buffer-functions
+                                    zoom
+                                    yascroll)
+                        :layers '(auto_completion))

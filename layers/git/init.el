@@ -1,83 +1,82 @@
-(defun gears-layers/git-init()
-  (defgroup gears-layers/git nil
-    "Git Layer Configuration"
+(defgroup gears-layers/git nil
+  "Git Layer Configuration"
 
-    :group 'gears-layers)
+  :group 'gears-layers)
 
-  (defcustom gears-layers/git-askpass-handler nil
-    "Askpass handler. No handler if empty."
+(defcustom gears-layers/git-askpass-handler nil
+  "Askpass handler. No handler if empty."
 
-    :type '(file :must-match t)
-    :set #'(lambda (sym val)
-             (custom-set-default sym val)
-             (setenv "SSH_ASKPASS" gears-layers/git-askpass-handler)))
+  :type '(file :must-match t)
+  :set #'(lambda (sym val)
+           (custom-set-default sym val)
+           (setenv "SSH_ASKPASS" gears-layers/git-askpass-handler)))
 
+(use-package magit
+  :ensure t
+  :init (progn (dynhydra-add 'M-g
+                             '(("S" magit-status "Status" :column "Git" :exit t)
+                               ("B" magit-blame "Blame" :column "Git" :exit t)
+                               ("L" magit-log-all "Log" :column "Git" :exit t)
+                               ("R" git-timemachine "Revisions" :column "Git" :exit t)))
 
-  (require 'diff-hl)
+               (with-eval-after-load 'magit
+                 (dolist (face '(magit-diff-hunk-heading
+                                 magit-diff-hunk-heading-highlight
+                                 magit-diff-hunk-heading-selection
+                                 magit-diff-hunk-region
+                                 magit-diff-lines-heading
+                                 magit-diff-lines-boundary
+                                 magit-diff-conflict-heading
+                                 magit-diff-added
+                                 magit-diff-removed
+                                 magit-diff-our
+                                 magit-diff-base
+                                 magit-diff-their
+                                 magit-diff-context
+                                 magit-diff-added-highlight
+                                 magit-diff-removed-highlight
+                                 magit-diff-our-highlight
+                                 magit-diff-base-highlight
+                                 magit-diff-their-highlight
+                                 magit-diff-context-highlight
+                                 magit-diff-whitespace-warning
+                                 magit-diffstat-added
+                                 magit-diffstat-removed
+                                 magit-section-heading
+                                 magit-section-heading-selection
+                                 magit-section-highlight
+                                 magit-section-secondary-heading
+                                 magit-diff-file-heading
+                                 magit-diff-file-heading-highlight
+                                 magit-diff-file-heading-selection))
+                   (set-face-attribute face nil :extend t)))))
 
-  (unless gears-show-minor-modes
-    (diminish 'diff-hl-mode))
+(use-package diff-hl
+  :ensure t
+  :config (progn (global-diff-hl-mode)
+                 (diminish 'diff-hl-mode)))
 
-  (dynhydra--add-category 'gears-layers/base-hydra-m-g
-                          `(,(make-dynhydra-category :title "GIT"
-                                                     :heads `(,(make-dynhydra-head :key "R"
-                                                                                   :text "Show Revisions"
-                                                                                   :command '(lambda ()
-                                                                                               (interactive)
-                                                                                               (git-timemachine)
-                                                                                               (dynhydra--open gears-layers/git-hydra-timemachine))
-                                                                                   :exit t)
-                                                              ,(make-dynhydra-head :key "B"
-                                                                                   :text "Blame Mode"
-                                                                                   :command 'magit-blame
-                                                                                   :exit t)
-                                                              ,(make-dynhydra-head :key "L"
-                                                                                   :text "Show Log"
-                                                                                   :command 'magit-log-all
-                                                                                   :exit t)
-                                                              ,(make-dynhydra-head :key "S"
-                                                                                   :text "Show Status"
-                                                                                   :command 'magit-status
-                                                                                   :exit t)))))
+(use-package git-timemachine
+  :ensure t
+  :hydra (git-timemachine-hydra (:color pink :hint nil)
+                                ("p" git-timemachine-show-previous-revision "Previous" :column "Revisions")
+                                ("n" git-timemachine-show-next-revision "Next" :column "Revisions")
+                                ("g" git-timemachine-show-nth-revision "GoTo Revision" :column "Revisions")
+                                ("q" git-timemachine-quit "Quit" :color blue :exit t))
+  :hook (git-timemachine-mode . git-timemachine-hydra/body))
 
-  (global-diff-hl-mode)
+(use-package vdiff
+  :ensure t
+  :init (setq vdiff-lock-scrolling t))
 
-  (when gears-layers/git-askpass-handler
-    (setenv "SSH_ASKPASS" gears-layers/git-askpass-handler))
-
-  (defdynhydra gears-layers/git-hydra-timemachine
-    `(,(make-dynhydra-category :title "General"
-                               :heads `(,(make-dynhydra-head :key "q"
-                                                             :text "Quit Timemachine"
-                                                             :command 'git-timemachine-quit
-                                                             :exit t)))
-    ,(make-dynhydra-category :title "Revisions"
-                             :heads `(,(make-dynhydra-head :key "p"
-                                                           :text "Previous"
-                                                           :command 'git-timemachine-show-previous-revision)
-                                      ,(make-dynhydra-head :key "n"
-                                                           :text "Next"
-                                                           :command 'git-timemachine-show-next-revision)
-                                      ,(make-dynhydra-head :key "r"
-                                                           :text "Go to Revision"
-                                                           :command 'git-timemachine-show-nth-revision))))
-    t)
-
-  ;; (dynhydra--set-options (dynhydra--get 'gears-layers/git-hydra-timemachine)
-  ;;                        '((foreign-keys run)))
-  )
-
-(defun gears-layers/git-description()
-  "Returns the description of the git Layer."
-
-  "On the fly syntax checking.")
-
-(defun gears-layers/git-install()
-  )
-
-(defun gears-layers/git-remove()
-  )
-
-(gears-layer-defdepends git
-                        :packages '(magit diff-hl git-timemachine)
-                        :layers '(diff))
+;; (use-package vdiff-magit
+;;   :ensure t
+;;   :bind (:map magit-mode-map
+;;               ("e" . vdiff-magit-dwim)
+;;               ("E" . vdiff-magit))
+;;   :after (vdiff magit)
+;;   :config (progn)
+;;   :init (progn (transient-suffix-put 'magit-dispatch "e" :description "vdiff (dwim)")
+;;                (transient-suffix-put 'magit-dispatch "e" :command 'vdiff-magit-dwim)
+;;                (transient-suffix-put 'magit-dispatch "E" :description "vdiff")
+;;                (transient-suffix-put 'magit-dispatch "E" :command 'vdiff-magit)))

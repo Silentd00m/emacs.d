@@ -1,19 +1,3 @@
-(defcustom gears-use-evil nil
-  "Use evil-mode instead of Gears' cua-mode."
-  :type 'boolean
-  :group 'gears)
-
-;; General
-(setq shift-select-mode t                                                       ;; Allow shift+arrow selection
-      cua-keep-region-after-copy t
-      x-select-enable-clipboard t
-      select-enable-clipboard t)
-(cua-mode t)                                                                    ;; Sane C-c, C-x and C-v
-(transient-mark-mode 1)
-
-(require 'smartparens-config)
-(smartparens-global-mode t)
-
 (defcustom gears-global-keymap '(;; General
                                  ("<escape>" . keyboard-escape-quit)
                                  ("<menu>" . helm-M-x)
@@ -58,36 +42,7 @@
                                  ("<f5>" . helm-make)
                                  ("<f7>" . helm-semantic-or-imenu)
                                  ("<f8>" . helm-flycheck)
-                                 ("C-u" . undo-tree-visualize)
-
-                                 ;; Hydras
-                                 ("M-a" . (lambda ()
-                                            (interactive)
-                                            (eval (dynhydra--open gears-layers/base-hydra-m-a))))
-                                 ("M-c" . (lambda ()
-                                            (interactive)
-                                            (eval (dynhydra--open gears-layers/base-hydra-m-c))))
-                                 ("M-e" . (lambda ()
-                                            (interactive)
-                                            (eval (dynhydra--open gears-layers/base-hydra-m-e))))
-                                 ("M-f" . (lambda ()
-                                            (interactive)
-                                            (eval (dynhydra--open gears-layers/base-hydra-m-f))))
-                                 ("M-g" . (lambda ()
-                                            (interactive)
-                                            (eval (dynhydra--open gears-layers/base-hydra-m-g))))
-                                 ("M-p" . (lambda ()
-                                            (interactive)
-                                            (eval (dynhydra--open gears-layers/base-hydra-m-p))))
-                                 ("M-r" . (lambda ()
-                                            (interactive)
-                                            (eval (dynhydra--open gears-layers/base-hydra-m-r))))
-                                 ("M-s" . (lambda ()
-                                            (interactive)
-                                            (eval (dynhydra--open gears-layers/base-hydra-m-s))))
-                                 ("M-t" . (lambda ()
-                                            (interactive)
-                                            (eval (dynhydra--open gears-layers/base-hydra-m-t)))))
+                                 ("C-u" . undo-tree-visualize))
 
   ""
   :type '(alist :value (group key-sequence symbol))
@@ -96,10 +51,17 @@
            (gears-layers/base/config-global-keymap val))
   :group 'gears)
 
+;; Hydras
+                                 (dolist (hydra '(M-a M-c M-e M-f M-g M-s M-t))
+                                    (global-unset-key (kbd (prin1-to-string hydra)))
+
+                                    (global-set-key (kbd (prin1-to-string hydra))
+                                                    `(lambda () (interactive) (dynhydra-open ,hydra))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set configuration
 
-(define-key helm-map (kbd "<escape>") 'helm-keyboard-quit)
+;;(define-key helm-map (kbd "<escape>") 'helm-keyboard-quit)
 
 (defadvice keyboard-escape-quit (around my-keyboard-escape-quit activate)
   "Don't unsplit window when pressing escape."
@@ -111,13 +73,8 @@
         ad-do-it
       (fset 'one-window-p (symbol-function 'orig-one-window-p)))))
 
-;; (dolist (i gears-global-keymap)
-;;   (global-set-key (kbd (car i)) (cdr i)))
-
 (gears-layers/base/config-global-keymap gears-global-keymap)
 
 ;; Company mode
 (with-eval-after-load 'company
   (define-key company-active-map (kbd "<return>") #'company-complete-selection))
-
-(load (concat gears-emacs-basepath "/layers/base/hydra"))

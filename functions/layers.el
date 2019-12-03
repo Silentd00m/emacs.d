@@ -32,9 +32,12 @@
 
   (gears-load-layer layer)
 
-  (funcall (intern (concat "gears-layers/"
-                           (gears-layer-convert-name layer)
-                           "-init"))))
+  (when (fboundp (intern (concat "gears-layers/"
+                                 (gears-layer-convert-name layer)
+                                 "-init")))
+    (funcall (intern (concat "gears-layers/"
+                             (gears-layer-convert-name layer)
+                             "-init")))))
 
 (defun gears-layers-init ()
   "Initialize all installed layers."
@@ -124,9 +127,12 @@
       (funcall (intern (concat "gears-layers/"
                                (gears-layer-convert-name layer)
                                "-generate-dependency-list")))
-    (eval (intern (concat "gears-layers/"
-                          (gears-layer-convert-name layer)
-                          "-depends")))))
+    (if (boundp (intern (concat "gears-layers/"
+                                (gears-layer-convert-name layer)
+                                "-depends")))
+        (eval (intern (concat "gears-layers/"
+                              (gears-layer-convert-name layer)
+                              "-depends"))))))
 
 (defun gears-layer-autoremove-packages ()
   "Remove all packages not used by any layer."
@@ -194,7 +200,7 @@
                         (when dependency
                           (package-install dependency)))))
 
-    ;; Execute pre-install if defined
+  ;; Execute pre-install if defined
   (when (boundp (intern (concat "gears-layers/"
                                 (gears-layer-convert-name layer)
                                 "-post-install")))

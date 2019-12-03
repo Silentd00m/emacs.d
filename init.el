@@ -47,11 +47,6 @@
                   (concat gears-emacs-basepath "/config/layers.el"))
     (load (concat gears-emacs-basepath "/config/layers"))))
 
-(unless (> (length gears-layer-installed-list) 0)
-  (load "~/.emacs.d/functions/install")
-
-  (gears-install-firstrun-setup))
-
 (load (concat gears-emacs-basepath "/functions/update"))
 (load (concat gears-emacs-basepath "/functions/layers"))
 (load (concat gears-emacs-basepath "/functions/helper"))
