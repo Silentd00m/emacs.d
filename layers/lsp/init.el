@@ -1,44 +1,32 @@
-;;; Code:
+(use-package lsp-mode
+  :ensure t
+  :init (when (gears-layer-installed-p 'flycheck)
+          (setq lsp-prefer-flymake t))
+  :hook ((prog-mode . lsp-deferred))
+  :commands lsp)
 
-(defgroup gears-layers/lsp nil
-  "Language Server Protocol Layer configuration."
-  :group 'gears-layers)
+(use-package lsp-ui
+  :commands lsp-ui-mode)
 
-(defun gears-layers/lsp-mode-hook ()
-  (flycheck-mode)
-  (lsp-ui-mode 1)
-  (lsp-ui-sideline-mode 1)
-  (dap-mode 1))
+(when (gears-layer-installed-p 'auto_completion)
+  (use-package company-lsp
+    :ensure t
+    :commands company-lsp))
 
-(defun gears-layers/lsp-init ()
-  "Initializes the lsp layer."
+(use-package helm-lsp
+  :ensure t)
 
-  (require 'lsp-mode)
-  (require 'company)
-  (require 'lsp-ui)
+;; (use-package dap-mode
+;;   :ensure t
+;;   :config (progn (dap-mode 1)
+;;                  (dap-ui-mode 1)
+;;                  (dap-tooltip-mode 1)))
 
-  (setq lsp-prefer-flymake nil)
+(use-package lsp-origami
+  :ensure t
+  :hook ((lsp-mode . lsp-origami-mode)))
 
-  (when (gears-layer-installed-p 'auto_completion)
-    (push 'company-lsp company-backends))
-
-  (setq company-lsp-async t
-        company-lsp-cache-candidates t)
-
-  (when (gears-layer-installed-p 'cpp)
-    (add-hook 'c++-mode-hook #'lsp-mode))
-
-  (add-hook 'lsp-mode-hook #'gears-layers/lsp-mode-hook)
-
-  (when (gears-layer-installed-p 'flycheck)
-    (require 'flycheck)))
-
-(defun gears-layers/lsp-description ()
-  "Provides lsp highlighting, autocompletion and sets compiler options.")
-
-(defun gears-layers/lsp-install ()
-  "Additional installation commands for lsp-layer.")
-
-(gears-layer-defdepends lsp
-                        :packages '(lsp-mode lsp-ui company-lsp dap-mode)
-                        :layers '(flycheck))
+;; (use-package lsp-treemacs
+;;   :ensure t
+;;   :after treemacs
+;;   :init (lsp-treemacs-sync-mode 1))

@@ -49,7 +49,8 @@
                                  magit-diff-file-heading
                                  magit-diff-file-heading-highlight
                                  magit-diff-file-heading-selection))
-                   (set-face-attribute face nil :extend t)))))
+                   (when (>= emacs-major-version 27)
+                     (set-face-attribute face nil :extend t))))))
 
 (use-package diff-hl
   :ensure t

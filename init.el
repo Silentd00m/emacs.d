@@ -23,6 +23,15 @@
   (package-refresh-contents)
   (package-install 'f))
 
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(require 'use-package)
+
+(use-package git
+  :ensure t)
+  
 (require 'f)
 (defvar gears-emacs-basepath (f-dirname (f-this-file))
   "Location of the installation.")
