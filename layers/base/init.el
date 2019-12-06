@@ -56,8 +56,9 @@
                (setq helm-imenu-fuzzy-match t)
                (setq helm-candidate-number-limit 30)
                (helm-autoresize-mode 1)
-               (advice-add 'helm-ff-delete-char-backward :around #'gears/helm-find-files-navigate-back))
-  :config (progn (when (>= emacs-major-version 27)
+               (advice-add 'helm-ff-delete-char-backward :around #'gears/helm-find-files-navigate-back)
+
+               (when (>= emacs-major-version 27)
                    (with-eval-after-load 'helm-mode
                      (dolist (face '(helm-source-header helm-selection))
                        (set-face-attribute face nil :extend t))))))
@@ -158,6 +159,9 @@
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General dependencies
+
+(use-package aggressive-indent
+  :ensure t)
 
 (use-package use-package-hydra
   :ensure t
@@ -516,6 +520,8 @@ Options:
               (gears-layers/base/config-indent-width gears-indent-width)
               (gears-layers/base/config-insert-eof-newline
                gears-insert-eof-newline)))
+
+(gears-layers/base/config-show-paren-mode gears-show-paren-mode)
 
 (when gears-indent-comments
   (setq aggressive-indent-comments-too t))
