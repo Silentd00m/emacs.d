@@ -1,18 +1,21 @@
-(defun gears-layers/puppet-init()
-  (when (gears-layer-installed-p 'flycheck)
-    (add-hook 'puppet-mode '(lambda ()
-                              (flycheck-mode t)))))
+(use-package puppet-mode
+  :ensure t)
 
-(defun gears-layers/puppet-description()
-  "Returns the description of the puppet Layer."
+;; (defun gears-layers/puppet-init()
+;;   (when (gears-layer-installed-p 'flycheck)
+;;     (add-hook 'puppet-mode '(lambda ()
+;;                               (flycheck-mode t)))))
 
-  "Supporting functions for puppet.")
+;; (defun gears-layers/puppet-description()
+;;   "Returns the description of the puppet Layer."
 
-(defun gears-layers/puppet-install()
-  )
+;;   "Supporting functions for puppet.")
 
-(defun gears-layers/puppet-remove()
-  )
+;; (defun gears-layers/puppet-install()
+;;   )
 
-(gears-layer-defdepends puppet
-                        :packages '(puppet-mode))
+;; (defun gears-layers/puppet-remove()
+;;   )
+
+;; (gears-layer-defdepends puppet
+;;                         :packages '(puppet-mode))

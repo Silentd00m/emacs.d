@@ -1,8 +1,9 @@
 ;;; Code:
 
 (use-package cmake-mode
-  :ensure t)
+  :ensure t
+  :hook (cmake-mode-hook . fci-mode))
 
 (use-package cmake-font-lock
   :ensure t
-  :hook (cmake-mode . cmake-font-lock-activate))
+  :init (progn (add-hook 'cmake-mode-hook 'cmake-font-lock-activate)))
