@@ -9,6 +9,7 @@
               company-minimum-prefix-length 0
               company-selection-wrap-around t
               company-tooltip-align-annotations t)
+  :diminish 'company-mode
   :config (progn (global-company-mode 1)
                  (diminish 'company-mode)))
 
@@ -52,7 +53,8 @@
                   (24 . fa_square_o) ;; Operator
                   (25 . fa_arrows)) ;; TypeParameter
                 ))
-  :hook (company-mode . company-box-mode))
+  :hook (company-mode . company-box-mode)
+  :diminish 'company-box-mode)
 
 (use-package company-quickhelp
   :ensure t

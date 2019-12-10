@@ -31,7 +31,7 @@
 
 (use-package git
   :ensure t)
-  
+
 (require 'f)
 (defvar gears-emacs-basepath (f-dirname (f-this-file))
   "Location of the installation.")

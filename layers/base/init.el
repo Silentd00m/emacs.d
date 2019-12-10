@@ -157,6 +157,9 @@
 (use-package treemacs
   :ensure t)
 
+(diminish 'eldoc-mode)
+(diminish 'auto-revert-mode)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General dependencies
 
@@ -199,7 +202,10 @@ Options:
   :options '(tabs spaces)
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-indent-mode val))
+
+           (if (eq val 'tabs)
+               (setq indent-tabs-mode t)
+             (setq indent-tabs-mode nil)))
   :group 'gears)
 
 (defcustom gears-indent-comments t
@@ -207,7 +213,10 @@ Options:
   :type 'boolean
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-indent-comments val))
+
+           (if gears-indent-comments
+               (setq aggressive-indent-comments-too t)
+             (setq aggressive-indent-comment-too nil)))
   :group 'gears)
 
 (defcustom gears-delete-trailing-whitespace t
@@ -215,7 +224,10 @@ Options:
   :type 'boolean
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-delete-trailing-whitespace val))
+
+           (if val
+               (add-hook 'before-save-hook 'delete-trailing-whitespace)
+             (remove-hook 'before-save-hook 'delete-trailing-whitespace)))
   :group 'gears)
 
 (defcustom gears-indent-width 4
@@ -223,7 +235,8 @@ Options:
   :type 'integer
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-indent-width val))
+
+           (setq tab-width val))
   :group 'gears)
 
 (defcustom gears-insert-eof-newline t
@@ -231,19 +244,27 @@ Options:
   :type 'boolean
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-insert-eof-newline val))
+
+           (setq require-final-newline val))
   :group 'gears)
 
 (defcustom gears-disable-alarms t
   "Disable bell and beep sounds?"
+
   :type 'boolean
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-disable-alarms val))
+
+           (if val
+               (setq bell-volume 0
+                     ring-bell-function 'ignore)
+             (setq bell-volume 100
+                   ring-bell-function nil)))
   :group 'gears)
 
 (defcustom gears-webserver-port 8081
   "Default port for gears' builtin configuration webserver."
+
   :type 'integer
   :group 'gears)
 
@@ -258,23 +279,32 @@ Options:
 
 (defgroup gears-interface nil
   "Gears' Interface Configuration"
+
   :group 'gears
   :link '(url-link :tag "Github" "https://github.com/Silentd00m/emacs.d"))
 
 (defcustom gears-font "Source Code Pro-10"
   "The font to use."
+
   :type 'face
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-font val))
+
+           (set-frame-font val)
+           (set-face-attribute 'default nil :font val))
   :group 'gears-interface)
 
 (defcustom gears-theme 'material
   "The used theme."
+
   :type 'symbol
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-theme val))
+
+           (when val
+             ;; Add gears-theme-load-path to the custom theme load paths, if it is set.
+             (unless (string= (prin1-to-string val) "")
+               (load-theme val t))))
   :group 'gears-interface)
 
 (defcustom gears-theme-load-paths '(("moe-dark" . (f-glob (concat gears-emacs-basepath
@@ -285,7 +315,12 @@ Options:
   :type '(alist :value (group symbol symbol))
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-theme-load-paths val))
+
+           (when (car (eval (cdr (assoc (prin1-to-string val)
+                                        val))))
+             (add-to-list 'custom-theme-load-path
+                          (car (eval (cdr (assoc (prin1-to-string val)
+                                                 val)))))))
   :group 'gears-interface)
 
 (when (boundp 'tabbar-mode)
@@ -294,7 +329,12 @@ Options:
     :type 'boolean
     :set #'(lambda (sym val)
              (custom-set-default sym val)
-             (gears-layers/base/config-enable-tabbar val))
+
+             (if val
+                 (progn (tabbar-mode t)
+                        (setq tabbar-ruler-global-tabbar t
+                              tabbar-ruler-movement-timer-delay 1000000))
+               (tabbar-mode -1)))
     :options '(nil t)
     :group 'gears-interface))
 
@@ -310,19 +350,22 @@ Options:
   :type 'sexp
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-cursor-type val))
+
+           (modify-all-frames-parameters (list (cons 'cursor-type val))))
   :options '('bar 'box 'hbar 'hollow nil)
   :group 'gears-interface)
 
 (defcustom gears-hightlight-current-line t
   "Highlight the line the cursor is on."
   :type 'boolean
-  :initialize #'(lambda (sym val)
-                  (custom-initialize-reset sym val)
-                  (gears-layers/base/config-highlight-current-line val))
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-highlight-current-line val))
+
+           (if val
+               (progn (setq nlinum-highlight-current-line t)
+                      (global-hl-line-mode t))
+             (progn (setq nlinum-highlight-current-line nil)
+                    (global-hl-line-mode nil))))
   :group 'gears-interface)
 
 (defcustom gears-show-paren-mode 'expression
@@ -335,6 +378,13 @@ Options:
     - nil: Deactivate
     "
   :type 'symbolp
+  :set #'(lambda (sym val)
+           (custom-set-default sym val)
+
+           (if val
+               (progn (show-paren-mode t)
+                      (setq show-paren-style gears-show-paren-mode))
+             (show-paren-mode nil)))
   :options '('expression 'parenthesis 'mixed nil)
   :group 'gears-interface)
 
@@ -354,7 +404,18 @@ Options:
   :type 'symbolp
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-scrollbar-mode val))
+
+           (cond ((eq val 'yascroll)
+                  (add-to-list 'load-path (concat gears-emacs-basepath "/dep/yascroll-el/"))
+
+                  (require 'yascroll)
+
+                  (global-yascroll-bar-mode t)
+                  (scroll-bar-mode -1))
+                 ((eq val 'standard)
+                  (scroll-bar-mode t))
+                 ((eq val 'none)
+                  (scroll-bar-mode -1))))
   :group 'gears-interface)
 
 (defcustom gears-show-line-numbers t
@@ -362,7 +423,23 @@ Options:
   :type 'boolean
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-show-line-numbers val))
+
+           (if (version<= emacs-version "26.0")
+               (progn
+                 (require 'nlinum-hl)
+
+                 (if val
+                     (progn (add-hook 'prog-mode-hook 'nlinum-mode)
+                            (add-hook 'text-mode-hook 'nlinum-mode)
+                            (add-hook 'focus-in-hook 'nlinum-hl-flush-all-windows)
+                            (add-hook 'focus-out-hook 'nlinum-hl-flush-all-windows))
+                   (progn (remove-hook 'prog-mode-hook 'nlinum-mode)
+                          (remove-hook 'text-mode-hook 'nlinum-mode)
+                          (remove-hook 'focus-in-hook 'nlinum-hl-flush-all-windows)
+                          (remove-hook 'focus-out-hook 'nlinum-hl-flush-all-windows))))
+             (progn
+               (add-hook 'prog-mode-hook 'display-line-numbers-mode)
+               (add-hook 'text-mode-hook 'display-line-numbers-mode))))
   :group 'gears-interface)
 
 (defcustom gears-powerline-theme 'powerline-default-theme
@@ -371,7 +448,8 @@ Options:
   :type 'symbolp
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-powerline-theme val))
+
+           (funcall val))
   :group 'gears-interface)
 
 (defcustom gears-powerline-shape 'slant
@@ -390,8 +468,8 @@ Options:
   :options '('arrow 'half 'curve 'rounded 'chamfer 'slant 'slant-left 'slant-right)
   :type 'symbol
   :set #'(lambda (sym val)
-           (custom-set-default sym val)
-           (gears-layers/base/config-powerline-shape val))
+           (setq powerline-default-separator val)
+           (funcall gears-powerline-theme))
   :group 'gears-interface)
 
 (defcustom gears-enable-rainbow-delimiters t
@@ -400,7 +478,10 @@ Options:
   :type 'boolean
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-enable-rainbow-delimiters val))
+
+           (if val
+               (add-hook 'prog-mode-hook 'rainbow-delimiters-mode)
+             (remove-hook 'prog-mode-hook 'rainbow-delimiters-mode)))
   :group 'gears-interface)
 
 (defcustom gears-column-highlight 80
@@ -409,7 +490,9 @@ Options:
   :type 'integer
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-column-highlight val))
+
+           (setq whitespace-line-column val
+                 fci-rule-column val))
   :group 'gears-interface)
 
 (defcustom gears-column-highlight-style 'line
@@ -425,7 +508,19 @@ Options:
   :type 'symbol
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-column-highlight-style val))
+
+           (require 'whitespace)
+
+           (cond ((eq val 'both)
+                  (add-to-list 'whitespace-style '(face lines-tail))
+
+                  (add-hook 'prog-mode-hook 'whitespace-mode)
+                  (add-hook 'prog-mode-hook 'fci-mode))
+                 ((eq val 'face)
+                  (add-to-list 'whitespace-style '(face lines-tail))
+                  (add-hook 'prog-mode-hook 'whitespace-mode))
+                 ((eq val 'line)
+                  (add-hook 'prog-mode-hook 'fci-mode))))
   :group 'gears-interface)
 
 (defcustom gears-enable-toolbar nil
@@ -434,7 +529,22 @@ Options:
   :type 'boolean
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-enable-toolbar val))
+           (if val
+               (tool-bar-mode t)
+             (progn (tool-bar-mode -1)
+                    (setq tool-bar-mode nil))))
+  :group 'gears-interface)
+
+(defcustom gears-enable-menu-bar nil
+  "Specify whether the menu bar should be shown."
+
+  :type 'boolean
+  :set #'(lambda (sym val)
+           (custom-set-default sym val)
+
+           (if val
+               (menu-bar-mode t)
+             (menu-bar-mode -1)))
   :group 'gears-interface)
 
 (defcustom gears-disable-auto-key-help nil
@@ -443,16 +553,10 @@ Options:
   :type 'boolean
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-disable-auto-key-help val))
-  :group 'gears-interface)
 
-(defcustom gears-show-minor-modes nil
-  "Show all minor modes in modeline."
-
-  :type 'boolean
-  :set #'(lambda (sym val)
-           (custom-set-default sym val)
-           (gears-layers/base/config-show-minor-modes val))
+           (if val
+               (which-key-mode nil)
+             (which-key-mode t)))
   :group 'gears-interface)
 
 (defcustom gears-show-file-sidebar nil
@@ -461,11 +565,26 @@ Options:
   :type 'boolean
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-show-file-sidebar val))
+
+           (require 'treemacs)
+           (require 's)
+
+           (if val
+               (progn (treemacs)
+                      (treemacs-follow-mode t)
+                      (treemacs-filewatch-mode t)
+                      (treemacs-persist)
+
+                      (add-hook 'projectile-after-switch-project-hook
+                                #'(lambda ()
+                                    (treemacs-projectile))))
+             (remove-hook 'projectile-after-switch-project-hook
+                          #'(lambda ()
+                              (treemacs-projectile)))))
   :group 'gears-interface)
 
-(defcustom gears-file-sidebar-with 20
-  "File sidebar with in characters."
+(defcustom gears-file-sidebar-width 20
+  "File sidebar width in characters."
 
   :type 'integer
   :group 'gears-interface)
@@ -476,7 +595,12 @@ Options:
   :type 'integer
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-autoresize-splits val))
+
+           (setq zoom-ignored-buffer-names '("^*helm" "^helm"))
+
+           (if val
+               (zoom-mode t)
+             (zoom-mode nil)))
   :group 'gears-interface)
 
 (defcustom gears-show-documentation-mode 'minibuffer
@@ -492,7 +616,23 @@ Options:
   :type 'symbol
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-show-documentation-mode val))
+
+           (cond ((equal val 'popup)
+                  (require 'pos-tip)
+
+                  (defun eldoc-popup-message (format-string &rest args)
+                    "Display eldoc message near point."
+                    (when format-string
+                      (pos-tip-show (apply 'format format-string args))))
+
+                  (setq eldoc-message-function #'eldoc-popup-message))
+                 ((equal val 'overlay)
+                  (add-hook 'eldoc-mode-hook 'eldoc-overlay-mode)
+                  (setq eldoc-message-function #'inline-docs))
+                 ((equal val 'minibuffer)
+                  (global-eldoc-mode t))
+                 ((equal val 'none)
+                  (eldoc-mode nil))))
   :group 'gears-interface)
 
 (defcustom gears-helm-display-mode 'frame
@@ -506,7 +646,19 @@ Options:
   :type 'symbol
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-helm-display-mode val))
+
+           (cond ((eq val 'minibuffer)
+                  (setq helm-display-function 'helm-default-display-buffer
+                        helm-display-buffer-reuse-frame t
+                        helm-use-undecorated-frame-option t))
+                 ((eq val 'frame)
+                  (setq helm-display-function 'helm-display-buffer-in-own-frame
+                        helm-display-buffer-reuse-frame t
+                        helm-use-undecorated-frame-option t))
+                 ((eq val 'child-frame)
+                  (setq helm-display-function 'gears-helm-display-child-frame
+                        helm-display-buffer-reuse-frame t
+                        helm-display-buffer-width 80))))
   :group 'gears-interface)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -514,14 +666,14 @@ Options:
 
 (electric-indent-mode)
 
-(add-hook 'after-change-major-mode-hook
-          #'(lambda()
-              (gears-layers/base/config-indent-mode gears-indent-mode)
-              (gears-layers/base/config-indent-width gears-indent-width)
-              (gears-layers/base/config-insert-eof-newline
-               gears-insert-eof-newline)))
+;(add-hook 'after-change-major-mode-hook
+;          #'(lambda()
+;              (gears-layers/base/config-indent-mode gears-indent-mode)
+;              (gears-layers/base/config-indent-width gears-indent-width)
+;              (gears-layers/base/config-insert-eof-newline
+;               gears-insert-eof-newline)))
 
-(gears-layers/base/config-show-paren-mode gears-show-paren-mode)
+;(gears-layers/base/config-show-paren-mode gears-show-paren-mode)
 
 (when gears-indent-comments
   (setq aggressive-indent-comments-too t))
@@ -536,12 +688,6 @@ Options:
 
 (when gears-maximize-after-start
   (add-to-list 'default-frame-alist '(fullscreen . maximized)))
-
-(defun gears-layers/base/config-global-keymap (val)
-  "Setter callback function for gears-autoresize-splits."
-
-  (dolist (i val)
-    (global-set-key (kbd (car i)) (cdr i))))
 
 (defdynhydra 'M-a '(("s" align-current "Selection" :column "Align" :exit t)
                     ("e" align-enture "Everything" :column "Align" :exit t)))
