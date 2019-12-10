@@ -48,20 +48,20 @@
   :type '(alist :value (group key-sequence symbol))
   :set #'(lambda (sym val)
            (custom-set-default sym val)
-           (gears-layers/base/config-global-keymap val))
+           (dolist (i val)
+	     (global-set-key (kbd (car i)) (cdr i))))
   :group 'gears)
 
 ;; Hydras
-                                 (dolist (hydra '(M-a M-c M-e M-f M-g M-s M-t))
-                                    (global-unset-key (kbd (prin1-to-string hydra)))
 
-                                    (global-set-key (kbd (prin1-to-string hydra))
-                                                    `(lambda () (interactive) (dynhydra-open ,hydra))))
+(dolist (hydra '(M-a M-c M-e M-f M-g M-s M-t))
+  (global-unset-key (kbd (prin1-to-string hydra)))
+
+  (global-set-key (kbd (prin1-to-string hydra))
+                  `(lambda () (interactive) (dynhydra-open ,hydra))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set configuration
-
-;;(define-key helm-map (kbd "<escape>") 'helm-keyboard-quit)
 
 (defadvice keyboard-escape-quit (around my-keyboard-escape-quit activate)
   "Don't unsplit window when pressing escape."
@@ -73,7 +73,7 @@
         ad-do-it
       (fset 'one-window-p (symbol-function 'orig-one-window-p)))))
 
-(gears-layers/base/config-global-keymap gears-global-keymap)
+					;(gears-layers/base/config-global-keymap gears-global-keymap)
 
 ;; Company mode
 (with-eval-after-load 'company

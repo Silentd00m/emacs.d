@@ -43,15 +43,15 @@
   :init (progn (require 'helm-config)
 
                (helm-mode 1)
-               (setq helm-quick-update t)
-               (setq helm-X-x-fuzzy-match t)
-               (setq helm-buffers-fuzzy-matching t)
-               (setq helm-recentf-fuzzy-matching t)
-               (setq helm-move-to-line-cycle-in-source t)
-               (setq helm-semantic-fuzzy-match t)
-               (setq helm-apropos-fuzzy-match t)
-               (setq helm-imenu-fuzzy-match t)
-               (setq helm-candidate-number-limit 30)
+               (setq helm-quick-update t
+		     helm-X-x-fuzzy-match t
+		     helm-buffers-fuzzy-matching t
+		     helm-recentf-fuzzy-matching t
+		     helm-move-to-line-cycle-in-source t
+		     helm-semantic-fuzzy-match t
+		     helm-apropos-fuzzy-match t
+		     helm-imenu-fuzzy-match t
+		     helm-candidate-number-limit 30)
                (helm-autoresize-mode 1)
                (advice-add 'helm-ff-delete-char-backward :around #'gears/helm-find-files-navigate-back)
 
@@ -180,6 +180,7 @@
 
 (defgroup gears nil
   "Awesome Emacs configuration"
+
   :group 'environment
   :link '(url-link :tag "Github" "https://github.com/Silentd00m/emacs.d"))
 
@@ -454,11 +455,11 @@ Options:
 
     Options:
     - arrow: Left or right facing arrows.
-    - half: Flat / No separaters, just a few pixels of space.
+    - half: Flat / No separators, just a few pixels of space.
     - curve: Scallop curve.
     - rounded: Like half, but with rounded corners.
     - chamfer: 'Folded' corner on top.
-    - slant: Diagonar from left or right.
+    - slant: Diagonal from left or right.
     - slant-left: Diagonal from left.
     - slant-right: Diagonal from right."
 
@@ -686,6 +687,8 @@ Options:
 (when gears-maximize-after-start
   (add-to-list 'default-frame-alist '(fullscreen . maximized)))
 
+(load (concat gears-emacs-basepath "/functions/hydra"))
+  
 (defdynhydra 'M-a '(("s" align-current "Selection" :column "Align" :exit t)
                     ("e" align-enture "Everything" :column "Align" :exit t)))
 (defdynhydra 'M-b '())
