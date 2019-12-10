@@ -1,6 +1,3 @@
-(load (concat gears-emacs-basepath "/layers/base/config"))
-(load (concat gears-emacs-basepath "/functions/hydra"))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Base
 
