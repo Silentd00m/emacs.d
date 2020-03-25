@@ -21,7 +21,7 @@
                                  ("M-," . comment-dwim-2)
 
                                  ;; Document navigation
-                                 ("C-t" . hs-toggle-hiding)
+                                 ("C-t" . origami-toggle-node)
 
                                  ;; Window navigation
                                  ("M-S-<left>" . windmove-left)

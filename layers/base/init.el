@@ -27,7 +27,8 @@
 
 (use-package flycheck-pos-tip
   :ensure t
-  :hook (flycheck-mode . (flycheck-pos-tip-mode t)))
+  :config (with-eval-after-load 'flycheck
+	    (flycheck-pos-tip-mode)))
 
 (use-package helm
   :ensure t
@@ -688,7 +689,7 @@ Options:
   (add-to-list 'default-frame-alist '(fullscreen . maximized)))
 
 (load (concat gears-emacs-basepath "/functions/hydra"))
-  
+
 (defdynhydra 'M-a '(("s" align-current "Selection" :column "Align" :exit t)
                     ("e" align-enture "Everything" :column "Align" :exit t)))
 (defdynhydra 'M-b '())

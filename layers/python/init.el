@@ -20,6 +20,9 @@ Options:
   :type 'symbolp
   :group 'gears-layers/python)
 
+(use-package python
+  :init (setq python-indent-guess-indent-offset-verbose nil))
+
 (use-package pycoverage
   :ensure t
   :hook (python-mode-hook . pycoverage-mode))
@@ -27,8 +30,15 @@ Options:
 (use-package highlight-indent-guides
   :ensure t)
 
-(use-package py-yapf
-  :ensure t)
+;; (use-package py-yapf
+;;   :ensure t
+;;   :hook (python-mode-hook . py-yapf-enable-on-save))
+
+(use-package yapfify
+  :ensure t
+  :commands (yapf-mode)
+  :hook (python-mode-hook . yapf-mode)
+  :init (add-hook 'python-mode-hook 'yapf-mode))
 
 (use-package python
   :after lsp
@@ -36,3 +46,7 @@ Options:
                 gears-layers/python-indent-guide-style)
   :hook ((python-mode-hook . highlight-indent-guides-mode)
          (python-mode-hook . lsp)))
+
+(use-package auto-virtualenvwrapper
+  :ensure t
+  :hook (projectile-after-switch-project-hook . auto-virtualenvwrapper-activate))
