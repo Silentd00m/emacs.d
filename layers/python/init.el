@@ -30,10 +30,6 @@ Options:
 (use-package highlight-indent-guides
   :ensure t)
 
-;; (use-package py-yapf
-;;   :ensure t
-;;   :hook (python-mode-hook . py-yapf-enable-on-save))
-
 (use-package yapfify
   :ensure t
   :commands (yapf-mode)

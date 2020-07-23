@@ -1,5 +1,4 @@
 (defvar dynhydra-list '())
-;; (setq dynhydra-list '())
 
 (defun defdynhydra (name heads)
   "Define a new dynhydra."

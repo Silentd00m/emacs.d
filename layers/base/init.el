@@ -82,6 +82,10 @@
   :ensure t
   :config (which-key-mode))
 
+(use-package treemacs
+  :ensure t
+  :init (treemacs))
+
 (use-package hydra
   :ensure t)
 
