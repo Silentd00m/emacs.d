@@ -37,7 +37,7 @@ Options:
   :init (add-hook 'python-mode-hook 'yapf-mode))
 
 (use-package py-isort
-  :esure t
+  :ensure t
   :init (add-hook 'python-mode-hook
 				  #'(add-hook 'before-save-hook #'py-isort-before-save nil t)))
 
