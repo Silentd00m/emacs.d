@@ -2,7 +2,7 @@
   :ensure t
   :init (setq company-auto-complete 'ignore
               company-auto-complete-chars nil
-              company-backends '(company-bbdb company-capf company-cmake company-keywords company-files company-dabbrev)
+              company-backends '(company-capf company-cmake company-keywords company-files company-dabbrev)
               company-continue-commands '(not save-buffer save-some-buffers save-buffers-kill-terminal save-buffers-kill-emacs fixup-whitespace)
               company-frontends '(company-pseudo-tooltip-unless-just-one-frontend company-echo-metadata-frontend company-preview-if-just-one-frontend)
               company-idle-delay 0

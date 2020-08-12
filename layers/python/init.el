@@ -36,12 +36,17 @@ Options:
   :hook (python-mode-hook . yapf-mode)
   :init (add-hook 'python-mode-hook 'yapf-mode))
 
+(use-package py-isort
+  :esure t
+  :init (add-hook 'python-mode-hook
+				  #'(add-hook 'before-save-hook #'py-isort-before-save nil t)))
+
 (use-package python
   :after lsp
   :config (setq highlight-indent-guides-method
                 gears-layers/python-indent-guide-style)
-  :hook ((python-mode-hook . highlight-indent-guides-mode)
-         (python-mode-hook . lsp)))
+  :hook ((python-mode . highlight-indent-guides-mode)
+         (python-mode . lsp)))
 
 (use-package auto-virtualenvwrapper
   :ensure t

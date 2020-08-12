@@ -1,7 +1,10 @@
 (use-package lsp-mode
   :ensure t
-  :init (when (gears-layer-installed-p 'flycheck)
-          (setq lsp-prefer-flymake t))
+  :init (progn (when (gears-layer-installed-p 'flycheck)
+				 (setq lsp-prefer-flymake t))
+			   (setq gc-cons-threshold 100000000)
+			   (setq read-process-output-max (* 1024 1024))
+			   (setq lsp-completion-provider :capf))
   :hook ((prog-mode . lsp))
   :commands lsp)
 
