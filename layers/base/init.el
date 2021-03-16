@@ -132,11 +132,16 @@
           (with-eval-after-load 'hl-line
             (set-face-attribute 'hl-line nil :extend t))))
 
-(use-package zoom
+;; (use-package zoom
+;;   :ensure t
+;;   :config (progn (setq zoom-size '(0.618 . 0.618))
+;;                  (when (bound-and-true-p gears-autoresize-splits)
+;;                    (zoom-mode))))
+
+(use-package golden-ratio
   :ensure t
-  :config (progn (setq zoom-size '(0.618 . 0.618))
-                 (when (bound-and-true-p gears-autoresize-splits)
-                   (zoom-mode))))
+  :config (when (bound-and-true-p gears-autoresize-splits)
+			(golden-ratio-mode 1)))
 
 (use-package fill-column-indicator
   :ensure t
@@ -599,11 +604,9 @@ Options:
   :set #'(lambda (sym val)
            (custom-set-default sym val)
 
-           (setq zoom-ignored-buffer-names '("^*helm" "^helm"))
-
            (if val
-               (zoom-mode t)
-             (zoom-mode nil)))
+               (golden-ratio-mode 1)
+             (golden-ratio-mode nil)))
   :group 'gears-interface)
 
 (defcustom gears-show-documentation-mode 'minibuffer

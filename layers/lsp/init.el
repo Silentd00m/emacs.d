@@ -1,11 +1,24 @@
+(defgroup gears-layers/lsp nil
+  "LSP Layer Configuration"
+  :group 'gears-layers)
+
+(defcustom gears-layers/lsp-enable-breadcrumbs nil
+  "Show the breadcrumbs in the header line."
+  :type 'boolean
+  :group 'gears-layers/lsp)
+
+
+(setq lsp-headerline-breadcrumb-enable gears-layers/lsp-enable-breadcrumbs)
+
 (use-package lsp-mode
   :ensure t
   :init (progn (when (gears-layer-installed-p 'flycheck)
-				 (setq lsp-prefer-flymake t))
+				 (setq lsp-prefer-flymake nil))
 			   (setq gc-cons-threshold 100000000)
 			   (setq read-process-output-max (* 1024 1024))
 			   (setq lsp-completion-provider :capf))
-  :hook ((prog-mode . lsp))
+  :hook ((prog-mode . lsp)
+		 (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
 
 (use-package lsp-ui
@@ -25,12 +38,13 @@
 
 (use-package lsp-origami
   :ensure t
-  :hook ((lsp-mode . lsp-origami-mode)))
+  :hook (lsp-mode . lsp-origami-mode))
 
 (use-package lsp-treemacs
   :ensure t
   :after treemacs lsp-mode
-  :hook (lsp-mode . (lambda ()(lsp-treemacs-sync-mode 1))))
+  :hook (lsp-mode . (lambda ()
+					  (lsp-treemacs-sync-mode 1))))
 
 (use-package yasnippet
   :ensure t)

@@ -20,34 +20,32 @@ Options:
   :type 'symbolp
   :group 'gears-layers/python)
 
-(use-package python
-  :init (setq python-indent-guess-indent-offset-verbose nil))
-
-(use-package pycoverage
-  :ensure t
-  :hook (python-mode-hook . pycoverage-mode))
-
 (use-package highlight-indent-guides
   :ensure t)
 
-(use-package yapfify
-  :ensure t
-  :commands (yapf-mode)
-  :hook (python-mode-hook . yapf-mode)
-  :init (add-hook 'python-mode-hook 'yapf-mode))
+(use-package blacken
+  :ensure t)
 
 (use-package py-isort
-  :ensure t
-  :init (add-hook 'python-mode-hook
-				  #'(add-hook 'before-save-hook #'py-isort-before-save nil t)))
+  :ensure t)
 
 (use-package python
-  :after lsp
+  :mode ("\\.py\\'" . python-mode)
+  :interpreter ("python" . python-mode)
+  :init (setq python-indent-guess-indent-offset-verbose nil)
   :config (setq highlight-indent-guides-method
-                gears-layers/python-indent-guide-style)
-  :hook ((python-mode . highlight-indent-guides-mode)
-         (python-mode . lsp)))
+				gears-layers/python-indent-guide-style)
+  :hook ((python-mode . blacken-mode)
+		 (python-mode . highlight-indent-guides-mode)
+		 (rst-mode . (lambda ()
+					   (setq indent-tabs-mode nil)))))
 
 (use-package auto-virtualenvwrapper
   :ensure t
   :hook (projectile-after-switch-project-hook . auto-virtualenvwrapper-activate))
+
+(use-package lsp-pyright
+  :ensure t
+  :hook (python-mode . (lambda ()
+                         (require 'lsp-pyright)
+                         (lsp))))  ; or lsp-deferred
