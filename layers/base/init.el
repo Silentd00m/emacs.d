@@ -41,25 +41,24 @@
          ("<left>" . helm-previous-source)
          ("<right>" . helm-next-source)
          ("<tab>" . helm-execute-persistent-action))
-  :init (progn (require 'helm-config)
-
-               (helm-mode 1)
+  :init (progn (helm-mode 1)
                (setq helm-quick-update t
-		     helm-X-x-fuzzy-match t
-		     helm-buffers-fuzzy-matching t
-		     helm-recentf-fuzzy-matching t
-		     helm-move-to-line-cycle-in-source t
-		     helm-semantic-fuzzy-match t
-		     helm-apropos-fuzzy-match t
-		     helm-imenu-fuzzy-match t
-		     helm-candidate-number-limit 30)
+					 helm-X-x-fuzzy-match t
+					 helm-buffers-fuzzy-matching t
+					 helm-recentf-fuzzy-matching t
+					 helm-move-to-line-cycle-in-source t
+					 helm-semantic-fuzzy-match t
+					 helm-apropos-fuzzy-match t
+					 helm-imenu-fuzzy-match t
+					 helm-candidate-number-limit 30)
                (helm-autoresize-mode 1)
                (advice-add 'helm-ff-delete-char-backward :around #'gears/helm-find-files-navigate-back)
 
                (when (>= emacs-major-version 27)
                    (with-eval-after-load 'helm-mode
                      (dolist (face '(helm-source-header helm-selection))
-                       (set-face-attribute face nil :extend t))))))
+                       (set-face-attribute face nil :extend t)))))
+  :diminish)
 
 (use-package helm-flx
   :ensure t
@@ -80,11 +79,15 @@
 
 (use-package which-key
   :ensure t
-  :config (which-key-mode))
+  :config (which-key-mode)
+  :diminish which-key-mode)
 
 (use-package treemacs
   :ensure t
-  :init (treemacs))
+  :init (treemacs)
+  :bind ((:map treemacs-mode-map
+			   ("q" . nil))
+		 ("<escape>" . nil)))
 
 (use-package hydra
   :ensure t)
@@ -95,10 +98,16 @@
 (use-package smartparens
   :ensure t
   :config (progn (require 'smartparens-config)
-                 (smartparens-global-mode t)))
+                 (smartparens-global-mode t))
+  :diminish smartparens-mode)
 
 (use-package origami
   :ensure t)
+
+(use-package yasnippet
+  :ensure t
+  :hook ((prog-mode . yas-minor-mode))
+  :diminish yas-minor-mode)
 
 (when (version<= emacs-version "26.0")
   (use-package nlinum
@@ -114,6 +123,7 @@
       cua-keep-region-after-copy t
       x-select-enable-clipboard t
       select-enable-clipboard t)
+(global-set-key (kbd "C-c") 'undefined)
 (cua-mode t)                                                                    ;; Sane C-c, C-x and C-v
 (transient-mark-mode 1)
 (setq scroll-step 1)
@@ -141,7 +151,8 @@
 (use-package golden-ratio
   :ensure t
   :config (when (bound-and-true-p gears-autoresize-splits)
-			(golden-ratio-mode 1)))
+			(golden-ratio-mode 1))
+  :diminish golden-ratio-mode)
 
 (use-package fill-column-indicator
   :ensure t
@@ -165,7 +176,9 @@
   :ensure t)
 
 (diminish 'eldoc-mode)
-(diminish 'auto-revert-mode)
+
+;; (use-package autorevert
+;;   :diminish auto-revert-mode)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; General dependencies

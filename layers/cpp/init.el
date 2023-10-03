@@ -1,8 +1,14 @@
 (defun gears-layers/cpp-setup ()
+  (clang-format+-mode t)
   (lsp))
 
+(use-package clang-format+
+  :ensure t)
+
 (use-package c++-mode
-  :hook (c++-mode . gears-layers/cpp-setup))
+  :ensure nil
+  :hook ((c++-mode . gears-layers/cpp-setup)))
 
 (use-package c-mode
-  :hook (c-mode . gears-layers/cpp-setup))
+  :ensure nil
+  :hook ((c-mode . gears-layers/cpp-setup)))

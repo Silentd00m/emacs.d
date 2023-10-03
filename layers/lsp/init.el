@@ -7,7 +7,6 @@
   :type 'boolean
   :group 'gears-layers/lsp)
 
-
 (setq lsp-headerline-breadcrumb-enable gears-layers/lsp-enable-breadcrumbs)
 
 (use-package lsp-mode
@@ -20,6 +19,12 @@
   :hook ((prog-mode . lsp)
 		 (lsp-mode . lsp-enable-which-key-integration))
   :commands lsp)
+
+;(use-package dap-mode
+;  :ensure t
+;  :config (setq dap-auto-configure-features '(sessions locals controls tooltip expressions))
+;  :hook ((dap-stopped-hook
+;          (lambda (arg) (call-interactively #'dap-hydra)))))
 
 (use-package lsp-ui
   :commands lsp-ui-mode

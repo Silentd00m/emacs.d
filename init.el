@@ -7,7 +7,6 @@
   (package-initialize))
 
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
-                         ("marmalade" . "https://marmalade-repo.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")))
 
@@ -30,6 +29,9 @@
 (require 'use-package)
 
 (use-package git
+  :ensure t)
+
+(use-package use-package-ensure-system-package
   :ensure t)
 
 (require 'f)

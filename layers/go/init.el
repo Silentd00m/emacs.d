@@ -1,6 +1,5 @@
 (use-package go-mode
-  :config (progn (setq gofmt-command "goimports")
-				 (lsp-register-custom-settings
+  :config (progn (lsp-register-custom-settings
 				  '(("gopls.local" t t)
 					("gopls.completeUnimported" t t)
 					("gopls.staticcheck" t t))))
@@ -16,8 +15,9 @@
 
 (use-package web-mode
   :ensure t
-  :mode (".gohtml$")
+  :mode (".gohtml$" ".jet$")
   :init (add-hook 'web-mode-hook
 				  #'(lambda ()
-					  (setq web-mode-enable-auto-pairing nil
+					  (setq web-mode-engines-alist '(("gohtml" . "\\.jet|.gohtml\\'"))
+							web-mode-enable-auto-pairing nil
 							web-mode-markup-indent-offset 4))))
